@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:overScrollMode="never"
+    android:background="@color/white"
+    style="@style/Theme.AIMA"
+    tools:context=".Activities.ProfileActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/dashboardImage"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_190mdp"
+                android:contentDescription="@string/imagelogo"
+                android:scaleType="centerCrop"
+                android:src="@drawable/profileback"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_190mdp"
+                android:background="@color/profile_black_shade"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/myProfile"
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:contentDescription="@string/imagelogo"
+                android:layout_marginTop="20dp"
+                android:src="@drawable/profileplaceholder"
+                app:civ_border_color="@color/backgroundBottomColour"
+                app:civ_border_width="2dp"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout7"
+                app:layout_constraintEnd_toEndOf="@+id/dashboardImage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/dashboardImage" />
+
+            <com.github.ybq.android.spinkit.SpinKitView
+                android:id="@+id/spin_kit_profile"
+                style="@style/SpinKitView.Large.Circle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="20dp"
+                app:SpinKit_Color="@color/backgroundBottomColour"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout7"
+                app:layout_constraintEnd_toEndOf="@+id/dashboardImage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/dashboardImage" />
+
+            <TextView
+                android:id="@+id/stars"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/background_text_donation"
+                android:drawableEnd="@drawable/star_half_24"
+                android:drawablePadding="5dp"
+                android:gravity="end"
+                android:paddingStart="@dimen/_10font_mdp"
+                android:paddingEnd="@dimen/_10font_mdp"
+                android:text="0"
+                android:textColor="@color/backgroundBottomColour"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/myProfile"
+                app:layout_constraintStart_toEndOf="@+id/myProfile"
+                app:layout_constraintTop_toTopOf="@+id/myProfile" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="@dimen/_10mdp"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/profileDashboard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableLeft="@drawable/back_24"
+                    android:drawablePadding="@dimen/_5mdp"
+                    android:fontFamily="@font/signika_negative_bold"
+                    android:text="Profile"
+                    android:textColor="@color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+                <ImageView
+                    android:id="@+id/dotsProfile"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/more"
+                    app:tint="@color/black"
+                    android:padding="5dp"
+                    android:background="@drawable/click_effect_oval"
+                    android:layout_marginEnd="@dimen/_10mdp"
+                    android:layout_marginStart="@dimen/_10mdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:visibility="gone"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/linearLayout7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="@dimen/_5mdp"
+                app:layout_constraintBottom_toTopOf="@+id/cardView2"
+                app:layout_constraintEnd_toEndOf="@+id/cardView2"
+                app:layout_constraintStart_toStartOf="@+id/cardView2">
+
+                <ImageView
+                    android:id="@+id/mailImage"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="@dimen/_5mdp"
+                    android:src="@drawable/gmail" />
+
+                <ImageView
+                    android:id="@+id/callImage"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="@dimen/_5mdp"
+                    android:src="@drawable/telephone" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/whatsappImage"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="@dimen/_5mdp"
+                    android:src="@drawable/whatsapp" />
+
+                <ImageView
+                    android:id="@+id/facebookImage"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_margin="@dimen/_5mdp"
+                    android:src="@drawable/facebook" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/cardView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingStart="20dp"
+                android:background="@drawable/background_linear"
+                android:paddingEnd="20dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                app:layout_constraintBottom_toBottomOf="@+id/dashboardImage"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dashboardImage">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/followers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Followers"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/_15mdp"
+                    android:layout_marginEnd="@dimen/_15mdp"
+                    android:background="@color/white" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/posts"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Posts"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/_15mdp"
+                    android:layout_marginEnd="@dimen/_15mdp"
+                    android:background="@color/white" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/following"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Following"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/shimmer_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="parent"
+            app:shimmer_animation_duration="1200">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/dashBoardName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/profile_name"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/verifiedProfile"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                    <ImageView
+                        android:id="@+id/verifiedProfile"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_marginStart="2dp"
+                        android:src="@drawable/verified"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toTopOf="@+id/dashBoardName"
+                        app:layout_constraintStart_toEndOf="@+id/dashBoardName"
+                        app:layout_constraintTop_toTopOf="@+id/dashBoardName" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/dashBoardBio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/loading_please_wait"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/dashBoardName" />
+
+                <TextView
+                    android:id="@+id/dashBoardAbout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/loading_please_wait"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/dashBoardBio" />
+
+                <TextView
+                    android:id="@+id/dashBoardProfileType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="@string/loading"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/dashBoardAbout" />
+
+                <TextView
+                    android:id="@+id/profileLink"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:drawableEnd="@drawable/copy_24"
+                    android:text="@string/loading"
+                    android:textColor="@color/darkGray"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/dashBoardAbout" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/shimmer_text">
+            <LinearLayout
+                android:id="@+id/editBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_5mdp"
+                android:visibility="gone"
+                android:layout_marginEnd="@dimen/_2mdp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:background="@drawable/button_follow_background"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/dashBoardEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:drawablePadding="@dimen/_5mdp"
+                    android:drawableLeft="@drawable/edit_24"
+                    android:text="Edit Profile"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/followBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_5mdp"
+                android:visibility="visible"
+                android:layout_marginEnd="@dimen/_2mdp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:background="@drawable/button_follow_background"
+                android:orientation="horizontal">
+                <com.like.LikeButton
+                    android:id="@+id/followBtnLike"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_marginEnd="@dimen/_5mdp"
+                    app:anim_scale_factor="2"
+                    app:circle_end_color="@color/main_light_colour"
+                    app:circle_start_color="@color/backgroundBottomColour"
+                    app:dots_primary_color="@color/backgroundBottomColour"
+                    app:dots_secondary_color="@color/main_light_colour"
+                    app:icon_size="25dp"
+                    app:icon_type="Star"
+                    app:is_enabled="true"
+                    app:like_drawable="@drawable/unfollow"
+                    app:liked="false"
+                    app:unlike_drawable="@drawable/follow" />
+                <TextView
+                    android:id="@+id/followText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:text="Follow"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/shareProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/_5mdp"
+                android:layout_marginStart="@dimen/_2mdp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:background="@drawable/button_follow_background"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="@dimen/_5mdp"
+                    android:textColor="@color/white"
+                    android:drawableLeft="@drawable/share_24"
+                    android:text="Share Profile"/>
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="15dp"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:text="Followers"/>
+        <TextView
+            android:id="@+id/noFollowMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/_10mdp"
+            android:gravity="center"
+            android:text="@string/no_followers_yet"/>
+        <com.cooltechworks.views.shimmer.ShimmerRecyclerView
+            android:id="@+id/followersRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_5mdp"
+            android:layout_marginEnd="@dimen/_2mdp"
+            app:shimmer_demo_layout="@layout/item_follow_profile"
+            app:shimmer_demo_child_count="10"
+            app:shimmer_demo_layout_manager_type="linear_horizontal"
+            app:shimmer_demo_angle="20"
+            android:layout_marginTop="10dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10mdp"
+            android:layout_marginStart="15dp"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:text="Profile Posts"/>
+        <TextView
+            android:id="@+id/noPosts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginTop="@dimen/_10mdp"
+            android:gravity="center"
+            android:text="@string/no_posts_yet"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/postRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:spanCount="3"
+            android:layout_marginStart="13dp"
+            android:layout_marginEnd="13dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            tools:listitem="@layout/item_post_profile"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="@dimen/_8mdp"/>
+
+
+
+
+
+
+
+
+
+
+
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#7D70FF</color>
+    <color name="purple_500">#2515CC</color>
+    <color name="purple_700">#58585A</color>
+    <color name="teal_200">#d49f5d</color>
+    <color name="teal_700">#BC6F10</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFF</color>
+
+
+    //floating button colours
+    <color name="selectedIconColour">#958BFF</color>
+    <color name="textBack">#6E83FB</color>
+    <color name="defaultIconColour">#F6F6F6</color>
+    <color name="countTextColour">#fff</color>
+    <color name="countBackgroundColour">#F45E0B</color>
+    <color name="circleColour">#fff</color>
+    <color name="backgroundBottomColour">#393282</color>
+    <color name="shadowColour">#2E2E2E</color>
+
+    //background colours
+    <color name="backgroundColour">#68C9CCD1</color>
+    <color name="drawable_gray">#757272</color>
+    <color name="gray">#eff2f7</color>
+    <color name="darkGray">#D5D7DC</color>
+    <color name="black_shade">#A1000000</color>
+    <color name="profile_black_shade">#59000000</color>
+    <color name="red_colour">#F44336</color>
+    <color name="green_colour">#4CAF50</color>
+    <color name="blue_colour">#2196F3</color>
+
+    //main colours
+    <color name="main_colour">#393282</color>
+    <color name="main_light_yellow">#FDE5BD</color>
+    <color name="main_dark_yellow">#d6a24c</color>
+    <color name="main_dark_red">#9f2220</color>
+    <color name="main_light_green">#75af37</color>
+    <color name="main_dark_green">#215733</color>
+    <color name="main_light_colour">#D6D2FF</color>
+
+</resources>

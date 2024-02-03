@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeMenu"
+        android:icon="@drawable/home_24"
+        android:title="Home"
+        android:iconTint="@color/gray"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/wadiMenu"
+        android:icon="@drawable/wadi_24"
+        android:title="Wadi"
+        android:iconTint="@color/darkGray"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/joinMenu"
+        android:icon="@drawable/meeting_24"
+        android:title="Meet"
+        android:iconTint="@color/gray"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/shortsMenu"
+        android:icon="@drawable/shorts_24"
+        android:title="Shorts"
+        android:iconTint="@color/gray"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/mainMenu"
+        android:icon="@drawable/ic_baseline_menu_24"
+        android:title="Menu"
+        android:iconTint="@color/gray"
+        app:showAsAction="ifRoom" />
+</menu>

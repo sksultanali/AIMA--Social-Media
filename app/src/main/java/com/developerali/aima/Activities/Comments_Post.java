@@ -1,0 +1,315 @@
+package com.developerali.aima.Activities;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.developerali.aima.Adapters.CommentAdapter;
+import com.developerali.aima.CommonFeatures;
+import com.developerali.aima.MainActivity;
+import com.developerali.aima.Models.CommentModel;
+import com.developerali.aima.Models.NotificationModel;
+import com.developerali.aima.Models.UsagesModel;
+import com.developerali.aima.Models.UserModel;
+import com.developerali.aima.R;
+import com.developerali.aima.databinding.ActivityCommentsPostBinding;
+import com.developerali.aima.databinding.CommentBottomNavigationBinding;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.Date;
+
+public class Comments_Post extends AppCompatActivity {
+
+    ActivityCommentsPostBinding binding;
+    //PostModel model;
+    ArrayList<CommentModel> arrayList;
+    ProgressDialog progressDialog;
+    FirebaseDatabase database;
+    FirebaseFirestore firebaseFirestore;
+    CommentAdapter adapter;
+    FirebaseAuth auth;
+
+    String postId, uploader;
+    private long startTime;
+    Long totalSeconds;
+    Activity activity;
+    SharedPreferences sharedPreferences;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = ActivityCommentsPostBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        CommonFeatures.lowerColour(getWindow(), getResources());
+        activity = Comments_Post.this;
+
+        database = FirebaseDatabase.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
+
+        postId = getIntent().getStringExtra("postId");
+        uploader = getIntent().getStringExtra("uploaderId");
+
+        getRefresh();
+
+        progressDialog = new ProgressDialog(Comments_Post.this);
+        progressDialog.setTitle("Comment Uploading");
+        progressDialog.setMessage(getString(R.string.loading));
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+
+        binding.backComments.setOnClickListener(v->{
+            finish();
+        });
+
+
+
+
+
+        binding.commentInput.setOnClickListener(v->{
+            showBottomBar();
+        });
+
+        database.getReference().child("users").child(auth.getCurrentUser().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()){
+                            UserModel myModel = snapshot.getValue(UserModel.class);
+                            if (myModel.getImage() != null && !activity.isDestroyed()){
+                                Glide.with(Comments_Post.this)
+                                        .load(myModel.getImage())
+                                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                                        .placeholder(R.drawable.profileplaceholder)
+                                        .into(binding.commenterProfileImage);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
+
+
+
+    }
+
+    public void showBottomBar(){
+
+        CommentBottomNavigationBinding dialogBinding = CommentBottomNavigationBinding.inflate(getLayoutInflater());
+
+        // Create a new dialog and set the custom layout
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(dialogBinding.getRoot());
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+
+        dialogBinding.postBtn.setEnabled(false);
+        dialogBinding.commentInput.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dialogBinding.commentInput.requestFocus();
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(dialogBinding.commentInput, InputMethodManager.SHOW_IMPLICIT);
+            }
+        }, 200);
+
+        dialogBinding.postBtn.setOnClickListener(v->{
+
+            progressDialog.show();
+
+            CommentModel commentModel = new CommentModel();
+            commentModel.setCommentedAt(new Date().getTime());
+            commentModel.setPostId(postId);
+            commentModel.setCommentedBy(auth.getCurrentUser().getUid());
+            commentModel.setComment(dialogBinding.commentInput.getText().toString());
+
+            database.getReference().child("comments").child(postId)
+                    .child(database.getReference().push().getKey())
+                    .setValue(commentModel)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+//                            database.getReference().child("posts").child(model.getId())
+//                                    .child("commentsCount")
+//                                    .setValue(model.getCommentsCount() + 1)
+//                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                        @Override
+//                                        public void onSuccess(Void unused) {
+//                                            progressDialog.dismiss();
+//                                            dialog.dismiss();
+//                                            adapter.notifyDataSetChanged();
+//                                        }
+//                                    });
+
+                            //Increase Comment Count by 1 in Firebase Firestore
+                            firebaseFirestore.collection("post")
+                                    .document(postId)
+                                    .update("commentsCount", FieldValue.increment(1))
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+
+
+                                            NotificationModel notificationModel = new NotificationModel(auth.getCurrentUser().getUid(),
+                                                    "comment", postId, new Date().getTime(), false);
+                                            database.getReference().child("notification")
+                                                    .child(uploader)
+                                                    .push()
+                                                    .setValue(notificationModel).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void unused) {
+                                                            dialog.dismiss();
+                                                            progressDialog.dismiss();
+                                                        }
+                                                    });
+                                        }
+                                    });
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(Comments_Post.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
+                            dialog.dismiss();
+                        }
+                    });
+        });
+
+        dialogBinding.commentInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                dialogBinding.commentCounter.setText(charSequence.toString().length() +"/2000");
+                if (charSequence.toString().length() > 1){
+                    dialogBinding.postBtn.setEnabled(true);
+                    dialogBinding.postBtn.setBackground(getDrawable(R.drawable.button_follow_background));
+                }
+                if (charSequence.toString().length() < 1){
+                    dialogBinding.postBtn.setEnabled(false);
+                    dialogBinding.postBtn.setBackground(getDrawable(R.drawable.button_already_followd));
+                }
+                if (charSequence.toString().length() > 1950){
+                    dialogBinding.commentCounter.setTextColor(getColor(R.color.red_colour));
+                }else {
+                    dialogBinding.commentCounter.setTextColor(getColor(R.color.black));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+
+
+
+        // Show the dialog
+        dialog.show();
+    }
+
+    public void getRefresh(){
+        arrayList = new ArrayList<>();
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(Comments_Post.this);
+        binding.commentRecycler.setLayoutManager(linearLayoutManager);
+
+        database.getReference().child("comments").child(postId)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()){
+
+                            arrayList.clear();
+
+                            for (DataSnapshot snapshot1 : snapshot.getChildren()){
+                                CommentModel commentModel = snapshot1.getValue(CommentModel.class);
+                                commentModel.setCommentId(snapshot1.getKey());
+                                commentModel.setComment(commentModel.getComment());
+                                commentModel.setCommentedBy(commentModel.getCommentedBy());
+                                commentModel.setCommentedAt(commentModel.getCommentedAt());
+                                commentModel.setPostId(postId);
+                                arrayList.add(commentModel);
+                            }
+
+                            adapter = new CommentAdapter(Comments_Post.this, activity, arrayList);
+                            binding.commentRecycler.setAdapter(adapter);
+                            adapter.notifyDataSetChanged();
+                            binding.textNoComments.setVisibility(View.GONE);
+                        }else {
+                            binding.textNoComments.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        sharedPreferences = getSharedPreferences("UsageTime", MODE_PRIVATE); //creating database
+        totalSeconds = sharedPreferences.getLong("total_seconds", 0);  //getting previous value
+        startTime = System.currentTimeMillis();  //get start time for counting
+    }
+
+    @Override
+    protected void onPause() {
+        long currentTime = System.currentTimeMillis();  //get stop time for counting
+        long totalTime = currentTime - startTime;   //calculating watch time
+        long newTime = totalSeconds + (totalTime/1000);    //add previous sec and now time converting in sec
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();  // updating in database
+        editor.putLong("total_seconds", newTime);
+        editor.apply();
+
+        ArrayList<UsagesModel> arrayList = CommonFeatures.readListFromPref(this);
+        UsagesModel usagesModel = new UsagesModel("Commenting on Post", startTime, currentTime);
+        arrayList.add(usagesModel);
+        CommonFeatures.writeListInPref(Comments_Post.this, arrayList);
+
+        super.onPause();
+    }
+
+}

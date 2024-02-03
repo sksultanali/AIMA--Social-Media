@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".BottomBar.MenuFragment"
+    android:background="@color/backgroundColour">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="8dp"
+        android:orientation="horizontal">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:civ_border_width="1dp"
+            app:civ_border_color="@color/main_light_yellow"
+            android:layout_marginStart="5dp"
+            android:src="@drawable/aimalogo"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/signika_negative_bold"
+            android:text="Menu Options"
+            android:layout_gravity="center"
+            android:textColor="@color/backgroundBottomColour"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@color/darkGray"/>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never"
+        android:fillViewport="true"
+        android:id="@+id/nestedScroll">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.denzcoskun.imageslider.ImageSlider
+                android:id="@+id/image_slider"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginTop="@dimen/_10mdp"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"
+                app:iss_auto_cycle="true"
+                app:iss_corner_radius="20"
+                app:iss_delay="0"
+                app:iss_error_image="@color/purple_700"
+                app:iss_period="2000"
+                app:iss_placeholder="@color/gray"/>
+
+
+<!--            <HorizontalScrollView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:padding="10dp"-->
+<!--                android:layout_marginTop="10dp"-->
+<!--                android:background="@drawable/background_white_linear">-->
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/linearLayout300"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:orientation="horizontal">-->
+<!--                    <TextView-->
+<!--                        android:id="@+id/terms"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:background="@drawable/text_background_active"-->
+<!--                        android:gravity="center"-->
+<!--                        android:textSize="12sp"-->
+<!--                        android:layout_marginEnd="@dimen/_2mdp"-->
+<!--                        android:paddingStart="@dimen/_10mdp"-->
+<!--                        android:paddingEnd="@dimen/_10mdp"-->
+<!--                        android:paddingTop="@dimen/_5mdp"-->
+<!--                        android:paddingBottom="@dimen/_5mdp"-->
+<!--                        android:text="Terms and Conditions"-->
+<!--                        android:textColor="@color/black" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/privacyPolicy"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:gravity="center"-->
+<!--                        android:textSize="12sp"-->
+<!--                        android:layout_marginStart="@dimen/_2mdp"-->
+<!--                        android:background="@drawable/text_background_active"-->
+<!--                        android:paddingTop="@dimen/_5mdp"-->
+<!--                        android:paddingEnd="@dimen/_10mdp"-->
+<!--                        android:paddingStart="@dimen/_10mdp"-->
+<!--                        android:paddingBottom="@dimen/_5mdp"-->
+<!--                        android:text="Privacy Policy"-->
+<!--                        android:textColor="@color/black" />-->
+<!--                    <TextView-->
+<!--                        android:id="@+id/refundPolicy"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:gravity="center"-->
+<!--                        android:textSize="12sp"-->
+<!--                        android:layout_marginStart="@dimen/_2mdp"-->
+<!--                        android:background="@drawable/text_background_active"-->
+<!--                        android:paddingTop="@dimen/_5mdp"-->
+<!--                        android:paddingEnd="@dimen/_10mdp"-->
+<!--                        android:paddingStart="@dimen/_10mdp"-->
+<!--                        android:paddingBottom="@dimen/_5mdp"-->
+<!--                        android:text="Refund Policy"-->
+<!--                        android:textColor="@color/black" />-->
+<!--                </LinearLayout>-->
+<!--            </HorizontalScrollView>-->
+
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10mdp"
+                android:paddingStart="@dimen/_10mdp"
+                android:paddingEnd="@dimen/_10mdp"
+                android:textColor="@color/black"
+                android:paddingTop="@dimen/_5mdp"
+                android:text="One Click Actions"
+                android:background="@drawable/background_text_donation"
+                android:paddingBottom="@dimen/_5mdp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/memberShip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_white_round_corner"
+                    android:layout_margin="@dimen/_5mdp"
+                    android:padding="@dimen/_5mdp"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:orientation="vertical">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:background="@drawable/button_already_followd"
+                        android:padding="@dimen/_5mdp"
+                        android:src="@drawable/membersmenu" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="Membership"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/meetings"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_white_round_corner"
+                    android:layout_margin="@dimen/_5mdp"
+                    android:padding="@dimen/_5mdp"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:orientation="vertical">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:background="@drawable/button_already_followd"
+                        android:padding="@dimen/_5mdp"
+                        android:src="@drawable/meetingmenu" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="Meetings"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/donations"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="@dimen/_5mdp"
+                    android:background="@drawable/bg_white_round_corner"
+                    android:layout_margin="@dimen/_5mdp"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:orientation="vertical">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/member_feature"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:background="@drawable/button_already_followd"
+                        android:padding="@dimen/_5mdp"
+                        android:src="@drawable/donate" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="Donation"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="@dimen/_5mdp"
+                    android:background="@drawable/bg_white_round_corner"
+                    android:layout_margin="@dimen/_5mdp"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:orientation="vertical">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:background="@drawable/button_already_followd"
+                        android:padding="@dimen/_5mdp"
+                        android:src="@drawable/profilemenu" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:text="Profile"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10mdp"
+                android:paddingStart="@dimen/_10mdp"
+                android:paddingEnd="@dimen/_10mdp"
+                android:textColor="@color/black"
+                android:paddingTop="@dimen/_5mdp"
+                android:text="Other Actions"
+                android:background="@drawable/background_text_donation"
+                android:paddingBottom="@dimen/_5mdp"/>
+
+            <TextView
+                android:id="@+id/terms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10mdp"
+                android:layout_marginStart="@dimen/_10mdp"
+                android:background="@drawable/back_white_gray_stroke_click_effect"
+                android:drawableStart="@drawable/terms_24"
+                android:drawablePadding="@dimen/_5mdp"
+                android:textSize="@dimen/_11font_mdp"
+                android:paddingTop="@dimen/_5mdp"
+                android:paddingBottom="@dimen/_5mdp"
+                android:paddingEnd="@dimen/_10mdp"
+                android:paddingStart="@dimen/_10mdp"
+                android:text="Terms and Conditions"
+                android:textColor="@color/black" />
+            <TextView
+                android:id="@+id/privacyPolicy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5mdp"
+                android:layout_marginStart="@dimen/_10mdp"
+                android:background="@drawable/back_white_gray_stroke_click_effect"
+                android:drawableStart="@drawable/terms_24"
+                android:drawablePadding="@dimen/_5mdp"
+                android:textSize="@dimen/_11font_mdp"
+                android:paddingTop="@dimen/_5mdp"
+                android:paddingBottom="@dimen/_5mdp"
+                android:paddingEnd="@dimen/_10mdp"
+                android:paddingStart="@dimen/_10mdp"
+                android:text="Privacy Policy"
+                android:textColor="@color/black" />
+            <TextView
+                android:id="@+id/refundPolicy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5mdp"
+                android:layout_marginStart="@dimen/_10mdp"
+                android:background="@drawable/back_white_gray_stroke_click_effect"
+                android:drawableStart="@drawable/terms_24"
+                android:drawablePadding="@dimen/_5mdp"
+                android:textSize="@dimen/_11font_mdp"
+                android:paddingTop="@dimen/_5mdp"
+                android:paddingBottom="@dimen/_5mdp"
+                android:paddingEnd="@dimen/_10mdp"
+                android:paddingStart="@dimen/_10mdp"
+                android:text="Refund and Return Policy"
+                android:textColor="@color/black" />
+            <TextView
+                android:id="@+id/helpCentre"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5mdp"
+                android:layout_marginStart="@dimen/_10mdp"
+                android:background="@drawable/back_white_gray_stroke_click_effect"
+                android:drawableStart="@drawable/terms_24"
+                android:drawablePadding="@dimen/_5mdp"
+                android:textSize="@dimen/_11font_mdp"
+                android:paddingTop="@dimen/_5mdp"
+                android:paddingBottom="@dimen/_5mdp"
+                android:paddingEnd="@dimen/_10mdp"
+                android:paddingStart="@dimen/_10mdp"
+                android:text="Help Centre"
+                android:textColor="@color/black" />
+
+
+
+
+<!--            <com.github.ybq.android.spinkit.SpinKitView-->
+<!--                android:id="@+id/spin_kit"-->
+<!--                style="@style/SpinKitView.Small.FadingCircle"-->
+<!--                android:layout_width="30dp"-->
+<!--                android:layout_height="30dp"-->
+<!--                android:layout_marginTop="50dp"-->
+<!--                android:layout_gravity="center"-->
+<!--                app:SpinKit_Color="@color/backgroundBottomColour"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/linearLayout6"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/linearLayout6" />-->
+
+<!--            <androidx.recyclerview.widget.RecyclerView-->
+<!--                android:id="@+id/discover_recyclerView"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:overScrollMode="never"-->
+<!--                android:orientation="vertical"/>-->
+<!--            <TextView-->
+<!--                android:id="@+id/nextBtn"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginTop="@dimen/_10mdp"-->
+<!--                android:layout_marginBottom="@dimen/_10mdp"-->
+<!--                android:layout_marginStart="@dimen/_5mdp"-->
+<!--                android:layout_marginEnd="@dimen/_5mdp"-->
+<!--                android:background="@drawable/post_click_effect"-->
+<!--                android:text="See More"-->
+<!--                android:padding="@dimen/_10mdp"-->
+<!--                android:gravity="center"-->
+<!--                android:visibility="gone"-->
+<!--                android:textColor="@color/black"/>-->
+        </LinearLayout>
+
+
+
+
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

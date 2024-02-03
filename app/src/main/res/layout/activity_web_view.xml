@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    style="@style/Theme.AIMA"
+    tools:context=".Activities.WebViewActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayout60"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:id="@+id/progress_web_External"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/backgroundBottomColour"
+            android:progressTint="@color/white" />
+
+        <WebView
+            android:id="@+id/webViewExternal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textProgressExternal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/_5mdp"
+        android:paddingBottom="@dimen/_5mdp"
+        android:paddingStart="@dimen/_10mdp"
+        android:paddingEnd="@dimen/_10mdp"
+        android:background="@drawable/background_text_donation"
+        android:layout_marginBottom="@dimen/_10mdp"
+        android:textColor="@color/red_colour"
+        app:layout_constraintBottom_toTopOf="@+id/spin_kit_External"
+        app:layout_constraintEnd_toEndOf="@+id/spin_kit_External"
+        app:layout_constraintStart_toStartOf="@+id/spin_kit_External" />
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/spin_kit_External"
+        style="@style/SpinKitView.Large.Wave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_20mdp"
+        android:layout_gravity="center"
+        app:SpinKit_Color="@color/backgroundBottomColour"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout60"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout60" />
+</androidx.constraintlayout.widget.ConstraintLayout>

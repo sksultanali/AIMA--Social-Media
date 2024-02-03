@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/backgroundNotification"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@color/white">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/notificationImage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_margin="8dp"
+        android:contentDescription="@string/imagelogo"
+        android:src="@drawable/profileplaceholder"
+        app:civ_border_color="@color/main_light_yellow"
+        app:civ_border_width="2dp"
+        app:layout_constraintStart_toStartOf="@+id/story"
+        app:layout_constraintTop_toTopOf="@+id/story" />
+    <TextView
+        android:id="@+id/notificationType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:padding="@dimen/_5mdp"
+        android:textColor="@color/black"
+        android:layout_gravity="center_vertical"
+        android:text="@string/loading_please_wait"/>
+
+    <ImageView
+        android:id="@+id/discoverDots"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_gravity="center"
+        android:layout_marginEnd="@dimen/_10mdp"
+        android:src="@drawable/more"
+        app:layout_constraintEnd_toEndOf="@+id/story"
+        app:layout_constraintTop_toTopOf="@+id/story"
+        app:tint="#757272" />
+
+</LinearLayout>

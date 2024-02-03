@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "546815131723",
+    "project_id": "aima-6a424",
+    "storage_bucket": "aima-6a424.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:546815131723:android:794e7af6095bf36f048dce",
+        "android_client_info": {
+          "package_name": "com.developerali.aima"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "546815131723-9fm7i2k1bcgv8tidu6fsg1h30abv2sj8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB30chImI-BUWp44lVOo8qpvHVIlvddh6E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "546815131723-9fm7i2k1bcgv8tidu6fsg1h30abv2sj8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

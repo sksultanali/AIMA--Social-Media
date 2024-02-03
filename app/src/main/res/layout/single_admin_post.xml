@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:layout_marginTop="10dp">
+
+
+    <TextView
+        android:id="@+id/adminName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_5mdp"
+        android:layout_marginEnd="@dimen/_5mdp"
+        android:maxLines="3"
+        android:drawableEnd="@drawable/public_24"
+        android:drawablePadding="@dimen/_5mdp"
+        android:drawableTint="@color/black"
+        android:padding="@dimen/_5mdp"
+        android:text="Admin Post Activity"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/discoverClose"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/close_24"
+        app:layout_constraintBottom_toBottomOf="@+id/adminName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/adminName"
+        app:tint="#757272" />
+
+    <LinearLayout
+        android:id="@+id/constraintDiscover"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/adminName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp">
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/discover"
+                android:layout_width="@dimen/_60mdp"
+                android:layout_height="@dimen/_60mdp"
+                android:scaleType="centerCrop"
+                android:layout_marginEnd="5dp"
+                android:contentDescription="@string/imagelogo"
+                android:src="@drawable/image"
+                android:visibility="visible"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:riv_corner_radius="10dip"
+                app:riv_mutate_background="false" />
+
+            <TextView
+                android:id="@+id/discoverCaption"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:maxLines="3"
+                android:gravity="top"
+                android:padding="@dimen/_5mdp"
+                android:text="Admin Post Activity"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="@+id/discover"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/discover"
+                app:layout_constraintTop_toTopOf="@+id/discover" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/likeTextCount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawablePadding="@dimen/_5mdp"
+        android:drawableStart="@drawable/communication"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintDiscover"
+        android:paddingTop="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="5dp"
+        android:text="0"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="@dimen/_10mdp"
+    app:layout_goneMarginTop="10dp"
+    android:background="@color/white"
+    android:layout_marginTop="@dimen/_10mdp">
+
+    <LinearLayout
+        android:id="@+id/profClick"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/discoverProfileImage"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="5dp"
+            android:contentDescription="@string/imagelogo"
+            android:src="@drawable/aimalogo"
+            app:civ_border_color="@color/main_light_yellow"
+            app:civ_border_width="2dp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/_10mdp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/discoverProfileName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Admin Uploads"
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/verifiedProfile"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginStart="2dp"
+                    android:src="@drawable/verified"
+                    android:visibility="visible" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/addedOnDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableEnd="@drawable/public_24"
+                android:drawablePadding="@dimen/_5mdp"
+                android:drawableTint="@color/black"
+                android:text="Added on "
+                android:textColor="@color/black" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/seeAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="3"
+            android:textSize="13sp"
+            android:paddingTop="@dimen/_5mdp"
+            android:paddingStart="@dimen/_5mdp"
+            android:paddingEnd="@dimen/_5mdp"
+            android:paddingBottom="@dimen/_5mdp"
+            android:textColor="@color/white"
+            android:background="@drawable/button_follow_background"
+            android:text="See All" />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/galleryCaption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxLines="3"
+        android:textSize="13sp"
+        android:paddingTop="@dimen/_5mdp"
+        android:paddingStart="@dimen/_5mdp"
+        android:paddingEnd="@dimen/_5mdp"
+        android:paddingBottom="@dimen/_5mdp"
+        android:text="@string/sample_caption"
+        app:layout_constraintTop_toBottomOf="@+id/profileSegment"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5mdp"
+        android:orientation="horizontal">
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/imageView1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_85mdp"
+            android:layout_weight="1"
+            android:scaleType="centerCrop"
+            android:background="@color/main_light_colour"
+            android:contentDescription="@string/imagelogo"
+            android:src="@drawable/image"
+            android:layout_marginEnd="@dimen/_5mdp"
+            app:riv_corner_radius="10dip"
+            app:riv_mutate_background="true" />
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/imageView2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_85mdp"
+            android:layout_weight="1"
+            android:scaleType="centerCrop"
+            android:background="@color/main_light_colour"
+            android:contentDescription="@string/imagelogo"
+            android:src="@drawable/image"
+            android:layout_marginEnd="@dimen/_5mdp"
+            app:riv_corner_radius="10dip"
+            app:riv_mutate_background="true" />
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/imageView3"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_85mdp"
+            android:layout_weight="1"
+            android:scaleType="centerCrop"
+            android:background="@color/main_light_colour"
+            android:contentDescription="@string/imagelogo"
+            android:src="@drawable/image"
+            app:riv_corner_radius="10dip"
+            app:riv_mutate_background="true" />
+    </LinearLayout>
+
+</LinearLayout>
