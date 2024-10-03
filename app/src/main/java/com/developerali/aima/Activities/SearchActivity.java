@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.developerali.aima.Adapters.FollowAdapter;
 import com.developerali.aima.Adapters.PostAdapter;
+import com.developerali.aima.Adapters.SearchAdapter;
 import com.developerali.aima.Adapters.VideoPostAdapter;
 import com.developerali.aima.CommonFeatures;
 import com.developerali.aima.DB_Helper;
@@ -45,7 +46,7 @@ import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements SearchAdapter.SelectedItem {
 
     private ActivitySearchBinding binding;
     private FirebaseAuth auth;
@@ -124,8 +125,8 @@ public class SearchActivity extends AppCompatActivity {
         binding.userRecyclerView.setLayoutManager(lnm);
         if (recentSearches != null){
             Collections.reverse(recentSearches);
-            //adapter = new SearchAdapter(recentSearches, SearchHotel.this);
-            //binding.userRecyclerView.setAdapter(adapter);
+            SearchAdapter adapter = new SearchAdapter(recentSearches, SearchActivity.this, SearchActivity.this);
+            binding.userRecyclerView.setAdapter(adapter);
             binding.noData.setVisibility(View.GONE);
         }
         if (recentSearches.isEmpty()){
@@ -172,6 +173,7 @@ public class SearchActivity extends AppCompatActivity {
         int checkedRadioButtonId = binding.radioGroup.getCheckedRadioButtonId();
         RadioButton radioButton = findViewById(checkedRadioButtonId);
         String searchOn = radioButton.getText().toString();
+        dbHelper.addSearchQuery(new RecentSearchModel(queryText, searchOn));
         binding.noData.setVisibility(View.GONE);
 
         switch (searchOn.toLowerCase()) {
@@ -504,5 +506,22 @@ public class SearchActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onShowAction(RecentSearchModel searchModel) {
+        switch (searchModel.getType().toLowerCase()) {
+            case "people":
+                binding.people.setChecked(true);
+                break;
+            case "video":
+                binding.video.setChecked(true);
+                break;
+            default:
+                binding.post.setChecked(true);
+                break;
+        }
+        searchProfile(searchModel.getSearch_query());
+        binding.progressBar4.setVisibility(View.VISIBLE);
     }
 }
