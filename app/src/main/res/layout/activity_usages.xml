@@ -256,7 +256,18 @@
                 tools:listitem="@layout/item_usages_app"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="@dimen/_8mdp"/>
-
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/no_data"
+                android:layout_width="220dp"
+                android:layout_height="220dp"
+                android:layout_gravity="center"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lottie_autoPlay="true"
+                android:visibility="gone"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/no_data" />
 
 
 

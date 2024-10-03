@@ -17,6 +17,7 @@ import android.os.Bundle;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.os.StrictMode;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -145,6 +146,14 @@ public class MainActivity extends AppCompatActivity{
         });
 
 
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                .detectAll()
+                .penaltyLog()
+                .build();
+        StrictMode.setThreadPolicy(policy);
+
+
+
 
 
     }
@@ -156,8 +165,8 @@ public class MainActivity extends AppCompatActivity{
         totalSeconds = sharedPreferences.getLong("total_seconds", 0);  //getting previous value
         startTime = System.currentTimeMillis();  //get start time for counting
 
-        long minutes = totalSeconds / 60;
-        long hour = minutes / 60;
+        long minutes = totalSeconds/60;
+        long hour = minutes/60;
 
         //Toast.makeText(this, ""+ seconds, Toast.LENGTH_SHORT).show();
         //Toast.makeText(this, ""+ minutes, Toast.LENGTH_SHORT).show();
@@ -222,30 +231,30 @@ public class MainActivity extends AppCompatActivity{
         dialog1.show();
     }
 
-    @Override
-    protected void onPause() {
-        long currentTime = System.currentTimeMillis();  //get stop time for counting
-        long totalTime = currentTime - startTime;   //calculating watch time
-        long newTime = totalSeconds + (totalTime/1000);    //add previous sec and now time converting in sec
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();  // updating in database
-        editor.putLong("total_seconds", newTime);
-        editor.apply();
-
-        ArrayList<UsagesModel> arrayList = CommonFeatures.readListFromPref(this);
-        UsagesModel usagesModel = new UsagesModel("AIMA Book", startTime, currentTime);
-        if (arrayList != null) {
-
-            arrayList.add(usagesModel);
-
-        } else {
-
-        }
-
-        CommonFeatures.writeListInPref(MainActivity.this, arrayList);
-
-        super.onPause();
-    }
+//    @Override
+//    protected void onPause() {
+//        long currentTime = System.currentTimeMillis();  //get stop time for counting
+//        long totalTime = currentTime - startTime;   //calculating watch time
+//        long newTime = totalSeconds + (totalTime/1000);    //add previous sec and now time converting in sec
+//
+//        SharedPreferences.Editor editor = sharedPreferences.edit();  // updating in database
+//        editor.putLong("total_seconds", newTime);
+//        editor.apply();
+//
+//        ArrayList<UsagesModel> arrayList = CommonFeatures.readListFromPref(this);
+//        UsagesModel usagesModel = new UsagesModel("AIMA Book", startTime, currentTime);
+//        if (arrayList != null) {
+//
+//            arrayList.add(usagesModel);
+//
+//        } else {
+//
+//        }
+//
+//        CommonFeatures.writeListInPref(MainActivity.this, arrayList);
+//
+//        super.onPause();
+//    }
 
     private void showUpdateDialog(int version, String details) {
         DilaogUpdateMakingBinding dialogUpdate = DilaogUpdateMakingBinding.inflate(getLayoutInflater());

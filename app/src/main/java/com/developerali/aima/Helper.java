@@ -3,10 +3,18 @@ package com.developerali.aima;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.core.content.ContextCompat;
 
 import com.developerali.aima.databinding.DialogNotLoginBinding;
 
@@ -14,6 +22,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class Helper {
 
@@ -47,5 +56,18 @@ public class Helper {
         });
 
         dialog.show();
+    }
+
+    public static boolean isChromeCustomTabsSupported(@NonNull final Context context) {
+        Intent serviceIntent = new Intent("android.support.customtabs.action.CustomTabsService");
+        serviceIntent.setPackage("com.android.chrome");
+        List<ResolveInfo> resolveInfos = context.getPackageManager().queryIntentServices(serviceIntent, 0);
+        return !resolveInfos.isEmpty();
+    }
+    public static void openChromeTab(String link, Activity activity){
+        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+        builder.setToolbarColor(ContextCompat.getColor(activity, R.color.backgroundBottomColour));
+        CustomTabsIntent customTabsIntent = builder.build();
+        customTabsIntent.launchUrl(activity, Uri.parse(link));
     }
 }

@@ -183,31 +183,31 @@ public class GalleryActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        sharedPreferences = getSharedPreferences("UsageTime", MODE_PRIVATE); //creating database
-        totalSeconds = sharedPreferences.getLong("total_seconds", 0);  //getting previous value
-        startTime = System.currentTimeMillis();  //get start time for counting
-    }
-
-    @Override
-    protected void onPause() {
-        long currentTime = System.currentTimeMillis();  //get stop time for counting
-        long totalTime = currentTime - startTime;   //calculating watch time
-        long newTime = totalSeconds + (totalTime/1000);    //add previous sec and now time converting in sec
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();  // updating in database
-        editor.putLong("total_seconds", newTime);
-        editor.apply();
-
-        ArrayList<UsagesModel> arrayList = CommonFeatures.readListFromPref(this);
-        UsagesModel usagesModel = new UsagesModel("AIMA Gallery", startTime, currentTime);
-        arrayList.add(usagesModel);
-        CommonFeatures.writeListInPref(GalleryActivity.this, arrayList);
-
-        super.onPause();
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        sharedPreferences = getSharedPreferences("UsageTime", MODE_PRIVATE); //creating database
+//        totalSeconds = sharedPreferences.getLong("total_seconds", 0);  //getting previous value
+//        startTime = System.currentTimeMillis();  //get start time for counting
+//    }
+//
+//    @Override
+//    protected void onPause() {
+//        long currentTime = System.currentTimeMillis();  //get stop time for counting
+//        long totalTime = currentTime - startTime;   //calculating watch time
+//        long newTime = totalSeconds + (totalTime/1000);    //add previous sec and now time converting in sec
+//
+//        SharedPreferences.Editor editor = sharedPreferences.edit();  // updating in database
+//        editor.putLong("total_seconds", newTime);
+//        editor.apply();
+//
+//        ArrayList<UsagesModel> arrayList = CommonFeatures.readListFromPref(this);
+//        UsagesModel usagesModel = new UsagesModel("AIMA Gallery", startTime, currentTime);
+//        arrayList.add(usagesModel);
+//        CommonFeatures.writeListInPref(GalleryActivity.this, arrayList);
+//
+//        super.onPause();
+//    }
 
     private String extractLink(Uri data) {
         Toast.makeText(this, "loading request...", Toast.LENGTH_SHORT).show();

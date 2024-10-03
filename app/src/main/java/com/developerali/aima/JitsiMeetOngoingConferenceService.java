@@ -1,5 +1,6 @@
 package com.developerali.aima;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -21,6 +22,7 @@ public class JitsiMeetOngoingConferenceService extends Service{
         super.onCreate();
     }
 
+    @SuppressLint("ForegroundServiceType")
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // Create and configure your notification
@@ -59,7 +61,7 @@ public class JitsiMeetOngoingConferenceService extends Service{
         // Create and configure the PendingIntent for your notification
         // ...
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(), PendingIntent.FLAG_MUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, new Intent(), PendingIntent.FLAG_IMMUTABLE);
         return pendingIntent;
     }
 }

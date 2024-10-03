@@ -36,6 +36,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.developerali.aima.CommonFeatures;
 import com.developerali.aima.Forms.MembershipApply;
+import com.developerali.aima.Helper;
 import com.developerali.aima.MainActivity;
 import com.developerali.aima.Models.CommentModel;
 import com.developerali.aima.Models.MembershipModel;
@@ -206,12 +207,15 @@ public class MemberShip_Act extends AppCompatActivity {
         });
 
         binding.newMemberForm.setOnClickListener(v->{
-//            Toast.makeText(activity, "loading...", Toast.LENGTH_SHORT).show();
-//            Intent i = new Intent(MemberShip_Act.this, MembershipApply.class);
-//            i.putExtra("value", "appliedForms");
-//            i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
-//            startActivity(i);
-            Toast.makeText(activity, "coming soon...", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(activity, "loading...", Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(MemberShip_Act.this, MembershipApply.class);
+            i.putExtra("value", "appliedForms");
+            i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(i);
+//            Helper.showAlertNoAction(MemberShip_Act.this,
+//                    "Denied Access",
+//                    "For now, we are not allowing new member through online mode. Please try after sometime.",
+//                    "Okay");
         });
 
         binding.activeOldMember.setOnClickListener(c->{
@@ -224,11 +228,11 @@ public class MemberShip_Act extends AppCompatActivity {
 
         binding.renewCard.setOnClickListener(v->{
 //            Toast.makeText(activity, "loading...", Toast.LENGTH_SHORT).show();
-//            Intent i = new Intent(MemberShip_Act.this, MembershipApply.class);
-//            i.putExtra("value", "renewForms");
-//            i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
-//            startActivity(i);
-            Toast.makeText(activity, "coming soon...", Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(MemberShip_Act.this, MembershipApply.class);
+            i.putExtra("value", "renewForms");
+            i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(i);
+            //Toast.makeText(activity, "coming soon...", Toast.LENGTH_SHORT).show();
         });
 
         binding.memberProfClick.setOnClickListener(v->{
@@ -240,9 +244,9 @@ public class MemberShip_Act extends AppCompatActivity {
         binding.formFillUp.setOnClickListener(v->{
             VideoModel videoModel = new VideoModel();
             Long time = 1691513124425L;
-            videoModel.setVideoId("");    //ekhane video Id dite hobe
+            videoModel.setVideoId("kC-uh72pAw0");    //ekhane video Id dite hobe
             videoModel.setUploader("Admin");
-            videoModel.setCaption("");
+            videoModel.setCaption("Watch our tutorial video of form fill up.");
             videoModel.setTime(time);
 
             Intent intent = new Intent(MemberShip_Act.this, VideoShow.class);
@@ -326,31 +330,31 @@ public class MemberShip_Act extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        sharedPreferences = getSharedPreferences("UsageTime", MODE_PRIVATE); //creating database
-        totalSeconds = sharedPreferences.getLong("total_seconds", 0);  //getting previous value
-        startTime = System.currentTimeMillis();  //get start time for counting
-    }
-
-    @Override
-    protected void onPause() {
-        long currentTime = System.currentTimeMillis();  //get stop time for counting
-        long totalTime = currentTime - startTime;   //calculating watch time
-        long newTime = totalSeconds + (totalTime/1000);    //add previous sec and now time converting in sec
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();  // updating in database
-        editor.putLong("total_seconds", newTime);
-        editor.apply();
-
-        ArrayList<UsagesModel> arrayList = CommonFeatures.readListFromPref(this);
-        UsagesModel usagesModel = new UsagesModel("Membership Page", startTime, currentTime);
-        arrayList.add(usagesModel);
-        CommonFeatures.writeListInPref(MemberShip_Act.this, arrayList);
-
-        super.onPause();
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        sharedPreferences = getSharedPreferences("UsageTime", MODE_PRIVATE); //creating database
+//        totalSeconds = sharedPreferences.getLong("total_seconds", 0);  //getting previous value
+//        startTime = System.currentTimeMillis();  //get start time for counting
+//    }
+//
+//    @Override
+//    protected void onPause() {
+//        long currentTime = System.currentTimeMillis();  //get stop time for counting
+//        long totalTime = currentTime - startTime;   //calculating watch time
+//        long newTime = totalSeconds + (totalTime/1000);    //add previous sec and now time converting in sec
+//
+//        SharedPreferences.Editor editor = sharedPreferences.edit();  // updating in database
+//        editor.putLong("total_seconds", newTime);
+//        editor.apply();
+//
+//        ArrayList<UsagesModel> arrayList = CommonFeatures.readListFromPref(this);
+//        UsagesModel usagesModel = new UsagesModel("Membership Page", startTime, currentTime);
+//        arrayList.add(usagesModel);
+//        CommonFeatures.writeListInPref(MemberShip_Act.this, arrayList);
+//
+//        super.onPause();
+//    }
 
     public void showBottomBar(String link){
 

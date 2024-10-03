@@ -127,7 +127,7 @@ public class HomeFragment extends Fragment {
         }
 
 
-        adapter = new PostAdapter(getActivity(), postModelArrayList, getActivity());
+        adapter = new PostAdapter(postModelArrayList, getActivity());
         binding.nestedScroll.setNestedScrollingEnabled(false);
         binding.discoverRecyclerView.setAdapter(adapter);
 //        binding.swipeRefresh.setNestedScrollingEnabled(false);
@@ -238,7 +238,7 @@ public class HomeFragment extends Fragment {
                         break;
                     case 3:
                         postModelArrayList.clear();
-                        adapter = new PostAdapter(getActivity(), postModelArrayList, getActivity());
+                        adapter = new PostAdapter(postModelArrayList, getActivity());
                         binding.discoverRecyclerView.setAdapter(adapter);
 
                         collectionReference = firebaseFirestore.collection("post");
@@ -251,7 +251,7 @@ public class HomeFragment extends Fragment {
                     case 4:
                         postModelArrayList.clear();
 
-                        adapter = new PostAdapter(getActivity(), postModelArrayList, getActivity());
+                        adapter = new PostAdapter(postModelArrayList, getActivity());
                         binding.discoverRecyclerView.setAdapter(adapter);
                         collectionReference = firebaseFirestore.collection("post");
                         binding.spinKit.setVisibility(View.VISIBLE);
@@ -371,7 +371,6 @@ public class HomeFragment extends Fragment {
                     .compress(3072)			//Final image size will be less than 3 MB(Optional)
                     .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
                     .start(85);
-            Toast.makeText(getActivity(), "opening camera...", Toast.LENGTH_SHORT).show();
         });
 
         database.getReference().child("notification")
@@ -638,7 +637,7 @@ public class HomeFragment extends Fragment {
                 });
     }
     public void initialVideoPage(){
-        adapterVideo = new VideoPostAdapter(getActivity(), postVideoArrayList, getActivity().getLifecycle(), getActivity());
+        adapterVideo = new VideoPostAdapter(postVideoArrayList, getActivity().getLifecycle(), getActivity());
         binding.discoverRecyclerView.setAdapter(adapterVideo);
 
         collectionReference = firebaseFirestore.collection("video");

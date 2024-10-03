@@ -177,7 +177,8 @@ public class UsagesActivity extends AppCompatActivity {
                     }
                 });
 
-        getFetchData();
+        //getFetchData();
+        arrayList = new ArrayList<>();
 
         database.getReference().child("withdraw")
                 .child(auth.getCurrentUser().getUid())
@@ -206,6 +207,14 @@ public class UsagesActivity extends AppCompatActivity {
         binding.recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
+        if (arrayList == null || arrayList.isEmpty()){
+            binding.clearAllUsages.setVisibility(View.GONE);
+            binding.noData.setVisibility(View.VISIBLE);
+        }else {
+            binding.clearAllUsages.setVisibility(View.VISIBLE);
+            binding.noData.setVisibility(View.GONE);
+        }
+
 
         binding.clearAllUsages.setOnClickListener(v->{
             SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(UsagesActivity.this);
@@ -216,12 +225,22 @@ public class UsagesActivity extends AppCompatActivity {
             adapter.notifyDataSetChanged();
         });
 
-        SharedPreferences sharedPreferences = getSharedPreferences("UsageTime", MODE_PRIVATE); //creating database
-        long totalSeconds = sharedPreferences.getLong("total_seconds", 0);  //getting previous value
-        long minutes = totalSeconds / 60;
-        totalSeconds %= totalSeconds;
+        try {
+            SharedPreferences sharedPreferences = getSharedPreferences("UsageTime", MODE_PRIVATE); //creating database
+            long totalSeconds = sharedPreferences.getLong("total_seconds", 0);  //getting previous value
+            long minutes;
+            if (totalSeconds < 60){
+                minutes = 0;
+            }else {
+                minutes = totalSeconds / 60;
+            }
 
-        binding.min.setText(minutes + " Min " + totalSeconds + " Sec");
+            totalSeconds %= totalSeconds;
+
+            binding.min.setText(minutes + " Min " + totalSeconds + " Sec");
+        }catch (Exception e){
+
+        }
 
 
 
@@ -373,7 +392,6 @@ public class UsagesActivity extends AppCompatActivity {
         if (arrayList == null) {
             arrayList = new ArrayList<>();
         }
-
         arrayList = CommonFeatures.readListFromPref(this);
         Collections.reverse(arrayList);
     }

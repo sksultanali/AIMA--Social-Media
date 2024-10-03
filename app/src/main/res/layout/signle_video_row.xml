@@ -9,12 +9,18 @@
         android:id="@+id/youtube_mine_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:autoPlay="false"
-        app:showVideoCurrentTime="false"
-        app:showFullScreenButton="false"
-        app:showVideoDuration="false"
-        app:showYouTubeButton="false"
-        app:showSeekBar="true"/>
+        app:autoPlay="false"/>
+
+<!--    <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView-->
+<!--        android:id="@+id/youtube_mine_view"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        app:autoPlay="false"-->
+<!--        app:showVideoCurrentTime="false"-->
+<!--        app:showFullScreenButton="false"-->
+<!--        app:showVideoDuration="false"-->
+<!--        app:showYouTubeButton="false"-->
+<!--        app:showSeekBar="true"/>-->
 
     <LinearLayout
         android:id="@+id/profileSegment"
@@ -123,6 +129,7 @@
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/download_link"
             android:layout_width="35dp"
+            android:visibility="gone"
             android:layout_height="35dp"
             android:background="@drawable/shape_oval"
             android:padding="@dimen/_5mdp"

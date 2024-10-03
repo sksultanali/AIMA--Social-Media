@@ -32,6 +32,7 @@
         android:layout_margin="20dp"
         android:src="@drawable/share_24"
         app:tint="@color/white"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -22,6 +22,7 @@ import com.developerali.aima.Activities.MemberShip_Act;
 import com.developerali.aima.Activities.ProfileActivity;
 import com.developerali.aima.Activities.WebViewActivity;
 import com.developerali.aima.Adapters.AdminActivityAdapter;
+import com.developerali.aima.Helper;
 import com.developerali.aima.Models.PostModel;
 import com.developerali.aima.R;
 import com.developerali.aima.databinding.FragmentMenuBinding;
@@ -38,6 +39,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.rpc.Help;
 
 import java.util.ArrayList;
 
@@ -83,7 +85,7 @@ public class MenuFragment extends Fragment {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists() && !getActivity().isDestroyed()){
+                        if (snapshot.exists()){
                             slideModels.clear();
                             for (DataSnapshot ds:snapshot.getChildren()){
                                 slideModels.add(new SlideModel(ds.child("imageUrl").getValue(String.class), ScaleTypes.CENTER_CROP));
@@ -126,26 +128,44 @@ public class MenuFragment extends Fragment {
         });
 
         binding.terms.setOnClickListener(v->{
-            Intent i = new Intent(getActivity().getApplicationContext(), WebViewActivity.class);
-            i.putExtra("provide", "https://www.visitaima.org/terms");
-            startActivity(i);
+            if (Helper.isChromeCustomTabsSupported(getActivity())){
+                Helper.openChromeTab("https://www.visitaima.org/terms", getActivity());
+            }else {
+                Intent i = new Intent(getActivity().getApplicationContext(), WebViewActivity.class);
+                i.putExtra("provide", "https://www.visitaima.org/terms");
+                startActivity(i);
+            }
         });
         binding.privacyPolicy.setOnClickListener(v->{
-            Intent i = new Intent(getActivity().getApplicationContext(), WebViewActivity.class);
-            i.putExtra("provide", "https://www.visitaima.org/privacy");
-            startActivity(i);
+            if (Helper.isChromeCustomTabsSupported(getActivity())){
+                Helper.openChromeTab("https://www.visitaima.org/privacy", getActivity());
+            }else {
+                Intent i = new Intent(getActivity().getApplicationContext(), WebViewActivity.class);
+                i.putExtra("provide", "https://www.visitaima.org/privacy");
+                startActivity(i);
+            }
         });
         binding.refundPolicy.setOnClickListener(v->{
-            Intent i = new Intent(getActivity().getApplicationContext(), WebViewActivity.class);
-            i.putExtra("provide", "https://www.visitaima.org/refund");
-            startActivity(i);
+            if (Helper.isChromeCustomTabsSupported(getActivity())){
+                Helper.openChromeTab("https://www.visitaima.org/refund", getActivity());
+            }else {
+                Intent i = new Intent(getActivity().getApplicationContext(), WebViewActivity.class);
+                i.putExtra("provide", "https://www.visitaima.org/refund");
+                startActivity(i);
+            }
         });
 
         binding.helpCentre.setOnClickListener(v->{
-            String message = "Hi, I'm using AIMA app. I wanted to know about something. Can we talk now?";
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse("http://api.whatsapp.com/send?phone="+"+91"+"8967254087" + "&text="+ message));
-            startActivity(intent);
+            try {
+                String message = "Hi, I'm using AIMA app. I wanted to know about something. Can we talk now?";
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("http://api.whatsapp.com/send?phone="+"+91"+"8967254087" + "&text="+ message));
+                startActivity(intent);
+            }catch (Exception e){
+                Helper.showAlertNoAction(getActivity(), "Error 404",
+                        "May be you don't have installed whatsapp in your device. We are only " +
+                                "available in whatsapp right now. Please try again later after installing whatsapp.", "Okay");
+            }
         });
 
 //        postModelArrayList = new ArrayList<>();

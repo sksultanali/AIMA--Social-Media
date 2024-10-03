@@ -4,14 +4,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
@@ -21,6 +26,7 @@ import com.developerali.aima.Activities.WebViewActivity;
 import com.developerali.aima.Models.MemberApplied;
 import com.developerali.aima.R;
 import com.developerali.aima.databinding.ActivityMembershipApplyBinding;
+import com.developerali.aima.databinding.DialogAmountInsertBinding;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -31,12 +37,16 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.razorpay.Checkout;
+import com.razorpay.PaymentResultListener;
 import com.shuhart.stepview.StepView;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
 
-public class MembershipApply extends AppCompatActivity {
+public class MembershipApply extends AppCompatActivity implements PaymentResultListener {
 
     ActivityMembershipApplyBinding binding;
     ArrayList<String> formName = new ArrayList<>();
@@ -46,6 +56,7 @@ public class MembershipApply extends AppCompatActivity {
     String valueChild, formLink;
     FirebaseAuth auth;
     FirebaseStorage storage;
+    Checkout checkout;
     String validity[] = {"3 Months", "6 Months", "12 Months"};
     String price[] = {"60", "110", "200"};
     String payWith[] = {"Select Payment Mode", "UPI", "QR Code", "Bank Transfer"};
@@ -59,6 +70,10 @@ public class MembershipApply extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance();
+
+        Checkout.preload(getApplicationContext());
+        checkout = new Checkout();
+        checkout.setKeyID("rzp_live_0734xBSfpgbEg3");
 
         valueChild = getIntent().getStringExtra("value");
         if (valueChild.equalsIgnoreCase("renewForms")){
@@ -202,13 +217,6 @@ public class MembershipApply extends AppCompatActivity {
 
 
         binding.payBtn.setOnClickListener(v->{
-//            Toast.makeText(this, "loading...", Toast.LENGTH_SHORT).show();
-//            int amount = Integer.parseInt(binding.validityPayment.getText().toString()) +
-//                    Integer.parseInt(binding.processingFee.getText().toString());
-//            String uri = "upi://pay?pa=" + "sksultanali9732@ybl" + "&am=" + amount + "&pn=" + "&mc=&tid=&tr=" + System.currentTimeMillis() + "&tn=" + "Payment For AIMA Membership" + "&url=";
-//            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-//            Intent chooser = Intent.createChooser(intent, "Pay with...");
-//            startActivity(chooser);
             String emailCode = binding.codeEmail.getText().toString();
             String phone = binding.phoneNumber.getText().toString();
 
@@ -218,8 +226,37 @@ public class MembershipApply extends AppCompatActivity {
                 binding.phoneNumber.setError("can't empty");
             }else {
 
+                try {
+
+                    int Amt = Integer.parseInt(binding.processingFee.getText().toString());
+                    int Amt2 = Integer.parseInt(binding.validityPayment.getText().toString());
+                    int normalPrice = (Amt+Amt2) * 100;
+
+                    JSONObject options = new JSONObject();
+                    options.put("name", "All India Minority Association");
+                    options.put("description", "Donating For All India Minority Association");
+                    options.put("send_sms_hash",true);
+                    options.put("allow_rotation", true);
+
+                    //You can omit the image option to fetch the image from dashboard
+                    options.put("image", "https://play-lh.googleusercontent.com/zckSw2H858GVtLbh2UwBWUocb6tT9CsEQcQGGVeF0pOnga1-bVxS_lgStiNGxeVoOC8");
+                    options.put("currency", "INR");
+                    options.put("amount", normalPrice);
+
+                    //JSONObject preFill = new JSONObject();
+//                preFill.put("email", user.getEmail());
+                   // preFill.put("contact", "+91"+phoneNum);
+                    //options.put("prefill", preFill);
+
+                    checkout.open(MembershipApply.this, options);
+
+                } catch (Exception e) {
+                    Toast.makeText(MembershipApply.this, "Error in payment: " + e.getMessage(), Toast.LENGTH_SHORT)
+                            .show();
+                    e.printStackTrace();
+                }
                 //pay and if success then
-                finalSubmit();
+                //finalSubmit();
 
             }
         });
@@ -302,6 +339,19 @@ public class MembershipApply extends AppCompatActivity {
 //                }
 //            }
 //        });
+    }
+
+
+    @Override
+    public void onPaymentSuccess(String s) {
+        finalSubmit();
+        Toast.makeText(MembershipApply.this, s, Toast.LENGTH_SHORT).show();
+    }
+
+
+    @Override
+    public void onPaymentError(int i, String s) {
+        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
     }
 
     public void setStep(int position){

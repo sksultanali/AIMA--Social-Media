@@ -26,8 +26,13 @@ public class CommonFeatures {
     private static final String LIST_KEY = "usages_list";
 
     public static void writeListInPref(Context context, ArrayList<UsagesModel> list) {
-        Gson gson = new Gson();
-        String jsonString = gson.toJson(list);
+        String jsonString;
+        try{
+            Gson gson = new Gson();
+            jsonString = gson.toJson(list);
+        }catch (Exception e){
+            jsonString = "Na";
+        }
 
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = pref.edit();
@@ -45,9 +50,15 @@ public class CommonFeatures {
 //        return list;
 
         if (jsonString != null || !jsonString.isEmpty()) {
-            Gson gson = new Gson();
-            Type type = new TypeToken<ArrayList<UsagesModel>>() {}.getType();
-            ArrayList<UsagesModel> list = gson.fromJson(jsonString, type);
+
+            ArrayList<UsagesModel> list;
+            try{
+                Gson gson = new Gson();
+                Type type = new TypeToken<ArrayList<UsagesModel>>() {}.getType();
+                list = gson.fromJson(jsonString, type);
+            }catch (Exception e){
+                list = new ArrayList<>();
+            }
 
             if (list != null) {
                 return list;
@@ -70,7 +81,4 @@ public class CommonFeatures {
         }
         return arrayList;
     }
-
-
-
 }

@@ -78,6 +78,8 @@
                     android:drawableEnd="@drawable/public_24"
                     android:drawablePadding="@dimen/_5mdp"
                     android:drawableTint="@color/black"
+                    android:singleLine="true"
+                    android:textSize="@dimen/_10font_mdp"
                     android:text="Public Profile - 3m ago -"
                     android:textColor="@color/black" />
             </LinearLayout>
@@ -133,11 +135,6 @@
         app:autoPlay="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/discoverCaption"
-        app:showFullScreenButton="false"
-        app:showSeekBar="true"
-        app:showVideoCurrentTime="true"
-        app:showVideoDuration="true"
-        app:showYouTubeButton="false" />
+        app:layout_constraintTop_toBottomOf="@+id/discoverCaption"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

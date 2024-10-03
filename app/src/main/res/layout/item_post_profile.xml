@@ -22,14 +22,11 @@
         app:riv_corner_radius="10dip"
         app:riv_mutate_background="true" />
 
-    <com.google.android.material.progressindicator.CircularProgressIndicator
+    <ProgressBar
         android:id="@+id/progress_circular"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:visibility="gone"
-        style="@style/Widget.Material3.CircularProgressIndicator"
-        android:progressTint="@color/backgroundBottomColour"
-        android:progressBackgroundTint="@color/main_light_colour"
         app:layout_constraintBottom_toBottomOf="@+id/imageView1"
         app:layout_constraintEnd_toEndOf="@+id/imageView1"
         app:layout_constraintStart_toStartOf="@+id/imageView1"

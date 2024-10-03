@@ -51,6 +51,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Name"
+                        android:textSize="@dimen/_11font_mdp"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
 
@@ -70,6 +71,8 @@
                     android:layout_height="wrap_content"
                     android:drawableEnd="@drawable/public_24"
                     android:drawablePadding="@dimen/_5mdp"
+                    android:textSize="@dimen/_10font_mdp"
+                    android:singleLine="true"
                     android:drawableTint="@color/black"
                     android:text="Public Profile - 3m ago -"
                     android:textColor="@color/black" />

@@ -183,6 +183,10 @@ public class ProfileActivity extends AppCompatActivity {
 
                                 String profId = snapshot.getKey();
 
+                                if (snapshot.child("phone").exists()){
+                                    userModel.setPhone(snapshot.child("phone").getValue(String.class));
+                                }
+
                                 userModel.setUserId(profId);
                                 SocialMediaClicks(userModel);
                                 if (userModel.getImage() ==null || userModel.getBio() == null || userModel.getAbout() == null
@@ -260,32 +264,32 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        sharedPreferences = getSharedPreferences("UsageTime", MODE_PRIVATE); //creating database
-        totalSeconds = sharedPreferences.getLong("total_seconds", 0);  //getting previous value
-        startTime = System.currentTimeMillis();  //get start time for counting
-    }
-
-    @Override
-    protected void onPause() {
-        long currentTime = System.currentTimeMillis();  //get stop time for counting
-        long totalTime = currentTime - startTime;   //calculating watch time
-        long newTime = totalSeconds + (totalTime/1000);    //add previous sec and now time converting in sec
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();  // updating in database
-        editor.putLong("total_seconds", newTime);
-        editor.apply();
-
-        ArrayList<UsagesModel> arrayList = CommonFeatures.readListFromPref(this);
-
-        UsagesModel usagesModel = new UsagesModel("Checked Profile", startTime, currentTime);
-        arrayList.add(usagesModel);
-        CommonFeatures.writeListInPref(ProfileActivity.this, arrayList);
-
-        super.onPause();
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        sharedPreferences = getSharedPreferences("UsageTime", MODE_PRIVATE); //creating database
+//        totalSeconds = sharedPreferences.getLong("total_seconds", 0);  //getting previous value
+//        startTime = System.currentTimeMillis();  //get start time for counting
+//    }
+//
+//    @Override
+//    protected void onPause() {
+//        long currentTime = System.currentTimeMillis();  //get stop time for counting
+//        long totalTime = currentTime - startTime;   //calculating watch time
+//        long newTime = totalSeconds + (totalTime/1000);    //add previous sec and now time converting in sec
+//
+//        SharedPreferences.Editor editor = sharedPreferences.edit();  // updating in database
+//        editor.putLong("total_seconds", newTime);
+//        editor.apply();
+//
+//        ArrayList<UsagesModel> arrayList = CommonFeatures.readListFromPref(this);
+//
+//        UsagesModel usagesModel = new UsagesModel("Checked Profile", startTime, currentTime);
+//        arrayList.add(usagesModel);
+//        CommonFeatures.writeListInPref(ProfileActivity.this, arrayList);
+//
+//        super.onPause();
+//    }
     private void showVerified() {
         DialogNotLoginBinding dialogNotLoginBinding = DialogNotLoginBinding.inflate(getLayoutInflater());
         Dialog dialog1 = new Dialog(this);
@@ -500,6 +504,18 @@ public class ProfileActivity extends AppCompatActivity {
                             binding.stars.setText(String.valueOf(userModel.getStars()));
 
                             String profId = snapshot.getKey();
+
+                            if (snapshot.child("phone").exists()){
+                                userModel.setPhone(snapshot.child("phone").getValue(String.class));
+                            }
+
+                            if (snapshot.child("facebook").exists()){
+                                userModel.setFacebook(snapshot.child("facebook").getValue(String.class));
+                            }
+
+                            if (snapshot.child("whatsapp").exists()){
+                                userModel.setWhatsapp(snapshot.child("whatsapp").getValue(String.class));
+                            }
 
                             userModel.setUserId(profId);
                             SocialMediaClicks(userModel);
@@ -730,6 +746,7 @@ public class ProfileActivity extends AppCompatActivity {
                             startActivity(i);
                         }
 
+                        popupMenu.dismiss();
                         return true;
                     }
                 });
@@ -811,7 +828,7 @@ public class ProfileActivity extends AppCompatActivity {
                 String message = "Hi, I am " + binding.dashBoardName.getText().toString()+
                         ". I get your number from *AIMA App*. Should we talk now?";
                 Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse("http://api.whatsapp.com/send?phone=" + "+91" + whatsapp + "&text=" + message));
+                intent.setData(Uri.parse("https://api.whatsapp.com/send?phone=" + "+91" + whatsapp + "&text=" + message));
                 startActivity(intent);
             });
         }

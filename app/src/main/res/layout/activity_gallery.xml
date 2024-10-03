@@ -12,7 +12,7 @@
     <LinearLayout
         android:id="@+id/profClick"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:gravity="center_vertical"
         android:background="@color/white"
         android:paddingTop="@dimen/_8mdp"
@@ -66,6 +66,8 @@
                 android:drawablePadding="@dimen/_5mdp"
                 android:drawableTint="@color/black"
                 android:text="@string/loading"
+                android:singleLine="true"
+                android:textSize="@dimen/_10font_mdp"
                 android:textColor="@color/black" />
         </LinearLayout>
         <ImageView

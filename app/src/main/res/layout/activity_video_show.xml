@@ -15,12 +15,7 @@
         app:autoPlay="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:showFullScreenButton="true"
-        app:showSeekBar="true"
-        app:showVideoCurrentTime="true"
-        app:showVideoDuration="true"
-        app:showYouTubeButton="false" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/profileSegment"
@@ -73,7 +68,7 @@
                         android:id="@+id/discoverProfileName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Name"
+                        android:text="Aima Official"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
 
@@ -94,6 +89,8 @@
                     android:drawableEnd="@drawable/public_24"
                     android:drawablePadding="@dimen/_5mdp"
                     android:drawableTint="@color/black"
+                    android:singleLine="true"
+                    android:textSize="@dimen/_10font_mdp"
                     android:text="Public Profile - 3m ago -"
                     android:textColor="@color/black" />
             </LinearLayout>

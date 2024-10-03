@@ -48,9 +48,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.viewHolder>{
     FirebaseAuth auth;
     FirebaseFirestore firebaseFirestore;
 
-    public PostAdapter(Context context, ArrayList<PostModel> list, Activity activity){
+    public PostAdapter(ArrayList<PostModel> list, Activity activity){
         this.models = list;
-        this.context = context;
+        this.context = activity.getApplicationContext();
         this.activity = activity;
     }
 

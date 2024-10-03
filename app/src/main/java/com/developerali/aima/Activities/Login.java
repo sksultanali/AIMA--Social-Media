@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 
+import com.developerali.aima.Helper;
 import com.developerali.aima.MainActivity;
 import com.developerali.aima.Models.UserModel;
 import com.developerali.aima.R;
@@ -130,6 +131,12 @@ public class Login extends AppCompatActivity {
             signIn();
         });
 
+        binding.fbBtn.setOnClickListener(v->{
+            Helper.showAlertNoAction(Login.this,
+                    "Denied Access",
+                    "For now, we are not allowing login with facebook. Please try after sometime.",
+                    "Okay");
+        });
 
     }
 

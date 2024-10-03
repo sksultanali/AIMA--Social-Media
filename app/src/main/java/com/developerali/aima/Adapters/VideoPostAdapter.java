@@ -38,8 +38,8 @@ public class VideoPostAdapter extends RecyclerView.Adapter<VideoPostAdapter.view
     private final Lifecycle lifecycle;
     FirebaseDatabase database;
 
-    public VideoPostAdapter(Context context, ArrayList<VideoModel> models, Lifecycle lifecycle, Activity activity) {
-        this.context = context;
+    public VideoPostAdapter(ArrayList<VideoModel> models, Lifecycle lifecycle, Activity activity) {
+        this.context = activity.getApplicationContext();
         this.models = models;
         this.lifecycle = lifecycle;
         this.activity = activity;
@@ -67,6 +67,11 @@ public class VideoPostAdapter extends RecyclerView.Adapter<VideoPostAdapter.view
                 }
 
             });
+
+//            holder.binding.youtubePostView.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+//                // Hide the 3-dot settings menu and share button using JavaScript
+//                holder.binding.youtubePostView.set
+//            });
         }
 
 
