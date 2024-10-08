@@ -268,6 +268,7 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.S
             binding.noData.setVisibility(View.VISIBLE);
         }
         binding.progressBar4.setVisibility(View.GONE);
+        binding.userRecyclerView.setVisibility(View.VISIBLE);
     }
 
     /**

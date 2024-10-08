@@ -10,9 +10,8 @@ public class pdfModel implements Parcelable {
     String id, link, caption;
     long time;
 
-    public pdfModel(String link, long time) {
+    public pdfModel(String link) {
         this.link = link;
-        this.time = time;
     }
 
     public pdfModel() {

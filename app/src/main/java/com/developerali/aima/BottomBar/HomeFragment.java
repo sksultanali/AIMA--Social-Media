@@ -502,11 +502,15 @@ public class HomeFragment extends Fragment {
                             pdfModelArrayList.clear();
                             for (DataSnapshot snapshot1 : snapshot.getChildren()){
                                 pdfModel pdfModel = snapshot1.getValue(pdfModel.class);
-                                pdfModel.setId(snapshot1.getKey());;
-                                pdfModel.setCaption(pdfModel.getCaption());
-                                pdfModel.setTime(pdfModel.getTime());
-                                pdfModel.setLink(pdfModel.getLink());
-                                pdfModelArrayList.add(pdfModel);
+
+                                if (pdfModel != null){
+                                    pdfModel.setId(snapshot1.getKey());
+                                    pdfModel.setCaption(pdfModel.getCaption());
+                                    pdfModel.setTime(pdfModel.getTime());
+                                    pdfModel.setLink(pdfModel.getLink());
+
+                                    pdfModelArrayList.add(pdfModel);
+                                }
                             }
                             Collections.reverse(pdfModelArrayList);
                             binding.spinKit.setVisibility(View.GONE);

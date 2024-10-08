@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
-    android:padding="@dimen/_5mdp">
+    android:gravity="center"
+    android:padding="@dimen/_10mdp">
 
     <ImageView
         android:layout_width="@dimen/_18mdp"
@@ -14,8 +15,15 @@
         android:id="@+id/searchText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/_12font_mdp"
+        android:textSize="@dimen/_14font_mdp"
+        android:layout_weight="1"
         android:layout_marginStart="@dimen/_5mdp"
         android:text="@string/search_history"
         android:singleLine="true"/>
+    <ImageView
+        android:id="@+id/closeBtn"
+        android:layout_width="@dimen/_18mdp"
+        android:layout_height="@dimen/_18mdp"
+        android:layout_marginStart="@dimen/_5mdp"
+        android:src="@drawable/close_24"/>
 </LinearLayout>
