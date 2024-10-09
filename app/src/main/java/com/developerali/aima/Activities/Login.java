@@ -3,16 +3,15 @@ package com.developerali.aima.Activities;
 
 import static com.reactnativegooglesignin.RNGoogleSigninModule.RC_SIGN_IN;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.developerali.aima.Helper;
 import com.developerali.aima.MainActivity;
@@ -64,7 +63,6 @@ public class Login extends AppCompatActivity {
 
         binding.signUpRedirect.setOnClickListener(v->{
             Intent i = new Intent(Login.this, SignUp.class);
-            i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
         });
 
@@ -85,7 +83,6 @@ public class Login extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
                             Intent i = new Intent(Login.this, MainActivity.class);
-                            i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(i);
                             dialog.dismiss();
                             finish();

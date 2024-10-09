@@ -2,22 +2,19 @@ package com.developerali.aima.Adapters;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
-
-import com.developerali.aima.Activities.WebViewActivity;
-import com.developerali.aima.Helper;
-import com.developerali.aima.R;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.developerali.aima.Activities.WebViewActivity;
+import com.developerali.aima.Helper;
 import com.developerali.aima.Models.pdfModel;
+import com.developerali.aima.R;
 import com.developerali.aima.databinding.ItemPdfsBinding;
-import com.google.rpc.Help;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -58,7 +55,6 @@ public class pdfAdapter extends RecyclerView.Adapter<pdfAdapter.ViewHolder>{
                 }else {
                     Intent i = new Intent(activity.getApplicationContext(), WebViewActivity.class);
                     i.putExtra("provide", pdf.getLink());
-                    i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
                     activity.startActivity(i);
                 }
             }
@@ -72,7 +68,7 @@ public class pdfAdapter extends RecyclerView.Adapter<pdfAdapter.ViewHolder>{
         return pdfModels.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         ItemPdfsBinding binding;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

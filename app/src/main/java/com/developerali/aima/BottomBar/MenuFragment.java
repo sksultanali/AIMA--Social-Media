@@ -3,17 +3,14 @@ package com.developerali.aima.BottomBar;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.models.SlideModel;
@@ -26,8 +23,6 @@ import com.developerali.aima.Helper;
 import com.developerali.aima.Models.PostModel;
 import com.developerali.aima.R;
 import com.developerali.aima.databinding.FragmentMenuBinding;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,10 +31,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.rpc.Help;
 
 import java.util.ArrayList;
 
@@ -70,7 +61,7 @@ public class MenuFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentMenuBinding.inflate(inflater, container, false);
-        bottomBar = (SmoothBottomBar) getActivity().findViewById(R.id.bottomBar);
+        bottomBar = getActivity().findViewById(R.id.bottomBar);
         bottomBar.setItemActiveIndex(4);
 
         auth = FirebaseAuth.getInstance();
@@ -109,17 +100,14 @@ public class MenuFragment extends Fragment {
 
         binding.donations.setOnClickListener(v->{
             Intent intent = new Intent(getActivity().getApplicationContext(), DonationPage.class);
-            intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK);
             getActivity().startActivity(intent);
         });
         binding.memberShip.setOnClickListener(c->{
             Intent i = new Intent(getActivity().getApplicationContext(), MemberShip_Act.class);
-            i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
             getActivity().startActivity(i);
         });
         binding.profile.setOnClickListener(v->{
             Intent intent = new Intent(getActivity().getApplicationContext(), ProfileActivity.class);
-            intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK);
             getActivity().startActivity(intent);
         });
         binding.meetings.setOnClickListener(c->{

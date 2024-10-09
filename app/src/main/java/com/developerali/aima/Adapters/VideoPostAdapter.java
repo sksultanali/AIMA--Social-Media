@@ -32,14 +32,12 @@ import java.util.ArrayList;
 
 public class VideoPostAdapter extends RecyclerView.Adapter<VideoPostAdapter.viewHolder>{
 
-    Context context;
     Activity activity;
     ArrayList<VideoModel> models;
     private final Lifecycle lifecycle;
     FirebaseDatabase database;
 
     public VideoPostAdapter(ArrayList<VideoModel> models, Lifecycle lifecycle, Activity activity) {
-        this.context = activity.getApplicationContext();
         this.models = models;
         this.lifecycle = lifecycle;
         this.activity = activity;
@@ -48,7 +46,7 @@ public class VideoPostAdapter extends RecyclerView.Adapter<VideoPostAdapter.view
     @NonNull
     @Override
     public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_single_video, parent, false);
+        View view = LayoutInflater.from(activity).inflate(R.layout.item_single_video, parent, false);
         return new viewHolder(view);
     }
 
@@ -93,10 +91,9 @@ public class VideoPostAdapter extends RecyclerView.Adapter<VideoPostAdapter.view
         });
 
         holder.binding.fulScreen.setOnClickListener(c->{
-            Intent intent = new Intent(context.getApplicationContext(), VideoShow.class);
-            intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK);
+            Intent intent = new Intent(activity.getApplicationContext(), VideoShow.class);
             intent.putExtra("videoModel", videoModel);
-            context.startActivity(intent);
+            activity.startActivity(intent);
         });
 
         String timeAgo = TimeAgo.using(videoModel.getTime());
@@ -107,22 +104,24 @@ public class VideoPostAdapter extends RecyclerView.Adapter<VideoPostAdapter.view
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.exists()){
                                 UserModel userModel = snapshot.getValue(UserModel.class);
-                                holder.binding.discoverProfileName.setText(userModel.getName());
-                                if (userModel.isVerified()){
-                                    holder.binding.verifiedProfile.setVisibility(View.VISIBLE);
-                                }
-                                if (userModel.getType() != null){
-                                    holder.binding.discoverProfile.setText(userModel.getType() + " • " + timeAgo + " •");
-                                }else {
-                                    holder.binding.discoverProfile.setText("Public Profile" + " • " + timeAgo + " •");
-                                }
-                                if (userModel.getImage() != null){
+                                if (userModel != null){
+                                    holder.binding.discoverProfileName.setText(userModel.getName());
+                                    if (userModel.isVerified()){
+                                        holder.binding.verifiedProfile.setVisibility(View.VISIBLE);
+                                    }
+                                    if (userModel.getType() != null){
+                                        holder.binding.discoverProfile.setText(userModel.getType() + " • " + timeAgo + " •");
+                                    }else {
+                                        holder.binding.discoverProfile.setText("Public Profile" + " • " + timeAgo + " •");
+                                    }
+                                    if (userModel.getImage() != null){
 
-                                    Glide.with(context)
-                                            .load(userModel.getImage())
-                                            .placeholder(context.getDrawable(R.drawable.placeholder))
-                                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                                            .into(holder.binding.discoverProfileImage);
+                                        Glide.with(activity.getApplicationContext())
+                                                .load(userModel.getImage())
+                                                .placeholder(activity.getDrawable(R.drawable.placeholder))
+                                                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                                                .into(holder.binding.discoverProfileImage);
+                                    }
                                 }
                             }
                         }
@@ -135,31 +134,30 @@ public class VideoPostAdapter extends RecyclerView.Adapter<VideoPostAdapter.view
         }else {
             holder.binding.discoverProfileName.setText("Admin Post");
             holder.binding.verifiedProfile.setVisibility(View.VISIBLE);
-            holder.binding.discoverProfileImage.setImageDrawable(context.getDrawable(R.drawable.aimalogo));
+            holder.binding.discoverProfileImage.setImageDrawable(activity.getDrawable(R.drawable.aimalogo));
             holder.binding.discoverProfile.setText("App Admin" + " • " + timeAgo + " •");
         }
 
 
         holder.binding.profClick.setOnClickListener(v->{
             if (videoModel.getUploader() != null && !videoModel.getUploader().equalsIgnoreCase("Admin")){
-                Intent i = new Intent(context.getApplicationContext(), ProfileActivity.class);
+                Intent i = new Intent(activity.getApplicationContext(), ProfileActivity.class);
                 i.putExtra("profileId", videoModel.getUploader());
-                i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(i);
+                activity.startActivity(i);
             }else {
-                Toast.makeText(context, "not profile found...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "not profile found...", Toast.LENGTH_SHORT).show();
             }
 
         });
 
         holder.binding.videoShare.setOnClickListener(c->{
-            Toast.makeText(context, "loading request...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "loading request...", Toast.LENGTH_SHORT).show();
             Intent sharingIntent = new Intent(Intent.ACTION_SEND);
             sharingIntent.setType("text/plain");
             sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT,
                     "https://www.youtube.com/watch?v=" + videoModel.getVideoId());
-            if (sharingIntent.resolveActivity(context.getPackageManager()) != null) {
-                context.startActivity(Intent.createChooser(sharingIntent,"Download Using"));
+            if (sharingIntent.resolveActivity(activity.getPackageManager()) != null) {
+                activity.startActivity(Intent.createChooser(sharingIntent,"Download Using"));
             }
         });
 
@@ -172,7 +170,7 @@ public class VideoPostAdapter extends RecyclerView.Adapter<VideoPostAdapter.view
         return models.size();
     }
 
-    public class viewHolder extends RecyclerView.ViewHolder{
+    public static class viewHolder extends RecyclerView.ViewHolder{
         ItemSingleVideoBinding binding;
         public viewHolder(@NonNull View itemView) {
             super(itemView);

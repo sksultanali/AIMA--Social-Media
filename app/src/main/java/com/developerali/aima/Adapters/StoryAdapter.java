@@ -1,5 +1,6 @@
 package com.developerali.aima.Adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,9 +19,9 @@ import java.util.ArrayList;
 public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.viewHolder>{
 
     ArrayList<StoryModel> list;
-    Context context;
+    Activity context;
 
-    public StoryAdapter(ArrayList<StoryModel> list, Context context){
+    public StoryAdapter(ArrayList<StoryModel> list, Activity context){
         this.list = list;
         this.context = context;
     }
@@ -47,7 +48,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.viewHolder>{
         return list.size();
     }
 
-    public class viewHolder extends RecyclerView.ViewHolder{
+    public static class viewHolder extends RecyclerView.ViewHolder{
         ImageView storyImage, profile, storyType;
         TextView name;
         public viewHolder(@NonNull View itemView) {

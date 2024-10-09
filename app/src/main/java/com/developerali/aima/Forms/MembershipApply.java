@@ -1,42 +1,26 @@
 package com.developerali.aima.Forms;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import com.developerali.aima.Activities.DonationPage;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.developerali.aima.Activities.WebViewActivity;
 import com.developerali.aima.Models.MemberApplied;
 import com.developerali.aima.R;
 import com.developerali.aima.databinding.ActivityMembershipApplyBinding;
-import com.developerali.aima.databinding.DialogAmountInsertBinding;
-import com.github.dhaval2404.imagepicker.ImagePicker;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 import com.shuhart.stepview.StepView;
@@ -57,9 +41,9 @@ public class MembershipApply extends AppCompatActivity implements PaymentResultL
     FirebaseAuth auth;
     FirebaseStorage storage;
     Checkout checkout;
-    String validity[] = {"3 Months", "6 Months", "12 Months"};
-    String price[] = {"60", "110", "200"};
-    String payWith[] = {"Select Payment Mode", "UPI", "QR Code", "Bank Transfer"};
+    String[] validity = {"3 Months", "6 Months", "12 Months"};
+    String[] price = {"60", "110", "200"};
+    String[] payWith = {"Select Payment Mode", "UPI", "QR Code", "Bank Transfer"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

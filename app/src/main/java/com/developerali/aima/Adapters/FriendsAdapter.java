@@ -1,5 +1,6 @@
 package com.developerali.aima.Adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -26,11 +27,11 @@ import java.util.ArrayList;
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.viewHolder>{
 
     ArrayList<FollowModel> models;
-    Context context;
+    Activity context;
     FirebaseDatabase database;
 
 
-    public FriendsAdapter(ArrayList<FollowModel> list, Context context){
+    public FriendsAdapter(ArrayList<FollowModel> list, Activity context){
         this.context = context;
         this.models = list;
     }
@@ -51,7 +52,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.viewHold
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         UserModel userModel = snapshot.getValue(UserModel.class);
-                        if (userModel.getImage() != null){
+                        if (userModel != null && userModel.getImage() != null){
                             Glide.with(context)
                                     .load(userModel.getImage())
                                     .placeholder(context.getDrawable(R.drawable.profileplaceholder))
@@ -78,7 +79,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.viewHold
         return models.size();
     }
 
-    public class viewHolder extends RecyclerView.ViewHolder{
+    public static class viewHolder extends RecyclerView.ViewHolder{
         ItemFollowProfileBinding binding;
         public viewHolder(@NonNull View itemView) {
             super(itemView);

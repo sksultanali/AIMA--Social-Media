@@ -1,9 +1,5 @@
 package com.developerali.aima;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,8 +9,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-
-
 import android.os.Handler;
 import android.os.Looper;
 import android.os.StrictMode;
@@ -22,21 +16,20 @@ import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.developerali.aima.Activities.Login;
 import com.developerali.aima.BottomBar.HomeFragment;
-
 import com.developerali.aima.BottomBar.MeetingFragment;
 import com.developerali.aima.BottomBar.MenuFragment;
 import com.developerali.aima.BottomBar.ShortsFragment;
 import com.developerali.aima.BottomBar.WadiNews;
-import com.developerali.aima.Models.UsagesModel;
-import com.developerali.aima.Models.UserModel;
 import com.developerali.aima.databinding.ActivityMainBinding;
 import com.developerali.aima.databinding.DialogCongratulationStarBinding;
 import com.developerali.aima.databinding.DialogNotLoginBinding;
 import com.developerali.aima.databinding.DilaogUpdateMakingBinding;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -44,9 +37,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
+
 import me.ibrahimsn.lib.OnItemSelectedListener;
 
 
@@ -183,21 +175,25 @@ public class MainActivity extends AppCompatActivity{
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if (snapshot.exists()){
-                        stars = snapshot.getValue(Long.class);
-                        reference.setValue(stars + minutes);
+                        try {
+                            stars = snapshot.getValue(Long.class);
+                            reference.setValue(stars + minutes);
 
-                        SharedPreferences sharedPreferences1 = getSharedPreferences("UsageTime", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences1.edit();  // updating in database
-                        editor.putLong("total_seconds", 0);
-                        editor.apply();
-                        totalSeconds = sharedPreferences.getLong("total_seconds", 0);
+                            SharedPreferences sharedPreferences1 = getSharedPreferences("UsageTime", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences1.edit();  // updating in database
+                            editor.putLong("total_seconds", 0);
+                            editor.apply();
+                            totalSeconds = sharedPreferences.getLong("total_seconds", 0);
 
-                        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                showCongratulatoins();
-                            }
-                        }, 5000);
+                            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    showCongratulatoins();
+                                }
+                            }, 5000);
+                        }catch (Exception e){
+
+                        }
 
                     }else {
                         reference.setValue(minutes);
@@ -329,7 +325,6 @@ public class MainActivity extends AppCompatActivity{
         dialogNotLoginBinding.messageText.setText("Login is required for POST something. You can post after get logged in :)");
         dialogNotLoginBinding.loginBtn.setOnClickListener(v->{
             Intent i = new Intent(MainActivity.this, Login.class);
-            i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
             finish();
         });

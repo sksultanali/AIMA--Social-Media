@@ -33,14 +33,12 @@ import java.util.ArrayList;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.viewHolder>{
 
-    Context context;
     ArrayList<NotificationModel> models;
     Activity activity;
     FirebaseDatabase database;
     FirebaseAuth auth;
 
-    public NotificationAdapter(Context context, ArrayList<NotificationModel> models, Activity activity) {
-        this.context = context;
+    public NotificationAdapter(ArrayList<NotificationModel> models, Activity activity) {
         this.models = models;
         this.activity = activity;
     }
@@ -48,7 +46,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     @NonNull
     @Override
     public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_notification_layout, parent, false);
+        View view = LayoutInflater.from(activity).inflate(R.layout.item_notification_layout, parent, false);
         return new viewHolder(view);
     }
 
@@ -59,11 +57,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         auth = FirebaseAuth.getInstance();
 
         if (notificationModel.getSeen()){
-            holder.binding.backgroundNotification.setBackgroundColor(context.getColor(R.color.backgroundColour));
+            holder.binding.backgroundNotification.setBackgroundColor(activity.getColor(R.color.backgroundColour));
         }
 
         if (notificationModel.getNotifyBy().equalsIgnoreCase("Admin")){
-            holder.binding.notificationImage.setImageDrawable(context.getDrawable(R.drawable.aimalogo));
+            holder.binding.notificationImage.setImageDrawable(activity.getDrawable(R.drawable.aimalogo));
             String timeAgo = TimeAgo.using(notificationModel.getNotifyAt());
             holder.binding.notificationType.setText(Html.fromHtml("<b>Admin</b>" + " • "
                     + timeAgo
@@ -77,31 +75,33 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()){
                             UserModel userModel = snapshot.getValue(UserModel.class);
-                            if (userModel.getImage() != null && !activity.isDestroyed()){
-                                Glide.with(context)
-                                        .load(userModel.getImage())
-                                        .skipMemoryCache(true)
-                                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                                        .placeholder(context.getDrawable(R.drawable.profileplaceholder))
-                                        .into(holder.binding.notificationImage);
-                            }
-                            String timeAgo = TimeAgo.using(notificationModel.getNotifyAt());
+                            if (userModel != null){
+                                if (userModel.getImage() != null && !activity.isDestroyed()){
+                                    Glide.with(activity.getApplicationContext())
+                                            .load(userModel.getImage())
+                                            .skipMemoryCache(true)
+                                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                                            .placeholder(activity.getDrawable(R.drawable.profileplaceholder))
+                                            .into(holder.binding.notificationImage);
+                                }
+                                String timeAgo = TimeAgo.using(notificationModel.getNotifyAt());
 
-                            if (notificationModel.getType().equalsIgnoreCase("like")){
-                                holder.binding.notificationType.setText(Html.fromHtml("<b>" + userModel.getName() + "</b>"
-                                        + " • " + timeAgo
-                                        + " •  liked on your post."));
+                                if (notificationModel.getType().equalsIgnoreCase("like")){
+                                    holder.binding.notificationType.setText(Html.fromHtml("<b>" + userModel.getName() + "</b>"
+                                            + " • " + timeAgo
+                                            + " •  liked on your post."));
 
 
-                            }else if (notificationModel.getType().equalsIgnoreCase("comment")){
-                                holder.binding.notificationType.setText(Html.fromHtml("<b>" + userModel.getName() + "</b>"
-                                        + " • " + timeAgo
-                                        + " • commented on your post."));
-                            }else if (notificationModel.getType().equalsIgnoreCase("follow")){
+                                }else if (notificationModel.getType().equalsIgnoreCase("comment")){
+                                    holder.binding.notificationType.setText(Html.fromHtml("<b>" + userModel.getName() + "</b>"
+                                            + " • " + timeAgo
+                                            + " • commented on your post."));
+                                }else if (notificationModel.getType().equalsIgnoreCase("follow")){
 
-                                holder.binding.notificationType.setText(Html.fromHtml("<b>" + userModel.getName() + "</b>" + " • "
-                                        + timeAgo
-                                        + " • followed your profile. See profile"));
+                                    holder.binding.notificationType.setText(Html.fromHtml("<b>" + userModel.getName() + "</b>" + " • "
+                                            + timeAgo
+                                            + " • followed your profile. See profile"));
+                                }
                             }
                         }
                     }
@@ -121,26 +121,23 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                         @Override
                         public void onSuccess(Void unused) {
                             if (notificationModel.getType().equalsIgnoreCase("like")){
-                                Intent i = new Intent(context.getApplicationContext(), See_Post.class);
+                                Intent i = new Intent(activity.getApplicationContext(), See_Post.class);
                                 i.putExtra("postId", notificationModel.getId());
-                                i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
-                                context.startActivity(i);
+                                activity.startActivity(i);
                             }else if (notificationModel.getType().equalsIgnoreCase("comment")){
-                                Intent i = new Intent(context.getApplicationContext(), Comments_Post.class);
+                                Intent i = new Intent(activity.getApplicationContext(), Comments_Post.class);
                                 i.putExtra("postId", notificationModel.getId());
-                                i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
-                                context.startActivity(i);
+                                activity.startActivity(i);
                             }else if (notificationModel.getType().equalsIgnoreCase("follow")){
                                 if (notificationModel.getNotifyBy() != null){
-                                    Intent i = new Intent(context.getApplicationContext(), ProfileActivity.class);
+                                    Intent i = new Intent(activity.getApplicationContext(), ProfileActivity.class);
                                     i.putExtra("profileId", notificationModel.getNotifyBy());
-                                    i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
-                                    context.startActivity(i);
+                                    activity.startActivity(i);
                                 }else {
-                                    Toast.makeText(context, "wait a while...", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(activity, "wait a while...", Toast.LENGTH_SHORT).show();
                                 }
                             }
-                            holder.binding.backgroundNotification.setBackgroundColor(context.getColor(R.color.backgroundColour));
+                            holder.binding.backgroundNotification.setBackgroundColor(activity.getColor(R.color.backgroundColour));
                         }
                     });
         });
@@ -152,7 +149,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         return models.size();
     }
 
-    public class viewHolder extends RecyclerView.ViewHolder{
+    public static class viewHolder extends RecyclerView.ViewHolder{
         ItemNotificationLayoutBinding binding;
         public viewHolder(@NonNull View itemView) {
             super(itemView);

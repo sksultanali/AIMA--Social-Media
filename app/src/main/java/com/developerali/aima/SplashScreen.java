@@ -1,12 +1,12 @@
 package com.developerali.aima;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.developerali.aima.Activities.Login;
 
@@ -30,7 +30,6 @@ public class SplashScreen extends AppCompatActivity {
             @Override
             public void run() {
                 Intent intent = new Intent(SplashScreen.this, Login.class);
-                intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
                 finish();
             }

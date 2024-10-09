@@ -1,15 +1,9 @@
 package com.developerali.aima.Activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -20,46 +14,38 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.text.format.DateUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.developerali.aima.CommonFeatures;
 import com.developerali.aima.Forms.MembershipApply;
 import com.developerali.aima.Helper;
-import com.developerali.aima.MainActivity;
-import com.developerali.aima.Models.CommentModel;
 import com.developerali.aima.Models.MembershipModel;
-import com.developerali.aima.Models.NotificationModel;
-import com.developerali.aima.Models.UsagesModel;
 import com.developerali.aima.Models.UserModel;
 import com.developerali.aima.Models.VideoModel;
 import com.developerali.aima.R;
 import com.developerali.aima.databinding.ActivityMemberShipBinding;
-import com.developerali.aima.databinding.CommentBottomNavigationBinding;
 import com.developerali.aima.databinding.DialogOpenChromeOrAppBinding;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.FieldValue;
+import com.google.rpc.Help;
 
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
@@ -71,9 +57,6 @@ public class MemberShip_Act extends AppCompatActivity {
     FirebaseAuth auth;
     Activity activity;
     FirebaseDatabase database;
-    private long startTime;
-    private long totalSeconds;
-    SharedPreferences sharedPreferences;
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1;
 
     @Override
@@ -152,21 +135,23 @@ public class MemberShip_Act extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()){
                             UserModel userModel = snapshot.getValue(UserModel.class);
-                            binding.profileName.setText(userModel.getName());
-                            if (userModel.isVerified()){
-                                binding.verifiedProfile.setVisibility(View.VISIBLE);
-                            }
-                            if (userModel.getType() != null){
-                                binding.profileType.setText(userModel.getType());
-                            }else {
-                                 binding.profileType.setText("Public Profile");
-                            }
-                            if (userModel.getImage() != null && !activity.isDestroyed()){
-                                Glide.with(MemberShip_Act.this)
-                                        .load(userModel.getImage())
-                                        .placeholder(getDrawable(R.drawable.profileplaceholder))
-                                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                                        .into(binding.memberProfile);
+                            if (userModel != null){
+                                binding.profileName.setText(userModel.getName());
+                                if (userModel.isVerified()){
+                                    binding.verifiedProfile.setVisibility(View.VISIBLE);
+                                }
+                                if (userModel.getType() != null){
+                                    binding.profileType.setText(userModel.getType());
+                                }else {
+                                    binding.profileType.setText("Public Profile");
+                                }
+                                if (userModel.getImage() != null && !activity.isDestroyed()){
+                                    Glide.with(MemberShip_Act.this)
+                                            .load(userModel.getImage())
+                                            .placeholder(getDrawable(R.drawable.profileplaceholder))
+                                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                                            .into(binding.memberProfile);
+                                }
                             }
                         }
                     }
@@ -202,15 +187,12 @@ public class MemberShip_Act extends AppCompatActivity {
         });
 
         //button clicks
-        binding.memberBack.setOnClickListener(v->{
-            finish();
-        });
+        binding.memberBack.setOnClickListener(v-> finish());
 
         binding.newMemberForm.setOnClickListener(v->{
             //Toast.makeText(activity, "loading...", Toast.LENGTH_SHORT).show();
             Intent i = new Intent(MemberShip_Act.this, MembershipApply.class);
             i.putExtra("value", "appliedForms");
-            i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
 //            Helper.showAlertNoAction(MemberShip_Act.this,
 //                    "Denied Access",
@@ -219,25 +201,31 @@ public class MemberShip_Act extends AppCompatActivity {
         });
 
         binding.activeOldMember.setOnClickListener(c->{
-            showBottomBar("https://docs.google.com/forms/d/e/1FAIpQLScl5pwfKyVziZwQfHFeZQjrVTD4HT_yVZ4XRFkQoYMEfKygQQ/viewform?usp=sf_link");
+            //showBottomBar("");
+            if (Helper.isChromeCustomTabsSupported(MemberShip_Act.this)){
+                Helper.openChromeTab("https://docs.google.com/forms/d/e/1FAIpQLScl5pwfKyVziZwQfHFeZQjrVTD4HT_yVZ4XRFkQoYMEfKygQQ/viewform?usp=sf_link",
+                        MemberShip_Act.this);
+            }
         });
 
         binding.raiseComplain.setOnClickListener(c->{
-            showBottomBar("https://docs.google.com/forms/d/e/1FAIpQLSfuC84vP65BacEUjSqupNePhVjbjMTEo7Vt_4E23PHrpZSIkg/viewform?usp=sf_link");
+            //showBottomBar("");
+            if (Helper.isChromeCustomTabsSupported(MemberShip_Act.this)){
+                Helper.openChromeTab("https://docs.google.com/forms/d/e/1FAIpQLSfuC84vP65BacEUjSqupNePhVjbjMTEo7Vt_4E23PHrpZSIkg/viewform?usp=sf_link",
+                        MemberShip_Act.this);
+            }
         });
 
         binding.renewCard.setOnClickListener(v->{
 //            Toast.makeText(activity, "loading...", Toast.LENGTH_SHORT).show();
             Intent i = new Intent(MemberShip_Act.this, MembershipApply.class);
             i.putExtra("value", "renewForms");
-            i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
             //Toast.makeText(activity, "coming soon...", Toast.LENGTH_SHORT).show();
         });
 
         binding.memberProfClick.setOnClickListener(v->{
             Intent i = new Intent(MemberShip_Act.this, ProfileActivity.class);
-            i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
         });
 
@@ -250,7 +238,6 @@ public class MemberShip_Act extends AppCompatActivity {
             videoModel.setTime(time);
 
             Intent intent = new Intent(MemberShip_Act.this, VideoShow.class);
-            intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra("videoModel", videoModel);
             startActivity(intent);
         });

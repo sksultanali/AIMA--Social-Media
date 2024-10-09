@@ -1,17 +1,8 @@
 package com.developerali.aima.Activities;
 
-import static java.security.AccessController.getContext;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.MenuBuilder;
-import androidx.appcompat.view.menu.MenuPopupHelper;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ClipData;
@@ -23,6 +14,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -34,17 +26,20 @@ import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.developerali.aima.Adapters.FriendsAdapter;
 import com.developerali.aima.Adapters.ProfilePostAdapter;
-import com.developerali.aima.CommonFeatures;
 import com.developerali.aima.Forms.verifiedBadgeActivity;
-import com.developerali.aima.MainActivity;
 import com.developerali.aima.Models.FollowModel;
 import com.developerali.aima.Models.NotificationModel;
 import com.developerali.aima.Models.PostModel;
-import com.developerali.aima.Models.UsagesModel;
 import com.developerali.aima.Models.UserModel;
 import com.developerali.aima.R;
 import com.developerali.aima.databinding.ActivityProfileBinding;
@@ -310,7 +305,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         dialogNotLoginBinding.loginBtn.setOnClickListener(c->{
             Intent j = new Intent(ProfileActivity.this, verifiedBadgeActivity.class);
-            j.setFlags(j.FLAG_ACTIVITY_NEW_TASK);
             startActivity(j);
             dialog1.dismiss();
         });
@@ -345,7 +339,6 @@ public class ProfileActivity extends AppCompatActivity {
         dialogNotLoginBinding.loginBtn.setOnClickListener(c->{
             Intent j = new Intent(ProfileActivity.this, EditProfile.class);
             j.putExtra("userModel", userModel);
-            j.setFlags(j.FLAG_ACTIVITY_NEW_TASK);
             startActivity(j);
             dialog1.dismiss();
         });
@@ -377,7 +370,7 @@ public class ProfileActivity extends AppCompatActivity {
                                 postModel.setImage(snapshot.getString("image"));
                                 postModelArrayList.add(postModel);
                             }
-                            ProfilePostAdapter postAdapter = new ProfilePostAdapter(ProfileActivity.this,
+                            ProfilePostAdapter postAdapter = new ProfilePostAdapter(
                                     postModelArrayList, ProfileActivity.this);
                             GridLayoutManager gridLayoutManager = new GridLayoutManager(ProfileActivity.this, 3);
                             binding.postRecyclerView.setLayoutManager(gridLayoutManager);
@@ -671,7 +664,6 @@ public class ProfileActivity extends AppCompatActivity {
         dialogNotLoginBinding.messageText.setText("Login is required for visit a POST. You can see this post after get logged in :)");
         dialogNotLoginBinding.loginBtn.setOnClickListener(v->{
             Intent i = new Intent(ProfileActivity.this, Login.class);
-            i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
             finish();
         });
@@ -693,14 +685,12 @@ public class ProfileActivity extends AppCompatActivity {
         binding.myProfile.setOnClickListener(c->{
             Intent i = new Intent(ProfileActivity.this, ImageShow.class);
             i.putExtra("image", profileImg);
-            i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
         });
 
         binding.dashboardImage.setOnClickListener(c->{
             Intent i = new Intent(ProfileActivity.this, ImageShow.class);
             i.putExtra("image", coverImage);
-            i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
         });
     }
@@ -714,47 +704,72 @@ public class ProfileActivity extends AppCompatActivity {
             binding.followBtn.setVisibility(View.GONE);
 
 
-            binding.dotsProfile.setOnClickListener(v->{
-                PopupMenu popupMenu = new PopupMenu(this, binding.dotsProfile); // 'view' is the anchor view for the PopupMenu
+            binding.dotsProfile.setOnClickListener(v -> {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
+                builder.setTitle("Select an Action")
+                        .setItems(new CharSequence[]{"Copy Profile Link", "Log Out", "View Usage"}, (dialog, which) -> {
+                            switch (which) {
+                                case 0: // Copy Profile Link
+                                    String link = "https://i.aima.profile/" + profId;
+                                    ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                                    ClipData clip = ClipData.newPlainText("Profile Link Copied", link);
+                                    Toast.makeText(ProfileActivity.this, "Profile Link Copied", Toast.LENGTH_LONG).show();
+                                    clipboard.setPrimaryClip(clip);
+                                    break;
 
-                popupMenu.getMenuInflater().inflate(R.menu.profile_menu, popupMenu.getMenu());
-                popupMenu.setForceShowIcon(true);
+                                case 1: // Log Out
+                                    LogOut();
+                                    break;
 
-                Menu menu = popupMenu.getMenu();
-                menu.findItem(R.id.action_copy).setIcon(R.drawable.copy_24);
-                menu.findItem(R.id.action_stars).setIcon(R.drawable.data_usage_24);
-
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        int itemId = item.getItemId();
-
-                        if (itemId == R.id.action_copy) {
-                            String link = "https://i.aima.profile/" + profId;
-                            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                            ClipData clip = ClipData.newPlainText("Profile Link Copied", link);
-                            Toast.makeText(ProfileActivity.this, "Profile Link Copied", Toast.LENGTH_LONG).show();
-                            clipboard.setPrimaryClip(clip);
-
-                        } else if (itemId == R.id.action_log_out) {
-
-                            LogOut();
-
-                        } else if (itemId == R.id.action_stars) {
-                            Intent i = new Intent(ProfileActivity.this, UsagesActivity.class);
-                            i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(i);
-                        }
-
-                        popupMenu.dismiss();
-                        return true;
-                    }
-                });
-
-                popupMenu.show();
-
-
+                                case 2: // View Usage
+                                    Intent i = new Intent(ProfileActivity.this, UsagesActivity.class);
+                                    startActivity(i);
+                                    break;
+                            }
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
+//                PopupMenu popupMenu = new PopupMenu(this, binding.dotsProfile); // 'view' is the anchor view for the PopupMenu
+//
+//                popupMenu.getMenuInflater().inflate(R.menu.profile_menu, popupMenu.getMenu());
+//
+//                // Check for API level before calling setForceShowIcon
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                    popupMenu.setForceShowIcon(true);
+//                }
+//
+//                Menu menu = popupMenu.getMenu();
+//                menu.findItem(R.id.action_copy).setIcon(R.drawable.copy_24);
+//                menu.findItem(R.id.action_stars).setIcon(R.drawable.data_usage_24);
+//
+//                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                    @Override
+//                    public boolean onMenuItemClick(MenuItem item) {
+//                        int itemId = item.getItemId();
+//
+//                        if (itemId == R.id.action_copy) {
+//                            String link = "https://i.aima.profile/" + profId;
+//                            ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+//                            ClipData clip = ClipData.newPlainText("Profile Link Copied", link);
+//                            Toast.makeText(ProfileActivity.this, "Profile Link Copied", Toast.LENGTH_LONG).show();
+//                            clipboard.setPrimaryClip(clip);
+//
+//                        } else if (itemId == R.id.action_log_out) {
+//                            LogOut();
+//
+//                        } else if (itemId == R.id.action_stars) {
+//                            Intent i = new Intent(ProfileActivity.this, UsagesActivity.class);
+//                            startActivity(i);
+//                        }
+//
+//                        popupMenu.dismiss();
+//                        return true;
+//                    }
+//                });
+//
+//                popupMenu.show();
             });
+
 
 
         }
@@ -771,9 +786,11 @@ public class ProfileActivity extends AppCompatActivity {
                         if (snapshot.exists()){
                             for (DataSnapshot snapshot1 : snapshot.getChildren()){
                                 FollowModel followModel = snapshot1.getValue(FollowModel.class);
-                                followModel.setFollowBy(followModel.getFollowBy());
 
-                                followModels.add(followModel);
+                                if (followModel != null){
+                                    followModel.setFollowBy(followModel.getFollowBy());
+                                    followModels.add(followModel);
+                                }
                             }
                             Collections.reverse(followModels);
                             LinearLayoutManager layoutManager = new LinearLayoutManager(ProfileActivity.this);
@@ -857,7 +874,6 @@ public class ProfileActivity extends AppCompatActivity {
         binding.editBtn.setOnClickListener(v->{
             Intent i = new Intent(ProfileActivity.this, EditProfile.class);
             i.putExtra("userModel", userModel);
-            i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
         });
     }

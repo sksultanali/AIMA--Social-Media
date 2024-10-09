@@ -40,9 +40,8 @@ import java.util.Date;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.viewHolder>{
 
-    Context context;
-    ArrayList<PostModel> models;
 
+    ArrayList<PostModel> models;
     Activity activity;
     FirebaseDatabase database;
     FirebaseAuth auth;
@@ -50,14 +49,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.viewHolder>{
 
     public PostAdapter(ArrayList<PostModel> list, Activity activity){
         this.models = list;
-        this.context = activity.getApplicationContext();
         this.activity = activity;
     }
 
     @NonNull
     @Override
     public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_single_post, parent, false);
+        View view = LayoutInflater.from(activity).inflate(R.layout.item_single_post, parent, false);
         return new viewHolder(view);
     }
 
@@ -79,24 +77,26 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.viewHolder>{
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()){
                             UserModel userModel = snapshot.getValue(UserModel.class);
-                            if (userModel.isVerified()){
-                                holder.binding.verifiedProfile.setVisibility(View.VISIBLE);
-                            }else {
-                                holder.binding.verifiedProfile.setVisibility(View.GONE);
-                            }
-                            String timeAgo = TimeAgo.using(postModel.getTime());
-                            holder.binding.discoverProfileName.setText(userModel.getName());
-                            if (userModel.getType() != null){
-                                holder.binding.discoverProfile.setText(userModel.getType() + " • " + timeAgo + " •");
-                            }else {
-                                holder.binding.discoverProfile.setText("Public Profile" + " • " + timeAgo + " •");
-                            }
-                            if (userModel.getImage() != null && !activity.isDestroyed()){
-                                Glide.with(context)
-                                        .load(userModel.getImage())
-                                        .placeholder(context.getDrawable(R.drawable.profileplaceholder))
-                                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                                        .into(holder.binding.discoverProfileImage);
+                            if (userModel != null){
+                                if (userModel.isVerified()){
+                                    holder.binding.verifiedProfile.setVisibility(View.VISIBLE);
+                                }else {
+                                    holder.binding.verifiedProfile.setVisibility(View.GONE);
+                                }
+                                String timeAgo = TimeAgo.using(postModel.getTime());
+                                holder.binding.discoverProfileName.setText(userModel.getName());
+                                if (userModel.getType() != null){
+                                    holder.binding.discoverProfile.setText(userModel.getType() + " • " + timeAgo + " •");
+                                }else {
+                                    holder.binding.discoverProfile.setText("Public Profile" + " • " + timeAgo + " •");
+                                }
+                                if (userModel.getImage() != null && !activity.isDestroyed()){
+                                    Glide.with(activity.getApplicationContext())
+                                            .load(userModel.getImage())
+                                            .placeholder(activity.getDrawable(R.drawable.profileplaceholder))
+                                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                                            .into(holder.binding.discoverProfileImage);
+                                }
                             }
                         }
                     }
@@ -113,7 +113,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.viewHolder>{
             holder.binding.discoverProfileName.setText("Admin Post");
             holder.binding.verifiedProfile.setVisibility(View.VISIBLE);
             holder.binding.discoverProfile.setText("App Admin" + " • " + timeAgo + " •");
-            holder.binding.discoverProfileImage.setImageDrawable(context.getDrawable(R.drawable.aimalogo));
+            holder.binding.discoverProfileImage.setImageDrawable(activity.getDrawable(R.drawable.aimalogo));
         }
 
 
@@ -143,7 +143,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.viewHolder>{
 
         if (postModel.getImage() != null && !activity.isDestroyed()){
 
-            Glide.with(context)
+            Glide.with(activity.getApplicationContext())
                     .load(postModel.getImage())
                     .skipMemoryCache(true)
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
@@ -162,30 +162,29 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.viewHolder>{
 
         holder.binding.profClick.setOnClickListener(v->{
             if (postModel.getUploader() != null && !postModel.getUploader().equalsIgnoreCase("admin")){
-                Intent i = new Intent(context.getApplicationContext(), ProfileActivity.class);
+                Intent i = new Intent(activity.getApplicationContext(), ProfileActivity.class);
                 i.putExtra("profileId", postModel.getUploader());
-                i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(i);
+                activity.startActivity(i);
             }else {
-                Toast.makeText(context, "not possible...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "not possible...", Toast.LENGTH_SHORT).show();
             }
         });
 
         holder.binding.discoverDots.setOnClickListener(c->{
-            PopupMenu popupMenu = new PopupMenu(context.getApplicationContext(), holder.binding.discoverDots);
+            PopupMenu popupMenu = new PopupMenu(activity.getApplicationContext(), holder.binding.discoverDots);
             popupMenu.getMenu().add("Share");
 
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    Toast.makeText(context, "loading request...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(activity, "loading request...", Toast.LENGTH_SHORT).show();
                     Intent sharingIntent = new Intent(Intent.ACTION_SEND);
                     sharingIntent.setType("text/html");
                     sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT,
                             "This post is shared from AIMA App. Check using app only ! \n\n" +
                                     " link: https://i.aima.post/" + postModel.getId());
-                    if (sharingIntent.resolveActivity(context.getPackageManager()) != null) {
-                        context.startActivity(Intent.createChooser(sharingIntent,"Share using"));
+                    if (sharingIntent.resolveActivity(activity.getPackageManager()) != null) {
+                        activity.startActivity(Intent.createChooser(sharingIntent,"Share using"));
                     }
                     return true;
                 }
@@ -277,15 +276,15 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.viewHolder>{
         });
 
         holder.binding.share01.setOnClickListener(c->{
-            Toast.makeText(context, "loading request...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "loading request...", Toast.LENGTH_SHORT).show();
             holder.binding.discoverShare.performClick();
             Intent sharingIntent = new Intent(Intent.ACTION_SEND);
             sharingIntent.setType("text/html");
             sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT,
                     "This post is shared from AIMA App. Check using app only ! \n\n" +
                             " link: https://i.aima.post/" + postModel.getId());
-            if (sharingIntent.resolveActivity(context.getPackageManager()) != null) {
-                context.startActivity(Intent.createChooser(sharingIntent,"Share using"));
+            if (sharingIntent.resolveActivity(activity.getPackageManager()) != null) {
+                activity.startActivity(Intent.createChooser(sharingIntent,"Share using"));
             }
 
         });
@@ -315,39 +314,19 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.viewHolder>{
         
 
         holder.binding.discoverComment.setOnClickListener(c->{
-            Intent i = new Intent(context.getApplicationContext(), Comments_Post.class);
+            Intent i = new Intent(activity.getApplicationContext(), Comments_Post.class);
             i.putExtra("postId", postModel.getId());
             i.putExtra("uploaderId", postModel.getUploader());
-            i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(i);
+            activity.startActivity(i);
         });
 
         holder.itemView.setOnClickListener(v->{
-            Intent i = new Intent(context.getApplicationContext(), See_Post.class);
+            Intent i = new Intent(activity.getApplicationContext(), See_Post.class);
             i.putExtra("postId", postModel.getId());
-            i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(i);
+            activity.startActivity(i);
         });
 
 
-
-
-
-
-
-
-
-
-
-
-        //Double click checker!
-
-//        holder.binding.discoverLike.setOnClickListener(new DoubleClickHandler(new DoubleClickListener() {
-//            @Override
-//            public void onDoubleClick(View view) {
-//                Toast.makeText(context, "double clicked", Toast.LENGTH_SHORT).show();
-//            }
-//        }));
     }
 
     @Override
@@ -355,7 +334,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.viewHolder>{
         return models.size();
     }
 
-    public class viewHolder extends RecyclerView.ViewHolder{
+    public static class viewHolder extends RecyclerView.ViewHolder{
         ItemSinglePostBinding binding;
         public viewHolder(@NonNull View itemView) {
             super(itemView);

@@ -1,14 +1,9 @@
 package com.developerali.aima.Activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -17,8 +12,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,16 +22,18 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.developerali.aima.Adapters.UsagesAdapter;
 import com.developerali.aima.CommonFeatures;
-import com.developerali.aima.Forms.MembershipApply;
 import com.developerali.aima.Models.UsagesModel;
 import com.developerali.aima.Models.UserModel;
 import com.developerali.aima.Models.WithdrawModel;
 import com.developerali.aima.R;
-import com.developerali.aima.databinding.ActivityDonationPageBinding;
 import com.developerali.aima.databinding.ActivityUsagesBinding;
 import com.developerali.aima.databinding.BottomWithdrewMoneyBinding;
 import com.developerali.aima.databinding.DialogRulesBinding;
@@ -62,7 +57,7 @@ public class UsagesActivity extends AppCompatActivity {
     ArrayList<UsagesModel> arrayList;
     ProgressDialog progressDialog;
     Animation blinkAnimation;
-    String payWith[] = {"Select Withdraw Mode", "UPI", "Bank Transfer"};
+    String[] payWith = {"Select Withdraw Mode", "UPI", "Bank Transfer"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -227,7 +222,7 @@ public class UsagesActivity extends AppCompatActivity {
 
         try {
             SharedPreferences sharedPreferences = getSharedPreferences("UsageTime", MODE_PRIVATE); //creating database
-            long totalSeconds = sharedPreferences.getLong("total_seconds", 0);  //getting previous value
+            long totalSeconds = sharedPreferences.getLong("total_seconds", 1);  //getting previous value
             long minutes;
             if (totalSeconds < 60){
                 minutes = 0;

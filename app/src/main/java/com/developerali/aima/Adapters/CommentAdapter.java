@@ -25,20 +25,18 @@ import java.util.ArrayList;
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.viewHolder>{
 
     ArrayList<CommentModel> models;
-    Context context;
     FirebaseDatabase database;
     Activity activity;
 
-    public CommentAdapter(Context context, Activity activity, ArrayList<CommentModel> list){
+    public CommentAdapter(Activity activity, ArrayList<CommentModel> list){
         this.models = list;
         this.activity = activity;
-        this.context = context;
     }
 
     @NonNull
     @Override
     public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_comment, parent, false);
+        View view = LayoutInflater.from(activity).inflate(R.layout.item_comment, parent, false);
         return new viewHolder(view);
     }
 
@@ -52,16 +50,18 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.viewHold
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()){
                             UserModel userModel = snapshot.getValue(UserModel.class);
-                            if (userModel.getImage() != null && !activity.isDestroyed()){
-                                Glide.with(context)
-                                                .load(userModel.getImage())
-                                                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                                                .placeholder(context.getDrawable(R.drawable.profileplaceholder))
-                                        .into(holder.binding.CommentsProfileImage);
-                            }
-                            holder.binding.commentProfileName.setText(userModel.getName());
-                            if (userModel.isVerified()){
-                                holder.binding.verifiedProfile.setVisibility(View.VISIBLE);
+                            if (userModel != null){
+                                if (userModel.getImage() != null && !activity.isDestroyed()){
+                                    Glide.with(activity.getApplicationContext())
+                                            .load(userModel.getImage())
+                                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                                            .placeholder(activity.getDrawable(R.drawable.profileplaceholder))
+                                            .into(holder.binding.CommentsProfileImage);
+                                }
+                                holder.binding.commentProfileName.setText(userModel.getName());
+                                if (userModel.isVerified()){
+                                    holder.binding.verifiedProfile.setVisibility(View.VISIBLE);
+                                }
                             }
                         }
                     }
@@ -91,7 +91,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.viewHold
         return models.size();
     }
 
-    public class viewHolder extends RecyclerView.ViewHolder{
+    public static class viewHolder extends RecyclerView.ViewHolder{
         ItemCommentBinding binding;
         public viewHolder(@NonNull View itemView) {
             super(itemView);

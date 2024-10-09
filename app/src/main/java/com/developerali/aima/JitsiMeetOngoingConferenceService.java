@@ -9,10 +9,6 @@ import android.content.pm.ServiceInfo;
 import android.os.Build;
 import android.os.IBinder;
 
-import androidx.annotation.Nullable;
-
-import org.jitsi.meet.sdk.JitsiMeetActivity;
-
 public class JitsiMeetOngoingConferenceService extends Service{
 
     private static final int NOTIFICATION_ID = 1;

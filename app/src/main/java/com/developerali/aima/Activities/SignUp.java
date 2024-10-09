@@ -1,20 +1,17 @@
 package com.developerali.aima.Activities;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.widget.Toast;
-
-import com.developerali.aima.CommonFeatures;
 import com.developerali.aima.MainActivity;
 import com.developerali.aima.Models.UserModel;
-import com.developerali.aima.R;
 import com.developerali.aima.databinding.ActivitySignUpBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;

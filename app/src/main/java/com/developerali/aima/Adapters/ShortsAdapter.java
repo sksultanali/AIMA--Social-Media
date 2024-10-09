@@ -44,7 +44,7 @@ public class ShortsAdapter extends FirebaseRecyclerAdapter<shortsModel, ShortsAd
         return new viewHolder(view);
     }
 
-    public class viewHolder extends RecyclerView.ViewHolder{
+    public static class viewHolder extends RecyclerView.ViewHolder{
         SignleVideoRowBinding binding;
         public viewHolder(@NonNull View itemView) {
             super(itemView);
@@ -57,22 +57,9 @@ public class ShortsAdapter extends FirebaseRecyclerAdapter<shortsModel, ShortsAd
                         @Override
                         public void onReady(@NonNull YouTubePlayer youTubePlayer) {
                             String videoId = obj.getVideoLink();
-//                            youTubePlayer.loadVideo(videoId, 0);
                             youTubePlayer.cueVideo(videoId, 0f);
                         }
 
-//                        @Override
-//                        public void onStateChange(@NonNull YouTubePlayer youTubePlayer, @NonNull PlayerConstants.PlayerState state) {
-//                            super.onStateChange(youTubePlayer, state);
-//                            switch (state) {
-//                                case VIDEO_CUED:
-//                                    overlayView.setVisibility(View.VISIBLE);
-//                                    break;
-//                                default:
-//                                    overlayView.setVisibility(View.GONE);
-//                                    break;
-//                            }
-//                        }
                     });
 
 
@@ -83,23 +70,25 @@ public class ShortsAdapter extends FirebaseRecyclerAdapter<shortsModel, ShortsAd
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             UserModel userModel = snapshot.getValue(UserModel.class);
-                            if (userModel.getImage() != null){
-                                Glide.with(itemView.getContext())
-                                        .load(userModel.getImage())
-                                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                                        .into(binding.uploadedImage);
-                            }
+                            if (userModel != null){
+                                if (userModel.getImage() != null){
+                                    Glide.with(itemView.getContext())
+                                            .load(userModel.getImage())
+                                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                                            .into(binding.uploadedImage);
+                                }
 
-                            String timeAgo = TimeAgo.using(obj.getTime());
+                                String timeAgo = TimeAgo.using(obj.getTime());
 
-                            binding.uploadNameAs.setText(userModel.getName());
-                            if (userModel.isVerified()){
-                                binding.verifiedProfile.setVisibility(View.VISIBLE);
-                            }
-                            if (userModel.getType() != null){
-                                binding.uploadTimeProfile.setText(userModel.getType() + " • " + timeAgo + " •");
-                            }else {
-                                binding.uploadTimeProfile.setText("Public Profile" + " • " + timeAgo + " •");
+                                binding.uploadNameAs.setText(userModel.getName());
+                                if (userModel.isVerified()){
+                                    binding.verifiedProfile.setVisibility(View.VISIBLE);
+                                }
+                                if (userModel.getType() != null){
+                                    binding.uploadTimeProfile.setText(userModel.getType() + " • " + timeAgo + " •");
+                                }else {
+                                    binding.uploadTimeProfile.setText("Public Profile" + " • " + timeAgo + " •");
+                                }
                             }
 
                         }

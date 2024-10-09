@@ -1,8 +1,5 @@
 package com.developerali.aima.Activities;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-
 import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -16,18 +13,11 @@ import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.developerali.aima.CommonFeatures;
-import com.developerali.aima.MainActivity;
-import com.developerali.aima.Models.UsagesModel;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.developerali.aima.databinding.ActivityDonationPageBinding;
 import com.developerali.aima.databinding.DialogAmountInsertBinding;
-import com.developerali.aima.databinding.DialogNotLoginBinding;
 import com.google.firebase.auth.FirebaseAuth;
-import com.phonepe.intent.sdk.api.B2BPGRequest;
-import com.phonepe.intent.sdk.api.B2BPGRequestBuilder;
-import com.phonepe.intent.sdk.api.PhonePe;
-import com.phonepe.intent.sdk.api.PhonePeInitException;
-import com.phonepe.intent.sdk.api.models.PhonePeEnvironment;
 import com.razorpay.Checkout;
 import com.razorpay.PaymentResultListener;
 
@@ -35,10 +25,7 @@ import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Base64;
-import java.util.Formatter;
 
 
 public class DonationPage extends AppCompatActivity implements PaymentResultListener {
@@ -237,7 +224,7 @@ public class DonationPage extends AppCompatActivity implements PaymentResultList
 
     private static String sha256(String input) {
         try {
-            byte[] bytes = input.getBytes("UTF-8");
+            byte[] bytes = input.getBytes(StandardCharsets.UTF_8);
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             byte[] digest = md.digest(bytes);
 

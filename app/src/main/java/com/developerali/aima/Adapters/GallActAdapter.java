@@ -1,7 +1,6 @@
 package com.developerali.aima.Adapters;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.developerali.aima.Activities.ImageShow;
-import com.developerali.aima.Models.GalleryModel;
 import com.developerali.aima.R;
 import com.developerali.aima.databinding.ItemPostProfileBinding;
 
@@ -50,7 +48,6 @@ public class GallActAdapter extends RecyclerView.Adapter<GallActAdapter.ViewHold
             holder.itemView.setOnClickListener(c->{
                 Intent i = new Intent(activity.getApplicationContext(), ImageShow.class);
                 i.putExtra("image", image);
-                i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
                 activity.startActivity(i);
             });
         }
@@ -62,7 +59,7 @@ public class GallActAdapter extends RecyclerView.Adapter<GallActAdapter.ViewHold
         return images.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
         ItemPostProfileBinding binding;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

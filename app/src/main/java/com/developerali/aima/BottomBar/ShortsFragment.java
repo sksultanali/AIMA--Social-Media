@@ -1,16 +1,13 @@
 package com.developerali.aima.BottomBar;
 
-import static com.facebook.react.bridge.UiThreadUtil.runOnUiThread;
-
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.developerali.aima.Adapters.ShortsAdapter;
 import com.developerali.aima.Models.shortsModel;
@@ -18,7 +15,6 @@ import com.developerali.aima.R;
 import com.developerali.aima.databinding.FragmentShortsBinding;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.FirebaseDatabase;
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 
 import me.ibrahimsn.lib.SmoothBottomBar;
 
@@ -27,10 +23,7 @@ public class ShortsFragment extends Fragment {
 
     FragmentShortsBinding binding;
     private SmoothBottomBar bottomBar;
-//    Adapter adapter;
-//    ArrayList<shortsModel> arrayList;
     ShortsAdapter adapter;
-    YouTubePlayer youTubePlayer;
 
 
     public ShortsFragment(){}
@@ -45,7 +38,7 @@ public class ShortsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentShortsBinding.inflate(inflater, container, false);
-        bottomBar = (SmoothBottomBar) getActivity().findViewById(R.id.bottomBar);
+        bottomBar = getActivity().findViewById(R.id.bottomBar);
         bottomBar.setItemActiveIndex(3);
 
 
@@ -76,43 +69,6 @@ public class ShortsFragment extends Fragment {
                 super.onPageScrollStateChanged(state);
             }
         });
-
-
-
-//        arrayList = new ArrayList<>();
-//        FirebaseDatabase.getInstance()
-//                .getReference().child("shorts")
-//                .addValueEventListener(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                        arrayList.clear();
-//                        for (DataSnapshot snapshot1 : snapshot.getChildren()){
-//                            shortsModel shortsModel = snapshot1.getValue(shortsModel.class);
-//                            arrayList.add(shortsModel);
-//                        }
-//
-//                        binding.viewPager.setAdapter(new Adapter(getActivity(), arrayList));
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError error) {
-//
-//                    }
-//                });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         return binding.getRoot();

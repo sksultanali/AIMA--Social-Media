@@ -2,12 +2,6 @@
 package com.developerali.aima.Activities;
 
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -26,12 +20,15 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.developerali.aima.CommonFeatures;
 import com.developerali.aima.MainActivity;
-import com.developerali.aima.Models.CommentModel;
-import com.developerali.aima.Models.NotificationModel;
 import com.developerali.aima.Models.UserModel;
 import com.developerali.aima.R;
 import com.developerali.aima.databinding.ActivityEditProfileBinding;
@@ -42,14 +39,10 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
-import java.util.Date;
 
 
 public class EditProfile extends AppCompatActivity {
@@ -174,7 +167,6 @@ public class EditProfile extends AppCompatActivity {
 
         binding.saveProfile.setOnClickListener(v->{
             Intent i = new Intent(EditProfile.this, MainActivity.class);
-            i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
             startActivity(i);
             finish();
         });

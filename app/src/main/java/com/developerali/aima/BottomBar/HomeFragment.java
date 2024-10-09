@@ -6,6 +6,12 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -14,17 +20,9 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.developerali.aima.Activities.DonationPage;
-import com.developerali.aima.Activities.Login;
 import com.developerali.aima.Activities.MemberShip_Act;
 import com.developerali.aima.Activities.NotificationAct;
 import com.developerali.aima.Activities.PostActivity;
@@ -49,7 +47,6 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
@@ -72,7 +69,7 @@ public class HomeFragment extends Fragment {
     FirebaseDatabase database;
     String who;
     CollectionReference collectionReference;
-    private int currentTabPosition = 0;
+    private final int currentTabPosition = 0;
     ArrayList<PostModel> postModelArrayList;
     ArrayList<pdfModel> pdfModelArrayList;
     ArrayList<VideoModel> postVideoArrayList;
@@ -102,7 +99,7 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(inflater, container, false);
 
-        bottomBar = (SmoothBottomBar) getActivity().findViewById(R.id.bottomBar);
+        bottomBar = getActivity().findViewById(R.id.bottomBar);
         bottomBar.setItemActiveIndex(0);
 
         auth = FirebaseAuth.getInstance();
@@ -184,14 +181,11 @@ public class HomeFragment extends Fragment {
         //toolbar clicks
         binding.myProfile.setOnClickListener(v->{
             Intent i = new Intent(getActivity().getApplicationContext(), ProfileActivity.class);
-
-            i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
             getActivity().startActivity(i);
         });
 
         binding.search.setOnClickListener(v->{
             Intent i = new Intent(getActivity().getApplicationContext(), SearchActivity.class);
-            i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
             getActivity().startActivity(i);
         });
 
@@ -328,18 +322,15 @@ public class HomeFragment extends Fragment {
 
         binding.addDonation.setOnClickListener(v->{
             Intent intent = new Intent(getActivity().getApplicationContext(), DonationPage.class);
-            intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK);
             getActivity().startActivity(intent);
         });
 
         binding.addMembership.setOnClickListener(c->{
             Intent i = new Intent(getActivity().getApplicationContext(), MemberShip_Act.class);
-            i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
             getActivity().startActivity(i);
         });
         binding.addPost.setOnClickListener(c->{
             Intent i = new Intent(getActivity().getApplicationContext(), PostActivity.class);
-            i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
             getActivity().startActivity(i);
         });
 
@@ -360,7 +351,6 @@ public class HomeFragment extends Fragment {
 
         binding.notification.setOnClickListener(v->{
             Intent intent = new Intent(getActivity().getApplicationContext(), NotificationAct.class);
-            intent.setFlags(intent.FLAG_ACTIVITY_NEW_TASK);
             getActivity().startActivity(intent);
         });
 
@@ -432,7 +422,7 @@ public class HomeFragment extends Fragment {
 
     private void loadGallery() {
 
-        galleryAdapter = new GalleryAdapter(getActivity(), getActivity(), galleryModelArrayList);
+        galleryAdapter = new GalleryAdapter(getActivity(),galleryModelArrayList);
         binding.discoverRecyclerView.setAdapter(galleryAdapter);
 
         binding.spinKit.setVisibility(View.VISIBLE);
@@ -448,12 +438,14 @@ public class HomeFragment extends Fragment {
                             for (DataSnapshot snapshot1 : snapshot.getChildren()){
                                 GalleryModel galleryModel = snapshot1.getValue(GalleryModel.class);
 
-                                galleryModel.setId(snapshot1.getKey());
-                                galleryModel.setCaption(galleryModel.getCaption());
-                                galleryModel.setTime(galleryModel.getTime());
-                                galleryModel.setImages(galleryModel.getImages());
+                                if (galleryModel != null){
+                                    galleryModel.setId(snapshot1.getKey());
+                                    galleryModel.setCaption(galleryModel.getCaption());
+                                    //galleryModel.setTime(galleryModel.getTime());
+                                    //galleryModel.setImages(galleryModel.getImages());
 
-                                galleryModelArrayList.add(galleryModel);
+                                    galleryModelArrayList.add(galleryModel);
+                                }
                             }
 
                             Collections.reverse(galleryModelArrayList);
@@ -507,7 +499,7 @@ public class HomeFragment extends Fragment {
                                     pdfModel.setId(snapshot1.getKey());
                                     pdfModel.setCaption(pdfModel.getCaption());
                                     pdfModel.setTime(pdfModel.getTime());
-                                    pdfModel.setLink(pdfModel.getLink());
+                                    //pdfModel.setLink(pdfModel.getLink());
 
                                     pdfModelArrayList.add(pdfModel);
                                 }
@@ -554,18 +546,20 @@ public class HomeFragment extends Fragment {
                     for (DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()){
                         PostModel postModel = snapshot.toObject(PostModel.class);
 
-                        postModel.setId(snapshot.getId());
-                        postModel.setImage(snapshot.getString("image"));
-                        postModel.setUploader(snapshot.getString("uploader"));
-                        if (snapshot.getString("caption") != null){
-                            postModel.setCaption(snapshot.getString("caption"));
-                        }
+                        if (postModel != null){
+                            postModel.setId(snapshot.getId());
+                            postModel.setImage(snapshot.getString("image"));
+                            postModel.setUploader(snapshot.getString("uploader"));
+                            if (snapshot.getString("caption") != null){
+                                postModel.setCaption(snapshot.getString("caption"));
+                            }
 
-                        postModel.setTime(snapshot.getLong("time"));
-                        postModel.setCommentsCount(postModel.getCommentsCount());
-                        postModel.setLikesCount(postModel.getLikesCount());
-                        postModel.setApproved(snapshot.getBoolean("approved"));
-                        postModelArrayList.add(postModel);
+                            //postModel.setTime(snapshot.getLong("time"));
+                            postModel.setCommentsCount(postModel.getCommentsCount());
+                            postModel.setLikesCount(postModel.getLikesCount());
+                            postModel.setApproved(snapshot.getBoolean("approved"));
+                            postModelArrayList.add(postModel);
+                        }
                     }
                     adapter.notifyDataSetChanged();
                     binding.spinKit.setVisibility(View.GONE);
@@ -612,17 +606,19 @@ public class HomeFragment extends Fragment {
                         for (DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()){
                             PostModel postModel = snapshot.toObject(PostModel.class);
 
-                            postModel.setId(snapshot.getId());
-                            postModel.setImage(snapshot.getString("image"));
-                            postModel.setUploader(snapshot.getString("uploader"));
-                            if (snapshot.getString("caption") != null){
-                                postModel.setCaption(snapshot.getString("caption"));
-                            }
+                           if (postModel != null){
+                               postModel.setId(snapshot.getId());
+                               postModel.setImage(snapshot.getString("image"));
+                               postModel.setUploader(snapshot.getString("uploader"));
+                               if (snapshot.getString("caption") != null){
+                                   postModel.setCaption(snapshot.getString("caption"));
+                               }
 
-                            postModel.setTime(snapshot.getLong("time"));
-                            postModel.setCommentsCount(postModel.getCommentsCount());
-                            postModel.setLikesCount(postModel.getLikesCount());
-                            postModelArrayList.add(postModel);
+                               //postModel.setTime(snapshot.getLong("time"));
+                               postModel.setCommentsCount(postModel.getCommentsCount());
+                               postModel.setLikesCount(postModel.getLikesCount());
+                               postModelArrayList.add(postModel);
+                           }
                         }
                         adapter.notifyDataSetChanged();
                         binding.nestedScroll.scrollTo(0, 0);
@@ -662,14 +658,15 @@ public class HomeFragment extends Fragment {
                             // Process the data from the initial page
                             for (DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()){
                                 VideoModel postModel = snapshot.toObject(VideoModel.class);
+                                if (postModel != null){
+                                    postModel.setUploader(snapshot.getString("uploader"));
+                                    if (snapshot.getString("caption") != null){
+                                        postModel.setCaption(snapshot.getString("caption"));
+                                    }
+                                    //postModel.setTime(snapshot.getLong("time"));
 
-                                postModel.setUploader(snapshot.getString("uploader"));
-                                if (snapshot.getString("caption") != null){
-                                    postModel.setCaption(snapshot.getString("caption"));
+                                    postVideoArrayList.add(postModel);
                                 }
-
-                                postModel.setTime(snapshot.getLong("time"));
-                                postVideoArrayList.add(postModel);
                             }
                             adapterVideo.notifyDataSetChanged();
                             binding.spinKit.setVisibility(View.GONE);
@@ -708,13 +705,15 @@ public class HomeFragment extends Fragment {
                         for (DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()){
                             VideoModel postModel = snapshot.toObject(VideoModel.class);
 
-                            postModel.setUploader(snapshot.getString("uploader"));
-                            if (snapshot.getString("caption") != null){
-                                postModel.setCaption(snapshot.getString("caption"));
-                            }
+                            if (postModel != null){
+                                postModel.setUploader(snapshot.getString("uploader"));
+                                if (snapshot.getString("caption") != null){
+                                    postModel.setCaption(snapshot.getString("caption"));
+                                }
 
-                            postModel.setTime(snapshot.getLong("time"));
-                            postVideoArrayList.add(postModel);
+                                //postModel.setTime(snapshot.getLong("time"));
+                                postVideoArrayList.add(postModel);
+                            }
                         }
                         adapterVideo.notifyDataSetChanged();
                         binding.nestedScroll.smoothScrollTo(0, 0);

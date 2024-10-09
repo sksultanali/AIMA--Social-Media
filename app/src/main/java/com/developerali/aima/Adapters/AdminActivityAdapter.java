@@ -1,5 +1,6 @@
 package com.developerali.aima.Adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -21,10 +22,10 @@ import java.util.ArrayList;
 
 public class AdminActivityAdapter extends RecyclerView.Adapter<AdminActivityAdapter.ViewHolder>{
 
-    Context context;
+    Activity context;
     ArrayList<PostModel> models;
 
-    public AdminActivityAdapter(Context context, ArrayList<PostModel> models) {
+    public AdminActivityAdapter(Activity context, ArrayList<PostModel> models) {
         this.context = context;
         this.models = models;
     }
@@ -76,7 +77,6 @@ public class AdminActivityAdapter extends RecyclerView.Adapter<AdminActivityAdap
         holder.itemView.setOnClickListener(v->{
             Intent i = new Intent(context.getApplicationContext(), See_Post.class);
             i.putExtra("postId", postModel.getId());
-            i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
         });
     }
@@ -86,7 +86,7 @@ public class AdminActivityAdapter extends RecyclerView.Adapter<AdminActivityAdap
         return models.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
         SingleAdminPostBinding binding;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

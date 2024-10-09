@@ -1,32 +1,27 @@
 package com.developerali.aima.BottomBar;
 
-import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.widget.Toast;
+import com.developerali.aima.R;
+import com.developerali.aima.databinding.FragmentMeetingBinding;
 
 import org.jitsi.meet.sdk.BroadcastEvent;
 import org.jitsi.meet.sdk.BroadcastIntentHelper;
 import org.jitsi.meet.sdk.JitsiMeet;
 import org.jitsi.meet.sdk.JitsiMeetActivity;
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
-
-import com.developerali.aima.R;
-import com.developerali.aima.databinding.FragmentMeetingBinding;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -61,7 +56,7 @@ public class MeetingFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentMeetingBinding.inflate(inflater, container, false);
-        bottomBar = (SmoothBottomBar) getActivity().findViewById(R.id.bottomBar);
+        bottomBar = getActivity().findViewById(R.id.bottomBar);
         bottomBar.setItemActiveIndex(2);
 
 

@@ -1,30 +1,25 @@
 package com.developerali.aima.Activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.developerali.aima.Adapters.NotificationAdapter;
-import com.developerali.aima.CommonFeatures;
-import com.developerali.aima.MainActivity;
 import com.developerali.aima.Models.NotificationModel;
-import com.developerali.aima.Models.UsagesModel;
 import com.developerali.aima.databinding.ActivityNotificationBinding;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 public class NotificationAct extends AppCompatActivity {
 
@@ -68,16 +63,19 @@ public class NotificationAct extends AppCompatActivity {
                         if (snapshot.exists()){
                             for (DataSnapshot snapshot1 : snapshot.getChildren()){
                                 NotificationModel notificationModel = snapshot1.getValue(NotificationModel.class);
-                                notificationModel.setNotificationId(snapshot1.getKey());
-                                notificationModel.setId(notificationModel.getId());
-                                notificationModel.setType(notificationModel.getType());
-                                notificationModel.setSeen(notificationModel.getSeen());
-                                notificationModel.setNotifyAt(notificationModel.getNotifyAt());
-                                notificationModel.setNotifyBy(notificationModel.getNotifyBy());
-                                models.add(notificationModel);
+
+                                if (notificationModel != null){
+                                    notificationModel.setNotificationId(snapshot1.getKey());
+                                    notificationModel.setId(notificationModel.getId());
+                                    notificationModel.setType(notificationModel.getType());
+                                    notificationModel.setSeen(notificationModel.getSeen());
+                                    notificationModel.setNotifyAt(notificationModel.getNotifyAt());
+                                    notificationModel.setNotifyBy(notificationModel.getNotifyBy());
+                                    models.add(notificationModel);
+                                }
                             }
                             Collections.reverse(models);
-                            adapter = new NotificationAdapter(NotificationAct.this, models, NotificationAct.this);
+                            adapter = new NotificationAdapter(models, NotificationAct.this);
                             binding.notificationRecyclerView.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
                             binding.textNoComments.setVisibility(View.GONE);

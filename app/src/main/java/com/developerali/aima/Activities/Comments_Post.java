@@ -1,10 +1,5 @@
 package com.developerali.aima.Activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -21,14 +16,16 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.developerali.aima.Adapters.CommentAdapter;
 import com.developerali.aima.CommonFeatures;
-import com.developerali.aima.MainActivity;
 import com.developerali.aima.Models.CommentModel;
 import com.developerali.aima.Models.NotificationModel;
-import com.developerali.aima.Models.UsagesModel;
 import com.developerali.aima.Models.UserModel;
 import com.developerali.aima.R;
 import com.developerali.aima.databinding.ActivityCommentsPostBinding;
@@ -105,7 +102,7 @@ public class Comments_Post extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()){
                             UserModel myModel = snapshot.getValue(UserModel.class);
-                            if (myModel.getImage() != null && !activity.isDestroyed()){
+                            if (myModel != null && myModel.getImage() != null && !activity.isDestroyed()){
                                 Glide.with(Comments_Post.this)
                                         .load(myModel.getImage())
                                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
@@ -262,15 +259,16 @@ public class Comments_Post extends AppCompatActivity {
 
                             for (DataSnapshot snapshot1 : snapshot.getChildren()){
                                 CommentModel commentModel = snapshot1.getValue(CommentModel.class);
-                                commentModel.setCommentId(snapshot1.getKey());
-                                commentModel.setComment(commentModel.getComment());
-                                commentModel.setCommentedBy(commentModel.getCommentedBy());
-                                commentModel.setCommentedAt(commentModel.getCommentedAt());
-                                commentModel.setPostId(postId);
-                                arrayList.add(commentModel);
+
+                                if (commentModel != null){
+                                    commentModel.setCommentId(snapshot1.getKey());
+                                    commentModel.setCommentedBy(commentModel.getCommentedBy());
+                                    commentModel.setPostId(postId);
+                                    arrayList.add(commentModel);
+                                }
                             }
 
-                            adapter = new CommentAdapter(Comments_Post.this, activity, arrayList);
+                            adapter = new CommentAdapter(Comments_Post.this, arrayList);
                             binding.commentRecycler.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
                             binding.textNoComments.setVisibility(View.GONE);

@@ -1,9 +1,5 @@
 package com.developerali.aima.Forms;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -13,7 +9,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
-import com.developerali.aima.MainActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.developerali.aima.Models.VerifiedBadgeModel;
 import com.developerali.aima.R;
 import com.developerali.aima.databinding.ActivityVerifiedBadgeBinding;
@@ -36,10 +35,10 @@ public class verifiedBadgeActivity extends AppCompatActivity {
     Uri identityUri, screenShotUri;
     String identityUrl, screenShotUrl;
     ProgressDialog dialog;
-    String validity[] = {"3 Months", "6 Months", "12 Months"};
-    String price[] = {"30", "50", "100"};
-    String payWith[] = {"Select Payment Mode", "UPI", "QR Code", "Bank Transfer"};
-    String identity[] = {"Select Identity", "Aadhaar Card", "Voter Card", "Pan Card", "GST"};
+    String[] validity = {"3 Months", "6 Months", "12 Months"};
+    String[] price = {"30", "50", "100"};
+    String[] payWith = {"Select Payment Mode", "UPI", "QR Code", "Bank Transfer"};
+    String[] identity = {"Select Identity", "Aadhaar Card", "Voter Card", "Pan Card", "GST"};
 
     FirebaseStorage storage;
     FirebaseDatabase database;

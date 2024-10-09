@@ -1,5 +1,6 @@
 package com.developerali.aima.Adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,10 +18,10 @@ import java.util.ArrayList;
 
 public class UsagesAdapter extends RecyclerView.Adapter<UsagesAdapter.ViewHolder>{
 
-    Context context;
+    Activity context;
     ArrayList<UsagesModel> usagesModels;
 
-    public UsagesAdapter(Context context, ArrayList<UsagesModel> usagesModels) {
+    public UsagesAdapter(Activity context, ArrayList<UsagesModel> usagesModels) {
         this.context = context;
         this.usagesModels = usagesModels;
     }
@@ -76,7 +77,7 @@ public class UsagesAdapter extends RecyclerView.Adapter<UsagesAdapter.ViewHolder
         return usagesModels.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
         ItemUsagesAppBinding binding;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

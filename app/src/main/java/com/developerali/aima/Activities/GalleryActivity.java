@@ -1,10 +1,5 @@
 package com.developerali.aima.Activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -14,21 +9,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
 import com.developerali.aima.Adapters.GallActAdapter;
-import com.developerali.aima.CommonFeatures;
-import com.developerali.aima.MainActivity;
 import com.developerali.aima.Models.GalleryModel;
-import com.developerali.aima.Models.UsagesModel;
-import com.developerali.aima.R;
 import com.developerali.aima.databinding.ActivityGalleryBinding;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 public class GalleryActivity extends AppCompatActivity {
@@ -111,42 +105,44 @@ public class GalleryActivity extends AppCompatActivity {
 
                                 GalleryModel galleryModel = snapshot.getValue(GalleryModel.class);
 
-                                if (galleryModel.getCaption() != null && galleryModel.getCaption().length()!=0){
-                                    if (galleryModel.getCaption().length() > 150){
-                                        String text = galleryModel.getCaption().substring(0, 135);
-                                        if (text.contains("\n")) {
-                                            int length = text.length(); int enterCount = 0; int enterIndex = -1;
-                                            for (int i = 0; i < length; i++) {
-                                                if (text.charAt(i) == '\n') {
-                                                    enterCount++;
-                                                    enterIndex = i - 1;
+                                if (galleryModel != null){
+                                    if (galleryModel.getCaption() != null && galleryModel.getCaption().length()!=0){
+                                        if (galleryModel.getCaption().length() > 150){
+                                            String text = galleryModel.getCaption().substring(0, 135);
+                                            if (text.contains("\n")) {
+                                                int length = text.length(); int enterCount = 0; int enterIndex = -1;
+                                                for (int i = 0; i < length; i++) {
+                                                    if (text.charAt(i) == '\n') {
+                                                        enterCount++;
+                                                        enterIndex = i - 1;
 
-                                                    binding.galleryCaption.setText( text.substring(0, enterIndex) + "...Read more");
+                                                        binding.galleryCaption.setText( text.substring(0, enterIndex) + "...Read more");
+                                                    }
                                                 }
+                                            }else {
+                                                binding.galleryCaption.setText( text + "...Read more");
                                             }
                                         }else {
-                                            binding.galleryCaption.setText( text + "...Read more");
+                                            binding.galleryCaption.setText(galleryModel.getCaption());
                                         }
                                     }else {
-                                        binding.galleryCaption.setText(galleryModel.getCaption());
+                                        binding.galleryCaption.setVisibility(View.GONE);
                                     }
-                                }else {
-                                    binding.galleryCaption.setVisibility(View.GONE);
+
+                                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy");
+                                    String date = simpleDateFormat.format(galleryModel.getTime());
+                                    binding.addedText.setText("Added On " + date);
+
+                                    binding.galleryCaption.setOnClickListener(v->{
+                                        binding.galleryCaption.setText(galleryModel.getCaption());
+                                    });
+
+
+                                    adapter = new GallActAdapter(GalleryActivity.this, galleryModel.getImages());
+                                    binding.spinKit.setVisibility(View.GONE);
+                                    binding.postRecyclerView.setAdapter(adapter);
+                                    adapter.notifyDataSetChanged();
                                 }
-
-                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM yyyy");
-                                String date = simpleDateFormat.format(galleryModel.getTime());
-                                binding.addedText.setText("Added On " + date);
-
-                                binding.galleryCaption.setOnClickListener(v->{
-                                    binding.galleryCaption.setText(galleryModel.getCaption());
-                                });
-
-
-                                adapter = new GallActAdapter(GalleryActivity.this, galleryModel.getImages());
-                                binding.spinKit.setVisibility(View.GONE);
-                                binding.postRecyclerView.setAdapter(adapter);
-                                adapter.notifyDataSetChanged();
 
                             }
                         }

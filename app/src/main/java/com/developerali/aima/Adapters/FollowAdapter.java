@@ -1,5 +1,6 @@
 package com.developerali.aima.Adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -32,11 +33,11 @@ import java.util.Date;
 public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.vieHolder>{
 
     ArrayList<UserModel> list;
-    Context context;
+    Activity context;
     FirebaseDatabase database;
     FirebaseAuth auth;
 
-    public FollowAdapter(Context context, ArrayList<UserModel> list){
+    public FollowAdapter(Activity context, ArrayList<UserModel> list){
         this.context = context;
         this.list = list;
     }
@@ -245,7 +246,7 @@ public class FollowAdapter extends RecyclerView.Adapter<FollowAdapter.vieHolder>
         return list.size();
     }
 
-    public class vieHolder extends RecyclerView.ViewHolder{
+    public static class vieHolder extends RecyclerView.ViewHolder{
         ItemFollowBinding binding;
         public vieHolder(@NonNull View itemView) {
             super(itemView);

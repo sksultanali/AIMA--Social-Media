@@ -1,7 +1,5 @@
 package com.developerali.aima.Models;
 
-import java.util.Date;
-
 public class FollowModel {
 
     String followBy;

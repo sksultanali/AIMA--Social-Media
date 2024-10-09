@@ -28,12 +28,10 @@ import java.util.ArrayList;
 
 public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.viewHolder>{
 
-    Context context;
     ArrayList<PostModel> postModels;
     Activity activity;
 
-    public ProfilePostAdapter(Context context, ArrayList<PostModel> postModels, Activity activity) {
-        this.context = context;
+    public ProfilePostAdapter(ArrayList<PostModel> postModels, Activity activity) {
         this.postModels = postModels;
         this.activity = activity;
     }
@@ -41,7 +39,7 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
     @NonNull
     @Override
     public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_post_profile, parent, false);
+        View view = LayoutInflater.from(activity).inflate(R.layout.item_post_profile, parent, false);
         return new viewHolder(view);
     }
 
@@ -49,21 +47,20 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
     public void onBindViewHolder(@NonNull viewHolder holder, @SuppressLint("RecyclerView") int position) {
         PostModel postModel = postModels.get(position);
         if (postModel.getImage() != null && !activity.isDestroyed()){
-            Glide.with(context)
+            Glide.with(activity.getApplicationContext())
                     .load(postModel.getImage())
                     .skipMemoryCache(true)
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                    .placeholder(context.getDrawable(R.drawable.placeholder))
+                    .placeholder(activity.getDrawable(R.drawable.placeholder))
                     .into(holder.binding.imageView1);
         }else {
-            holder.binding.imageView1.setImageDrawable(context.getDrawable(R.drawable.text));
+            holder.binding.imageView1.setImageDrawable(activity.getDrawable(R.drawable.text));
         }
 
         holder.itemView.setOnClickListener(v->{
-            Intent i = new Intent(context.getApplicationContext(), See_Post.class);
+            Intent i = new Intent(activity.getApplicationContext(), See_Post.class);
             i.putExtra("postId", postModel.getId());
-            i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(i);
+            activity.startActivity(i);
         });
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
@@ -72,7 +69,7 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
                 if (postModel.getUploader().equalsIgnoreCase(FirebaseAuth.getInstance().getCurrentUser().getUid())){
 
 
-                    PopupMenu popupMenu = new PopupMenu(context.getApplicationContext(), holder.binding.imageView1);
+                    PopupMenu popupMenu = new PopupMenu(activity.getApplicationContext(), holder.binding.imageView1);
                     popupMenu.getMenu().add("Delete");
                     popupMenu.show();
 
@@ -124,7 +121,7 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
         return postModels.size();
     }
 
-    public class viewHolder extends RecyclerView.ViewHolder{
+    public static class viewHolder extends RecyclerView.ViewHolder{
         ItemPostProfileBinding binding;
         public viewHolder(@NonNull View itemView) {
             super(itemView);

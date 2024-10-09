@@ -1,8 +1,5 @@
 package com.developerali.aima.Activities;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,12 +14,10 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
-import com.developerali.aima.CommonFeatures;
-import com.developerali.aima.Models.UsagesModel;
-import com.developerali.aima.R;
-import com.developerali.aima.databinding.ActivityWebViewBinding;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
+import com.developerali.aima.databinding.ActivityWebViewBinding;
 
 public class WebViewActivity extends AppCompatActivity {
 

@@ -21,7 +21,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     ArrayList<RecentSearchModel> arrayList;
     Activity activity;
     SelectedItem selectedItem;
-    private DB_Helper dbHelper;
+    private final DB_Helper dbHelper;
 
     public SearchAdapter(ArrayList<RecentSearchModel> arrayList, Activity activity, SelectedItem selectedItem) {
         this.arrayList = arrayList;
@@ -48,9 +48,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
         holder.binding.closeBtn.setOnClickListener(v->{
             dbHelper.deleteSearchQuery(recentSearchModel.getSearch_query());
-            arrayList.remove(position);
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, arrayList.size());
+            try {
+                arrayList.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, arrayList.size());
+            }catch (Exception e){
+
+            }
         });
 
 
@@ -65,7 +69,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         void onShowAction(RecentSearchModel searchModel);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
         LayoutSerachHistoryBinding binding;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

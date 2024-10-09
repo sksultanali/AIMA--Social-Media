@@ -1,21 +1,17 @@
 package com.developerali.aima.Activities;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.speech.RecognizerIntent;
-import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.developerali.aima.Adapters.FollowAdapter;
 import com.developerali.aima.Adapters.PostAdapter;
@@ -206,7 +202,7 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.S
                 userModelArrayList.clear();
                 for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                     String userId = childSnapshot.getKey();
-                    if (!userId.equalsIgnoreCase(auth.getCurrentUser().getUid())) {
+                    if (!(userId != null && userId.equalsIgnoreCase(auth.getCurrentUser().getUid()))) {
                         UserModel userModel = childSnapshot.getValue(UserModel.class);
                         if (userModel != null) {
                             userModel.setUserId(userId);
@@ -240,8 +236,8 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.S
                 userModelArrayList.clear();
                 for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                     UserModel userModel = childSnapshot.getValue(UserModel.class);
-                    userModel.setUserId(childSnapshot.getKey());
                     if (userModel != null) {
+                        userModel.setUserId(childSnapshot.getKey());
                         userModelArrayList.add(userModel);
                     }
                 }

@@ -1,17 +1,13 @@
 package com.developerali.aima.BottomBar;
 
 
+import android.Manifest;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.activity.OnBackPressedCallback;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import android.app.DownloadManager;
-
 import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +17,12 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
+
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 
 import com.developerali.aima.R;
 import com.developerali.aima.databinding.FragmentWadiNewsBinding;
@@ -28,14 +30,10 @@ import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
-
-import me.ibrahimsn.lib.SmoothBottomBar;
-
-import android.Manifest;
-import android.widget.Toast;
-
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
+
+import me.ibrahimsn.lib.SmoothBottomBar;
 
 
 public class WadiNews extends Fragment{
@@ -51,16 +49,15 @@ public class WadiNews extends Fragment{
     }
 
     FragmentWadiNewsBinding binding;
-    private SmoothBottomBar bottomBar;
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentWadiNewsBinding.inflate(inflater, container, false);
 
-        bottomBar = (SmoothBottomBar) getActivity().findViewById(R.id.bottomBar);
+        SmoothBottomBar bottomBar = getActivity().findViewById(R.id.bottomBar);
         bottomBar.setItemActiveIndex(1);
 
         binding.webView.setWebViewClient(new WebViewClient());

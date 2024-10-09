@@ -14,7 +14,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.developerali.aima.Activities.GalleryActivity;
 import com.developerali.aima.Activities.ImageShow;
-import com.developerali.aima.Activities.ProfileActivity;
 import com.developerali.aima.Models.GalleryModel;
 import com.developerali.aima.R;
 import com.developerali.aima.databinding.ItemGalleryBinding;
@@ -24,13 +23,11 @@ import java.util.ArrayList;
 
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHolder>{
 
-    Context context;
-    Activity activity;
+    Activity context;
     ArrayList<GalleryModel> galleryModels;
 
-    public GalleryAdapter(Context context, Activity activity, ArrayList<GalleryModel> galleryModels) {
-        this.context = context;
-        this.activity = activity;
+    public GalleryAdapter(Activity activity, ArrayList<GalleryModel> galleryModels) {
+        this.context = activity;
         this.galleryModels = galleryModels;
     }
 
@@ -73,68 +70,65 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         holder.binding.addedOnDate.setText("Added On " + date);
 
 
-        if (galleryModel.getImages().get(0) != null && !activity.isDestroyed()){
-            Glide.with(context)
-                    .load(galleryModel.getImages().get(0))
-                    .skipMemoryCache(true)
-                    .placeholder(context.getDrawable(R.drawable.placeholder))
-                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                    .into(holder.binding.imageView1);
+        if (galleryModel.getImages() != null){
+            if (galleryModel.getImages().get(0) != null && !context.isDestroyed()){
+                Glide.with(context)
+                        .load(galleryModel.getImages().get(0))
+                        .skipMemoryCache(true)
+                        .placeholder(context.getDrawable(R.drawable.placeholder))
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                        .into(holder.binding.imageView1);
 
-            holder.binding.imageView1.setOnClickListener(c->{
-                Intent i = new Intent(context.getApplicationContext(), ImageShow.class);
-                i.putExtra("image", galleryModel.getImages().get(0));
-                i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(i);
-            });
-        }
-        if (galleryModel.getImages().get(1) != null && !activity.isDestroyed()){
-            Glide.with(context)
-                    .load(galleryModel.getImages().get(1))
-                    .skipMemoryCache(true)
-                    .placeholder(context.getDrawable(R.drawable.placeholder))
-                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                    .into(holder.binding.imageView2);
+                holder.binding.imageView1.setOnClickListener(c->{
+                    Intent i = new Intent(context.getApplicationContext(), ImageShow.class);
+                    i.putExtra("image", galleryModel.getImages().get(0));
+                    context.startActivity(i);
+                });
+            }
+            if (galleryModel.getImages().get(1) != null && !context.isDestroyed()){
+                Glide.with(context)
+                        .load(galleryModel.getImages().get(1))
+                        .skipMemoryCache(true)
+                        .placeholder(context.getDrawable(R.drawable.placeholder))
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                        .into(holder.binding.imageView2);
 
-            holder.binding.imageView2.setOnClickListener(c->{
-                Intent i = new Intent(context.getApplicationContext(), ImageShow.class);
-                i.putExtra("image", galleryModel.getImages().get(1));
-                i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(i);
-            });
-        }else {
-            holder.binding.imageView2.setVisibility(View.GONE);
-        }
-        if (galleryModel.getImages().get(2) != null && !activity.isDestroyed()){
-            Glide.with(context)
-                    .load(galleryModel.getImages().get(2))
-                    .skipMemoryCache(true)
-                    .placeholder(context.getDrawable(R.drawable.placeholder))
-                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                    .into(holder.binding.imageView3);
+                holder.binding.imageView2.setOnClickListener(c->{
+                    Intent i = new Intent(context.getApplicationContext(), ImageShow.class);
+                    i.putExtra("image", galleryModel.getImages().get(1));
+                    context.startActivity(i);
+                });
+            }else {
+                holder.binding.imageView2.setVisibility(View.GONE);
+            }
+            if (galleryModel.getImages().get(2) != null && !context.isDestroyed()){
+                Glide.with(context)
+                        .load(galleryModel.getImages().get(2))
+                        .skipMemoryCache(true)
+                        .placeholder(context.getDrawable(R.drawable.placeholder))
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                        .into(holder.binding.imageView3);
 
-            holder.binding.imageView3.setOnClickListener(c->{
-                Intent i = new Intent(context.getApplicationContext(), ImageShow.class);
-                i.putExtra("image", galleryModel.getImages().get(2));
-                i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(i);
-            });
-        }else {
-            holder.binding.imageView3.setVisibility(View.GONE);
+                holder.binding.imageView3.setOnClickListener(c->{
+                    Intent i = new Intent(context.getApplicationContext(), ImageShow.class);
+                    i.putExtra("image", galleryModel.getImages().get(2));
+                    context.startActivity(i);
+                });
+            }else {
+                holder.binding.imageView3.setVisibility(View.GONE);
+            }
         }
 
 
         holder.binding.seeAll.setOnClickListener(v->{
             Intent i = new Intent(context.getApplicationContext(), GalleryActivity.class);
             i.putExtra("galleryId", galleryModel.getId());
-            i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
         });
 
         holder.itemView.setOnClickListener(v->{
             Intent i = new Intent(context.getApplicationContext(), GalleryActivity.class);
             i.putExtra("galleryId", galleryModel.getId());
-            i.setFlags(i.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
         });
 
@@ -146,7 +140,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         return galleryModels.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
         ItemGalleryBinding binding;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
