@@ -358,8 +358,8 @@ public class HomeFragment extends Fragment {
             ImagePicker.with(this)
                     .crop()//Crop image(Optional), Check Customization for more option
                     .cameraOnly()
-                    .compress(3072)			//Final image size will be less than 3 MB(Optional)
-                    .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
+                    .compress(1024)			//Final image size will be less than 3 MB(Optional)
+                    .maxResultSize(512, 512)	//Final image resolution will be less than 1080 x 1080(Optional)
                     .start(85);
         });
 
@@ -519,7 +519,6 @@ public class HomeFragment extends Fragment {
                     }
                 });
     }
-
     public void initialPage(String who){
 
         if (who == null || who.equalsIgnoreCase("public")){
@@ -647,7 +646,7 @@ public class HomeFragment extends Fragment {
 
         collectionReference.orderBy("time", Query.Direction.DESCENDING)
                 .whereEqualTo("approved", true)
-                .limit(18).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                .limit(5).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
@@ -694,7 +693,7 @@ public class HomeFragment extends Fragment {
                 .orderBy("time", Query.Direction.DESCENDING)
                 .startAfter(lastVisibleDocument)
                 .whereEqualTo("approved", true)
-                .limit(18)
+                .limit(5)
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     if (!queryDocumentSnapshots.isEmpty()) {
