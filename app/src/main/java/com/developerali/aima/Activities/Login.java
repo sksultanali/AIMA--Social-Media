@@ -102,19 +102,11 @@ public class Login extends AppCompatActivity {
 
         });
 
-
-//        GoogleSignInClient mGoogleSignInClient = GoogleSignIn.getClient(this,
-//                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                        .requestIdToken(getString(R.string.default_web_client_id))
-//                        .requestEmail()
-//                        .build());
-
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         signInClient = GoogleSignIn.getClient(Login.this, googleSignInOptions);
-
 
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
         if (account != null){
@@ -122,7 +114,6 @@ public class Login extends AppCompatActivity {
 
             });
         }
-
 
         binding.googleBtn.setOnClickListener(v->{
             signIn();
