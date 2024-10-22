@@ -2,11 +2,13 @@
 package com.developerali.aima.Activities;
 
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -23,6 +25,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
@@ -132,18 +135,39 @@ public class EditProfile extends AppCompatActivity {
 
 
         binding.coverUpload.setOnClickListener(v->{
-            ImagePicker.with(this)
-                    .crop()	    			//Crop image(Optional), Check Customization for more option
-                    .compress(2048)			//Final image size will be less than 3 MB(Optional)
-                    .start(25);
+            if (ContextCompat.checkSelfPermission(EditProfile.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(EditProfile.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+                // Request the necessary permissions
+                ActivityCompat.requestPermissions(EditProfile.this, new String[]{
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                }, 100);
+            }else{
+                ImagePicker.with(this)
+                        .crop()	    			//Crop image(Optional), Check Customization for more option
+                        .compress(1024)			//Final image size will be less than 3 MB(Optional)
+                        .start(25);
+            }
         });
 
         binding.myProfile.setOnClickListener(v->{
-            ImagePicker.with(this)
-                    .crop()	    			//Crop image(Optional), Check Customization for more option
-                    .compress(3072)			//Final image size will be less than 3 MB(Optional)
-                    .maxResultSize(1080, 1080)	//Final image resolution will be less than 1080 x 1080(Optional)
-                    .start(75);
+            if (ContextCompat.checkSelfPermission(EditProfile.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
+                    ContextCompat.checkSelfPermission(EditProfile.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+                // Request the necessary permissions
+                ActivityCompat.requestPermissions(EditProfile.this, new String[]{
+                        Manifest.permission.CAMERA,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                }, 100);
+            }else{
+                ImagePicker.with(this)
+                        .crop()	    			//Crop image(Optional), Check Customization for more option
+                        .compress(1024)			//Final image size will be less than 3 MB(Optional)
+                        .maxResultSize(512, 512)	//Final image resolution will be less than 1080 x 1080(Optional)
+                        .start(75);
+            }
+
         });
 
         binding.editName.setOnClickListener(v->{
@@ -171,6 +195,25 @@ public class EditProfile extends AppCompatActivity {
             finish();
         });
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 100) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, you can proceed with the camera action
+                ImagePicker.with(this)
+                        .crop()//Crop image(Optional), Check Customization for more option
+                        .cameraOnly()
+                        .compress(1024)            //Final image size will be less than 3 MB(Optional)
+                        .maxResultSize(512, 512)    //Final image resolution will be less than 1080 x 1080(Optional)
+                        .start(85);
+            } else {
+                // Permission denied, handle accordingly
+                Toast.makeText(EditProfile.this, "Camera and Storage permission are required", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     public void showBottomBar(String filed, TextView textView) {

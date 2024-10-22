@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -79,6 +80,7 @@ public class NotificationAct extends AppCompatActivity {
                             binding.notificationRecyclerView.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
                             binding.textNoComments.setVisibility(View.GONE);
+                            binding.spinKit.setVisibility(View.GONE);
 
                             if (models.isEmpty()){
                                 binding.clearAll.setVisibility(View.GONE);
@@ -88,13 +90,15 @@ public class NotificationAct extends AppCompatActivity {
 
                         }else {
                             binding.clearAll.setVisibility(View.GONE);
+                            binding.spinKit.setVisibility(View.GONE);
                             binding.textNoComments.setVisibility(View.VISIBLE);
                         }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-
+                        binding.spinKit.setVisibility(View.GONE);
+                        Toast.makeText(NotificationAct.this, error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
 

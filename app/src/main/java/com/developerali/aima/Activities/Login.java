@@ -3,10 +3,11 @@ package com.developerali.aima.Activities;
 
 import static com.reactnativegooglesignin.RNGoogleSigninModule.RC_SIGN_IN;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,17 +17,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.developerali.aima.Helper;
 import com.developerali.aima.MainActivity;
 import com.developerali.aima.Models.UserModel;
-import com.developerali.aima.R;
 import com.developerali.aima.databinding.ActivityLoginBinding;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.BuildConfig;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,11 +39,11 @@ public class Login extends AppCompatActivity {
     ActivityLoginBinding binding;
     String email, password;
     FirebaseAuth auth;
-    ProgressDialog dialog;
+    //Progressbinding.progressBar3 binding.progressBar3;
     FirebaseDatabase database;
     Uri uri;
     FirebaseStorage storage;
-    GoogleSignInClient signInClient;
+    //GoogleSignInClient signInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,14 +51,21 @@ public class Login extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        if (BuildConfig.DEBUG) {
+            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build());
+        }
+
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
 
-        dialog = new ProgressDialog(Login.this);
-        dialog.setTitle("Loading..");
-        dialog.setMessage("Finding you profile");
-        dialog.setCancelable(false);
+//        binding.progressBar3 = new Progressbinding.progressBar3(Login.this);
+//        binding.progressBar3.setTitle("Loading..");
+//        binding.progressBar3.setMessage("Finding you profile");
+//        binding.progressBar3.setCancelable(false);
 
         binding.signUpRedirect.setOnClickListener(v->{
             Intent i = new Intent(Login.this, SignUp.class);
@@ -67,7 +73,6 @@ public class Login extends AppCompatActivity {
         });
 
         binding.loginBtn.setOnClickListener(v->{
-
             email = binding.loginEmail.getText().toString();
             password = binding.loginPassword.getText().toString();
             if (email.isEmpty()){
@@ -76,7 +81,7 @@ public class Login extends AppCompatActivity {
                 binding.loginPassword.setError("Required");
             }else {
 
-                dialog.show();
+                binding.progressBar3.setVisibility(View.VISIBLE);
 
                 auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -84,17 +89,15 @@ public class Login extends AppCompatActivity {
                         if (task.isSuccessful()){
                             Intent i = new Intent(Login.this, MainActivity.class);
                             startActivity(i);
-                            dialog.dismiss();
+                            binding.progressBar3.setVisibility(View.GONE);
                             finish();
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        dialog.dismiss();
-                        if (e != null){
-                            Toast.makeText(Login.this, e.toString(), Toast.LENGTH_SHORT).show();
-                        }
+                        binding.progressBar3.setVisibility(View.GONE);
+                        Toast.makeText(Login.this, e.toString(), Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -102,22 +105,22 @@ public class Login extends AppCompatActivity {
 
         });
 
-        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        signInClient = GoogleSignIn.getClient(Login.this, googleSignInOptions);
+//        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                .requestIdToken(getString(R.string.default_web_client_id))
+//                .requestEmail()
+//                .build();
+//        signInClient = GoogleSignIn.getClient(Login.this, googleSignInOptions);
+//
+//        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+//        if (account != null){
+//            signInClient.signOut().addOnCompleteListener(this, task -> {
+//
+//            });
+//        }
 
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if (account != null){
-            signInClient.signOut().addOnCompleteListener(this, task -> {
-
-            });
-        }
-
-        binding.googleBtn.setOnClickListener(v->{
-            signIn();
-        });
+//        binding.googleBtn.setOnClickListener(v->{
+//            signIn();
+//        });
 
         binding.fbBtn.setOnClickListener(v->{
             Helper.showAlertNoAction(Login.this,
@@ -128,10 +131,10 @@ public class Login extends AppCompatActivity {
 
     }
 
-    private void signIn() {
-        Intent signInIntent = signInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
+//    private void signIn() {
+//        Intent signInIntent = signInClient.getSignInIntent();
+//        startActivityForResult(signInIntent, RC_SIGN_IN);
+//    }
 
 
     @Override
@@ -146,7 +149,7 @@ public class Login extends AppCompatActivity {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account.getIdToken(), account.getEmail(),
                         account.getDisplayName(), account.getPhotoUrl().toString());
-                dialog.show();
+                binding.progressBar3.setVisibility(View.VISIBLE);
 
             } catch (ApiException e) {
                 Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
@@ -178,13 +181,13 @@ public class Login extends AppCompatActivity {
                                         public void onSuccess(Void unused) {
                                             Intent i = new Intent(Login.this, MainActivity.class);
                                             startActivity(i);
-                                            dialog.dismiss();
+                                            binding.progressBar3.setVisibility(View.GONE);
                                             finish();
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            dialog.dismiss();
+                                            binding.progressBar3.setVisibility(View.GONE);
                                             Toast.makeText(Login.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                                         }
                                     });
