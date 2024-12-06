@@ -125,98 +125,102 @@ public class ProfileActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.exists()){
-                                userModel = snapshot.getValue(UserModel.class);
+                                try {
+                                    userModel = snapshot.getValue(UserModel.class);
 
-                                if (userModel.getImage() != null && !activity.isDestroyed()){
-                                    Glide.with(getApplicationContext())
-                                            .load(userModel.getImage())
-                                            .placeholder(getDrawable(R.drawable.profileplaceholder))
-                                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                                            .into(binding.myProfile);
-                                }
+                                    if (userModel.getImage() != null && !activity.isDestroyed()){
+                                        Glide.with(getApplicationContext())
+                                                .load(userModel.getImage())
+                                                .placeholder(getDrawable(R.drawable.profileplaceholder))
+                                                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                                                .into(binding.myProfile);
+                                    }
 
-                                if (userModel.getCover() != null && !activity.isDestroyed()){
-                                    Glide.with(getApplicationContext())
-                                            .load(userModel.getCover())
-                                            .placeholder(getDrawable(R.drawable.profileback))
-                                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                                            .into(binding.dashboardImage);
-                                }
-
-
-                                binding.dashBoardName.setText(userModel.getName());
-                                binding.dashBoardBio.setText(userModel.getBio());
-                                binding.dashBoardAbout.setText(userModel.getAbout());
+                                    if (userModel.getCover() != null && !activity.isDestroyed()){
+                                        Glide.with(getApplicationContext())
+                                                .load(userModel.getCover())
+                                                .placeholder(getDrawable(R.drawable.profileback))
+                                                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                                                .into(binding.dashboardImage);
+                                    }
 
 
-                                if (userModel.getType() != null){
-                                    binding.dashBoardProfileType.setText(userModel.getType());
-                                }else {
-                                    binding.dashBoardProfileType.setText("Public Profile");
-                                }
-                                if (userModel.isVerified()){
-                                    binding.verifiedProfile.setVisibility(View.VISIBLE);
-                                }
+                                    binding.dashBoardName.setText(userModel.getName());
+                                    binding.dashBoardBio.setText(userModel.getBio());
+                                    binding.dashBoardAbout.setText(userModel.getAbout());
 
-                                if (userModel.getBio() == null || userModel.getBio().isEmpty()){
-                                    binding.dashBoardBio.setVisibility(View.GONE);
-                                }
-                                if (userModel.getAbout() == null || userModel.getAbout().isEmpty()){
-                                    binding.dashBoardAbout.setVisibility(View.GONE);
-                                }
 
-                                binding.followers.setText(String.valueOf(userModel.getFollower()));
-                                binding.following.setText(String.valueOf(userModel.getFollowing()));
-                                binding.posts.setText(String.valueOf(userModel.getPosts()));
-                                binding.stars.setText(String.valueOf(userModel.getStars()));
+                                    if (userModel.getType() != null){
+                                        binding.dashBoardProfileType.setText(userModel.getType());
+                                    }else {
+                                        binding.dashBoardProfileType.setText("Public Profile");
+                                    }
+                                    if (userModel.isVerified()){
+                                        binding.verifiedProfile.setVisibility(View.VISIBLE);
+                                    }
 
-                                showImage(userModel.getImage(), userModel.getCover());
+                                    if (userModel.getBio() == null || userModel.getBio().isEmpty()){
+                                        binding.dashBoardBio.setVisibility(View.GONE);
+                                    }
+                                    if (userModel.getAbout() == null || userModel.getAbout().isEmpty()){
+                                        binding.dashBoardAbout.setVisibility(View.GONE);
+                                    }
 
-                                String profId = snapshot.getKey();
+                                    binding.followers.setText(String.valueOf(userModel.getFollower()));
+                                    binding.following.setText(String.valueOf(userModel.getFollowing()));
+                                    binding.posts.setText(String.valueOf(userModel.getPosts()));
+                                    binding.stars.setText(String.valueOf(userModel.getStars()));
 
-                                if (snapshot.child("phone").exists()){
-                                    userModel.setPhone(snapshot.child("phone").getValue(String.class));
-                                }
+                                    showImage(userModel.getImage(), userModel.getCover());
 
-                                userModel.setUserId(profId);
-                                SocialMediaClicks(userModel);
-                                if (userModel.getImage() ==null || userModel.getBio() == null || userModel.getAbout() == null
-                                        || userModel.getName() == null){
+                                    String profId = snapshot.getKey();
 
-                                    new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            showCompleteProfile(userModel);
-                                        }
-                                    }, 5000);
+                                    if (snapshot.child("phone").exists()){
+                                        userModel.setPhone(snapshot.child("phone").getValue(String.class));
+                                    }
 
-                                }else if (userModel.getFollower() > 200 && !userModel.isVerified()){
-                                    database.getReference().child("verified")
-                                            .child(auth.getCurrentUser().getUid())
-                                                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                                                        @Override
-                                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                            if (!snapshot.exists()){
+                                    userModel.setUserId(profId);
+                                    SocialMediaClicks(userModel);
+                                    if (userModel.getImage() ==null || userModel.getBio() == null || userModel.getAbout() == null
+                                            || userModel.getName() == null){
 
-                                                                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                                                                    @Override
-                                                                    public void run() {
-                                                                        showVerified();
-                                                                    }
-                                                                }, 5000);
-                                                            }
+                                        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                showCompleteProfile(userModel);
+                                            }
+                                        }, 5000);
+
+                                    }else if (userModel.getFollower() > 200 && !userModel.isVerified()){
+                                        database.getReference().child("verified")
+                                                .child(auth.getCurrentUser().getUid())
+                                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                        if (!snapshot.exists()){
+
+                                                            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                                                                @Override
+                                                                public void run() {
+                                                                    showVerified();
+                                                                }
+                                                            }, 5000);
                                                         }
+                                                    }
 
-                                                        @Override
-                                                        public void onCancelled(@NonNull DatabaseError error) {
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError error) {
 
-                                                        }
-                                                    });
+                                                    }
+                                                });
+                                    }
+                                    deferemciateProfile(profId);
+                                    shareProfile(profId);
+                                    copyProfileLink(profId);
+                                    binding.spinKitProfile.setVisibility(View.GONE);
+                                }catch (Exception e){
+
                                 }
-                                deferemciateProfile(profId);
-                                shareProfile(profId);
-                                copyProfileLink(profId);
-                                binding.spinKitProfile.setVisibility(View.GONE);
                             }
                         }
 
@@ -453,188 +457,192 @@ public class ProfileActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()){
-                            userModel = snapshot.getValue(UserModel.class);
+                            try {
+                                userModel = snapshot.getValue(UserModel.class);
 
-                            Glide.with(getApplicationContext())
-                                    .load(userModel.getCover())
-                                    .placeholder(R.drawable.profileback)
-                                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                                    .into(binding.dashboardImage);
-                            Glide.with(getApplicationContext())
-                                    .load(userModel.getImage())
-                                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                                    .placeholder(R.drawable.profileplaceholder)
-                                    .into(binding.myProfile);
+                                Glide.with(getApplicationContext())
+                                        .load(userModel.getCover())
+                                        .placeholder(R.drawable.profileback)
+                                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                                        .into(binding.dashboardImage);
+                                Glide.with(getApplicationContext())
+                                        .load(userModel.getImage())
+                                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                                        .placeholder(R.drawable.profileplaceholder)
+                                        .into(binding.myProfile);
 
-                            binding.dashBoardName.setText(userModel.getName());
-                            binding.dashBoardBio.setText(userModel.getBio());
-                            binding.dashBoardAbout.setText(userModel.getAbout());
+                                binding.dashBoardName.setText(userModel.getName());
+                                binding.dashBoardBio.setText(userModel.getBio());
+                                binding.dashBoardAbout.setText(userModel.getAbout());
 
 
-                            if (userModel.getType() != null){
-                                binding.dashBoardProfileType.setText(userModel.getType());
-                            }else {
-                                binding.dashBoardProfileType.setText("Public Profile");
-                            }
-                            if (userModel.isVerified()){
-                                binding.verifiedProfile.setVisibility(View.VISIBLE);
-                            }
-
-                            if (userModel.getBio() == null || userModel.getBio().isEmpty()){
-                                binding.dashBoardBio.setVisibility(View.GONE);
-                            }
-                            if (userModel.getAbout() == null || userModel.getAbout().isEmpty()){
-                                binding.dashBoardAbout.setVisibility(View.GONE);
-                            }
-
-                            binding.followers.setText(String.valueOf(userModel.getFollower()));
-                            binding.following.setText(String.valueOf(userModel.getFollowing()));
-                            binding.posts.setText(String.valueOf(userModel.getPosts()));
-                            binding.stars.setText(String.valueOf(userModel.getStars()));
-
-                            String profId = snapshot.getKey();
-
-                            if (snapshot.child("phone").exists()){
-                                userModel.setPhone(snapshot.child("phone").getValue(String.class));
-                            }
-
-                            if (snapshot.child("facebook").exists()){
-                                userModel.setFacebook(snapshot.child("facebook").getValue(String.class));
-                            }
-
-                            if (snapshot.child("whatsapp").exists()){
-                                userModel.setWhatsapp(snapshot.child("whatsapp").getValue(String.class));
-                            }
-
-                            userModel.setUserId(profId);
-                            SocialMediaClicks(userModel);
-                            deferemciateProfile(profId);
-
-                            showImage(userModel.getImage(), userModel.getCover());
-
-                            shareProfile(profId);
-
-                            checkedlike(profileUserId, userModel.getFollower());
-
-                            binding.followBtn.setOnClickListener(v->{
-                                binding.followBtnLike.performClick();
-                            });
-
-                            binding.followBtnLike.setOnLikeListener(new OnLikeListener() {
-                                @Override
-                                public void liked(LikeButton likeButton) {
-                                    dialog.show();
-                                    FollowModel followModel = new FollowModel();
-                                    followModel.setFollowBy(auth.getCurrentUser().getUid());
-                                    followModel.setFollowAt(new Date().getTime());
-
-                                    database.getReference().child("users").child(profileUserId)
-                                            .child("follows").child(auth.getCurrentUser().getUid())
-                                            .setValue(followModel)
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void unused) {
-
-                                                    int newFollower = userModel.getFollower() + 1;
-
-                                                    database.getReference().child("users").child(profileUserId)
-                                                            .child("follower")
-                                                            .setValue(newFollower).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                @Override
-                                                                public void onSuccess(Void unused) {
-
-                                                                    database.getReference().child("users").child(auth.getCurrentUser().getUid())
-                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                                @Override
-                                                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                                                    if (snapshot.exists()){
-                                                                                        UserModel userModel = snapshot.getValue(UserModel.class);
-                                                                                        database.getReference().child("users").child(auth.getCurrentUser().getUid())
-                                                                                                .child("following")
-                                                                                                .setValue(userModel.getFollowing() + 1).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                                                    @Override
-                                                                                                    public void onSuccess(Void unused) {
-
-                                                                                                        profIdTrue(profileUserId);
-                                                                                                        dialog.dismiss();
-
-                                                                                                    }
-                                                                                                });
-                                                                                    }
-                                                                                }
-
-                                                                                @Override
-                                                                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                                                                }
-                                                                            });
-
-                                                                }
-                                                            });
-                                                }
-                                            });
-
+                                if (userModel.getType() != null){
+                                    binding.dashBoardProfileType.setText(userModel.getType());
+                                }else {
+                                    binding.dashBoardProfileType.setText("Public Profile");
+                                }
+                                if (userModel.isVerified()){
+                                    binding.verifiedProfile.setVisibility(View.VISIBLE);
                                 }
 
-                                @Override
-                                public void unLiked(LikeButton likeButton) {
-                                    dialog.show();
-                                    FollowModel followModel = new FollowModel();
-                                    followModel.setFollowBy(auth.getCurrentUser().getUid());
-                                    followModel.setFollowAt(new Date().getTime());
-
-                                    database.getReference().child("users").child(profileUserId)
-                                            .child("follows").child(auth.getCurrentUser().getUid()).removeValue()
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void unused) {
-
-                                                    database.getReference().child("users").child(profileUserId)
-                                                            .child("follower")
-                                                            .setValue(userModel.getFollower() - 1).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                @Override
-                                                                public void onSuccess(Void unused) {
-
-                                                                    database.getReference().child("users").child(auth.getCurrentUser().getUid())
-                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                                @Override
-                                                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                                                    if (snapshot.exists()){
-                                                                                        UserModel userModel = snapshot.getValue(UserModel.class);
-                                                                                        database.getReference().child("users").child(auth.getCurrentUser().getUid())
-                                                                                                .child("following")
-                                                                                                .setValue(userModel.getFollowing() - 1).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                                                    @Override
-                                                                                                    public void onSuccess(Void unused) {
-                                                                                                        profIdTrue(profileUserId);
-
-                                                                                                        NotificationModel notificationModel = new NotificationModel(auth.getCurrentUser().getUid(),
-                                                                                                                "follow", auth.getCurrentUser().getUid(), new Date().getTime(), false);
-                                                                                                        database.getReference().child("notification")
-                                                                                                                .child(profileUserId)
-                                                                                                                .push()
-                                                                                                                .setValue(notificationModel);
-                                                                                                        dialog.dismiss();
-                                                                                                    }
-                                                                                                });
-                                                                                    }
-                                                                                }
-
-                                                                                @Override
-                                                                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                                                                }
-                                                                            });
-
-                                                                }
-                                                            });
-                                                }
-                                            });
-
+                                if (userModel.getBio() == null || userModel.getBio().isEmpty()){
+                                    binding.dashBoardBio.setVisibility(View.GONE);
                                 }
-                            });
+                                if (userModel.getAbout() == null || userModel.getAbout().isEmpty()){
+                                    binding.dashBoardAbout.setVisibility(View.GONE);
+                                }
 
-                            binding.spinKitProfile.setVisibility(View.GONE);
+                                binding.followers.setText(String.valueOf(userModel.getFollower()));
+                                binding.following.setText(String.valueOf(userModel.getFollowing()));
+                                binding.posts.setText(String.valueOf(userModel.getPosts()));
+                                binding.stars.setText(String.valueOf(userModel.getStars()));
+
+                                String profId = snapshot.getKey();
+
+                                if (snapshot.child("phone").exists()){
+                                    userModel.setPhone(snapshot.child("phone").getValue(String.class));
+                                }
+
+                                if (snapshot.child("facebook").exists()){
+                                    userModel.setFacebook(snapshot.child("facebook").getValue(String.class));
+                                }
+
+                                if (snapshot.child("whatsapp").exists()){
+                                    userModel.setWhatsapp(snapshot.child("whatsapp").getValue(String.class));
+                                }
+
+                                userModel.setUserId(profId);
+                                SocialMediaClicks(userModel);
+                                deferemciateProfile(profId);
+
+                                showImage(userModel.getImage(), userModel.getCover());
+
+                                shareProfile(profId);
+
+                                checkedlike(profileUserId, userModel.getFollower());
+
+                                binding.followBtn.setOnClickListener(v->{
+                                    binding.followBtnLike.performClick();
+                                });
+
+                                binding.followBtnLike.setOnLikeListener(new OnLikeListener() {
+                                    @Override
+                                    public void liked(LikeButton likeButton) {
+                                        dialog.show();
+                                        FollowModel followModel = new FollowModel();
+                                        followModel.setFollowBy(auth.getCurrentUser().getUid());
+                                        followModel.setFollowAt(new Date().getTime());
+
+                                        database.getReference().child("users").child(profileUserId)
+                                                .child("follows").child(auth.getCurrentUser().getUid())
+                                                .setValue(followModel)
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void unused) {
+
+                                                        int newFollower = userModel.getFollower() + 1;
+
+                                                        database.getReference().child("users").child(profileUserId)
+                                                                .child("follower")
+                                                                .setValue(newFollower).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                    @Override
+                                                                    public void onSuccess(Void unused) {
+
+                                                                        database.getReference().child("users").child(auth.getCurrentUser().getUid())
+                                                                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                    @Override
+                                                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                                                        if (snapshot.exists()){
+                                                                                            UserModel userModel = snapshot.getValue(UserModel.class);
+                                                                                            database.getReference().child("users").child(auth.getCurrentUser().getUid())
+                                                                                                    .child("following")
+                                                                                                    .setValue(userModel.getFollowing() + 1).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                                                        @Override
+                                                                                                        public void onSuccess(Void unused) {
+
+                                                                                                            profIdTrue(profileUserId);
+                                                                                                            dialog.dismiss();
+
+                                                                                                        }
+                                                                                                    });
+                                                                                        }
+                                                                                    }
+
+                                                                                    @Override
+                                                                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                                                                    }
+                                                                                });
+
+                                                                    }
+                                                                });
+                                                    }
+                                                });
+
+                                    }
+
+                                    @Override
+                                    public void unLiked(LikeButton likeButton) {
+                                        dialog.show();
+                                        FollowModel followModel = new FollowModel();
+                                        followModel.setFollowBy(auth.getCurrentUser().getUid());
+                                        followModel.setFollowAt(new Date().getTime());
+
+                                        database.getReference().child("users").child(profileUserId)
+                                                .child("follows").child(auth.getCurrentUser().getUid()).removeValue()
+                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void unused) {
+
+                                                        database.getReference().child("users").child(profileUserId)
+                                                                .child("follower")
+                                                                .setValue(userModel.getFollower() - 1).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                    @Override
+                                                                    public void onSuccess(Void unused) {
+
+                                                                        database.getReference().child("users").child(auth.getCurrentUser().getUid())
+                                                                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                    @Override
+                                                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                                                        if (snapshot.exists()){
+                                                                                            UserModel userModel = snapshot.getValue(UserModel.class);
+                                                                                            database.getReference().child("users").child(auth.getCurrentUser().getUid())
+                                                                                                    .child("following")
+                                                                                                    .setValue(userModel.getFollowing() - 1).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                                                        @Override
+                                                                                                        public void onSuccess(Void unused) {
+                                                                                                            profIdTrue(profileUserId);
+
+                                                                                                            NotificationModel notificationModel = new NotificationModel(auth.getCurrentUser().getUid(),
+                                                                                                                    "follow", auth.getCurrentUser().getUid(), new Date().getTime(), false);
+                                                                                                            database.getReference().child("notification")
+                                                                                                                    .child(profileUserId)
+                                                                                                                    .push()
+                                                                                                                    .setValue(notificationModel);
+                                                                                                            dialog.dismiss();
+                                                                                                        }
+                                                                                                    });
+                                                                                        }
+                                                                                    }
+
+                                                                                    @Override
+                                                                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                                                                    }
+                                                                                });
+
+                                                                    }
+                                                                });
+                                                    }
+                                                });
+
+                                    }
+                                });
+
+                                binding.spinKitProfile.setVisibility(View.GONE);
+                            }catch (Exception e){
+
+                            }
                         }
                     }
 

@@ -13,6 +13,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,40 +79,47 @@ public class MemberShip_Act extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()){
-                            MembershipModel model = snapshot.getValue(MembershipModel.class);
-                            if (model.getValid() < new Date().getTime()){
-                                binding.memberMessage.setText("Card: "+ model.getUiNo() + "\nValidity Expired. Please Renew!");
-                                binding.memberMessage.setTextColor(getColor(R.color.red_colour));
-                                binding.downloadImage.setVisibility(View.GONE);
+                            try {
+                                MembershipModel model = snapshot.getValue(MembershipModel.class);
+                                if (model != null){
+                                    if (model.getValid() < new Date().getTime()){
+                                        binding.memberMessage.setText("Card: "+ model.getUiNo() + "\nValidity Expired. Please Renew!");
+                                        binding.memberMessage.setTextColor(getColor(R.color.red_colour));
+                                        binding.downloadImage.setVisibility(View.GONE);
 
-                            }else {
-                                binding.memberMessage.setText("Membership Activated");
-                                binding.memberMessage.setTextColor(getColor(R.color.green_colour));
-                                binding.downloadImage.setVisibility(View.VISIBLE);
+                                    }else {
+                                        binding.memberMessage.setText("Membership Activated");
+                                        binding.memberMessage.setTextColor(getColor(R.color.green_colour));
+                                        binding.downloadImage.setVisibility(View.VISIBLE);
 
-                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-                                String validDate = simpleDateFormat.format(model.getValid());
-                                binding.valid.setText("Valid UpTo: " + validDate);
+                                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                                        String validDate = simpleDateFormat.format(model.getValid());
+                                        binding.valid.setText("Valid UpTo: " + validDate);
 
-                                binding.cardHolderName.setText(model.getName());
-                                binding.fatherName.setText("Father Name: " + model.getFatherName());
-                                binding.cardHolderAddress.setText(model.getAddress());
+                                        binding.cardHolderName.setText(model.getName());
+                                        binding.fatherName.setText("Father Name: " + model.getFatherName());
+                                        binding.cardHolderAddress.setText(model.getAddress());
 
-                                Glide.with(MemberShip_Act.this)
-                                        .load(model.getImage())
-                                        .placeholder(getDrawable(R.drawable.profileplaceholder))
-                                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                                        .into(binding.imageOnCard);
+                                        Glide.with(MemberShip_Act.this)
+                                                .load(model.getImage())
+                                                .placeholder(getDrawable(R.drawable.profileplaceholder))
+                                                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                                                .into(binding.imageOnCard);
 
-                                binding.uidNo.setText("DID: " + model.getUiNo());
-                                binding.nameOnCard.setText("Name: " + model.getName().toUpperCase());
-                                binding.dob.setText("DOB: " + model.getDob());
+                                        binding.uidNo.setText("DID: " + model.getUiNo());
+                                        binding.nameOnCard.setText("Name: " + model.getName().toUpperCase());
+                                        binding.dob.setText("DOB: " + model.getDob());
 
 
 
-                                binding.easyFlipView.setBackground(getDrawable(R.drawable.frontcard));
-                                binding.frontCard.setVisibility(View.VISIBLE);
-                                binding.lottieNO.setVisibility(View.GONE);
+                                        binding.easyFlipView.setBackground(getDrawable(R.drawable.frontcard));
+                                        binding.frontCard.setVisibility(View.VISIBLE);
+                                        binding.lottieNO.setVisibility(View.GONE);
+                                    }
+                                }
+                            }catch (Exception e){
+                                Log.e("FirebaseError", "Error parsing data at " + snapshot.getKey(), e);
+                                Log.e("FirebaseError", "Conflicting data: " + snapshot.toString());
                             }
                         }else {
                             binding.memberMessage.setText("Membership Not Activated");
@@ -132,24 +140,29 @@ public class MemberShip_Act extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()){
-                            UserModel userModel = snapshot.getValue(UserModel.class);
-                            if (userModel != null){
-                                binding.profileName.setText(userModel.getName());
-                                if (userModel.isVerified()){
-                                    binding.verifiedProfile.setVisibility(View.VISIBLE);
+                            try {
+                                UserModel userModel = snapshot.getValue(UserModel.class);
+                                if (userModel != null){
+                                    binding.profileName.setText(userModel.getName());
+                                    if (userModel.isVerified()){
+                                        binding.verifiedProfile.setVisibility(View.VISIBLE);
+                                    }
+                                    if (userModel.getType() != null){
+                                        binding.profileType.setText(userModel.getType());
+                                    }else {
+                                        binding.profileType.setText("Public Profile");
+                                    }
+                                    if (userModel.getImage() != null && !activity.isDestroyed()){
+                                        Glide.with(MemberShip_Act.this)
+                                                .load(userModel.getImage())
+                                                .placeholder(getDrawable(R.drawable.profileplaceholder))
+                                                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                                                .into(binding.memberProfile);
+                                    }
                                 }
-                                if (userModel.getType() != null){
-                                    binding.profileType.setText(userModel.getType());
-                                }else {
-                                    binding.profileType.setText("Public Profile");
-                                }
-                                if (userModel.getImage() != null && !activity.isDestroyed()){
-                                    Glide.with(MemberShip_Act.this)
-                                            .load(userModel.getImage())
-                                            .placeholder(getDrawable(R.drawable.profileplaceholder))
-                                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                                            .into(binding.memberProfile);
-                                }
+                            }catch (Exception e){
+                                Log.e("FirebaseError", "Error parsing data at " + snapshot.getKey(), e);
+                                Log.e("FirebaseError", "Conflicting data: " + snapshot.toString());
                             }
                         }
                     }

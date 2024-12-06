@@ -441,22 +441,26 @@ public class PostActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()){
-                            UserModel userModel = snapshot.getValue(UserModel.class);
+                            try {
+                                UserModel userModel = snapshot.getValue(UserModel.class);
 
-                            if (userModel != null){
-                                if (userModel.getImage() != null){
-                                    Glide.with(getApplicationContext())
-                                            .load(userModel.getImage())
-                                            .placeholder(getDrawable(R.drawable.profileplaceholder))
-                                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                                            .into(binding.uploaderImage);
+                                if (userModel != null){
+                                    if (userModel.getImage() != null){
+                                        Glide.with(getApplicationContext())
+                                                .load(userModel.getImage())
+                                                .placeholder(getDrawable(R.drawable.profileplaceholder))
+                                                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                                                .into(binding.uploaderImage);
+                                    }
+                                    binding.uploaderName.setText(userModel.getName());
+                                    if (userModel.getType() != null){
+                                        binding.uploaderType.setText(userModel.getType());
+                                    }else {
+                                        binding.uploaderType.setText("Public Profile");
+                                    }
                                 }
-                                binding.uploaderName.setText(userModel.getName());
-                                if (userModel.getType() != null){
-                                    binding.uploaderType.setText(userModel.getType());
-                                }else {
-                                    binding.uploaderType.setText("Public Profile");
-                                }
+                            }catch (Exception e){
+
                             }
                         }
                     }
