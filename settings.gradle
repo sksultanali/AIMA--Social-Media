@@ -3,7 +3,6 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
-
     }
 }
 dependencyResolutionManagement {
@@ -11,13 +10,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        jcenter()
-
         maven { url "https://jitpack.io" }
         maven { url "https://github.com/jitsi/jitsi-maven-repository/raw/master/releases" }
-        maven {
-            url  "https://phonepe.mycloudrepo.io/public/repositories/phonepe-intentsdk-android"
-        }
+        jcenter()
     }
 }
 rootProject.name = "AIMA"

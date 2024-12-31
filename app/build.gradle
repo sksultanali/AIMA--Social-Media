@@ -12,8 +12,8 @@ android {
         applicationId "com.developerali.aima"
         minSdk 26
         targetSdk 34
-        versionCode 17
-        versionName "4.4"
+        versionCode 18
+        versionName "4.5"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -45,30 +45,30 @@ android {
 
 dependencies {
 
-    implementation 'com.google.firebase:firebase-firestore:25.1.0'
-    implementation 'androidx.media3:media3-exoplayer:1.4.1'
+    implementation 'com.google.firebase:firebase-firestore:25.1.1'
+    implementation 'androidx.media3:media3-exoplayer:1.5.1'
     implementation 'com.android.volley:volley:1.2.1'
     implementation 'androidx.activity:activity:1.9.3'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.9.20"
 
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'com.google.android.material:material:1.12.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.google.firebase:firebase-auth:23.0.0'
-    implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
-    implementation("com.google.android.gms:play-services-auth:21.2.0")
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
+    implementation 'com.google.firebase:firebase-auth:23.1.0'
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+    implementation("com.google.android.gms:play-services-auth:21.3.0")
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation 'com.google.firebase:firebase-database:21.0.0'
     implementation 'com.google.firebase:firebase-storage:21.0.1'
-    implementation 'androidx.navigation:navigation-fragment:2.8.3'
-    implementation 'androidx.navigation:navigation-ui:2.8.3'
+    implementation 'androidx.navigation:navigation-fragment:2.8.5'
+    implementation 'androidx.navigation:navigation-ui:2.8.5'
     testImplementation 'junit:junit:4.13.2'
-    implementation 'com.google.firebase:firebase-crashlytics-ktx:19.2.0'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:19.3.0'
     implementation 'com.google.firebase:firebase-analytics-ktx:22.1.2'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 
-    implementation 'com.google.firebase:firebase-crashlytics:19.2.0'
+    implementation 'com.google.firebase:firebase-crashlytics:19.3.0'
     implementation 'com.google.firebase:firebase-analytics:22.1.2'
 
     //meeting
@@ -82,18 +82,18 @@ dependencies {
     implementation 'com.github.sharish:ShimmerRecyclerView:v1.3'
 
     implementation 'com.skyfishjy.ripplebackground:library:1.0.1'
-    implementation 'com.github.ybq:Android-SpinKit:1.4.0'
-    implementation 'com.github.florent37:diagonallayout:1.0.9'
+    //implementation 'com.github.ybq:Android-SpinKit:1.4.0'
+    //implementation 'com.github.florent37:diagonallayout:1.0.9'
 
-    implementation 'com.airbnb.android:lottie:6.5.2'
+    implementation 'com.airbnb.android:lottie:6.6.0'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'com.github.bumptech.glide:glide:4.16.0'
-    implementation 'com.miguelcatalan:materialsearchview:1.4.0'
+    //implementation 'com.miguelcatalan:materialsearchview:1.4.0'
     implementation 'com.github.marlonlom:timeago:4.0.3'
     implementation 'com.github.jd-alexander:LikeButton:0.2.3'
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0'
-    implementation 'com.firebaseui:firebase-ui-database:6.3.0'
+    implementation 'com.firebaseui:firebase-ui-database:8.0.0'
     implementation 'com.github.denzcoskun:ImageSlideshow:0.1.2'
     implementation 'com.github.dhaval2404:imagepicker:2.1'
     implementation 'com.github.shuhart:stepview:1.5.1'
@@ -101,8 +101,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.11.0'
     implementation 'com.karumi:dexter:6.2.3'
 
-    implementation 'phonepe.intentsdk.android.release:IntentSDK:2.3.0'
-    implementation 'com.razorpay:checkout:1.6.38'
+    implementation 'com.razorpay:checkout:1.6.40'
 
     //    implementation 'com.facebook.android:facebook-android-sdk:latest.release'
     //    implementation 'com.facebook.android:facebook-login:16.1.3'

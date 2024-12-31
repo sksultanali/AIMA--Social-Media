@@ -208,21 +208,21 @@
                     android:text="docs and notices"
                     android:textSize="@dimen/_12font_mdp" />
 
-<!--                <com.airbnb.lottie.LottieAnimationView-->
-<!--                    android:id="@+id/animation_view"-->
-<!--                    android:layout_width="@dimen/_60mdp"-->
-<!--                    android:layout_height="@dimen/_50mdp"-->
-<!--                    android:layout_marginTop="@dimen/_8mdp"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    app:lottie_loop="true"-->
-<!--                    app:lottie_rawRes="@raw/pdf_anim"-->
-<!--                    app:lottie_autoPlay="true"/>-->
-                <ImageView
-                    android:layout_width="@dimen/_50mdp"
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/animation_view"
+                    android:layout_width="@dimen/_60mdp"
                     android:layout_height="@dimen/_50mdp"
-                    android:layout_gravity="end"
-                    android:layout_marginTop="@dimen/_10mdp"
-                    android:src="@drawable/pdf_img" />
+                    android:layout_marginTop="@dimen/_8mdp"
+                    android:layout_gravity="center"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/pdf_anim"
+                    app:lottie_autoPlay="true"/>
+<!--                <ImageView-->
+<!--                    android:layout_width="@dimen/_50mdp"-->
+<!--                    android:layout_height="@dimen/_50mdp"-->
+<!--                    android:layout_gravity="end"-->
+<!--                    android:layout_marginTop="@dimen/_10mdp"-->
+<!--                    android:src="@drawable/pdf_img" />-->
 
             </LinearLayout>
 
@@ -251,21 +251,21 @@
                     android:text="see our event images"
                     android:textSize="@dimen/_12font_mdp" />
 
-<!--                <com.airbnb.lottie.LottieAnimationView-->
-<!--                    android:layout_width="@dimen/_60mdp"-->
-<!--                    android:layout_height="@dimen/_50mdp"-->
-<!--                    android:layout_marginTop="@dimen/_8mdp"-->
-<!--                    android:layout_gravity="center"-->
-<!--                    app:lottie_loop="true"-->
-<!--                    app:lottie_rawRes="@raw/gallery_anim"-->
-<!--                    app:lottie_autoPlay="true"/>-->
-
-                <ImageView
-                    android:layout_width="@dimen/_50mdp"
+                <com.airbnb.lottie.LottieAnimationView
+                    android:layout_width="@dimen/_60mdp"
                     android:layout_height="@dimen/_50mdp"
-                    android:layout_gravity="end"
-                    android:layout_marginTop="@dimen/_10mdp"
-                    android:src="@drawable/picture_gallery" />
+                    android:layout_marginTop="@dimen/_8mdp"
+                    android:layout_gravity="center"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/gallery_anim"
+                    app:lottie_autoPlay="true"/>
+
+<!--                <ImageView-->
+<!--                    android:layout_width="@dimen/_50mdp"-->
+<!--                    android:layout_height="@dimen/_50mdp"-->
+<!--                    android:layout_gravity="end"-->
+<!--                    android:layout_marginTop="@dimen/_10mdp"-->
+<!--                    android:src="@drawable/picture_gallery" />-->
 
             </LinearLayout>
         </LinearLayout>
@@ -340,7 +340,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/_5mdp"
                 android:layout_weight="1"
-                android:visibility="invisible"
+                android:visibility="visible"
                 android:background="@drawable/bg_white_round_corner"
                 android:elevation="@dimen/_3mdp"
                 android:orientation="vertical"

@@ -16,20 +16,20 @@
         android:layout_marginTop="@dimen/_100mdp"
         android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent">
-        <!--        <com.airbnb.lottie.LottieAnimationView-->
-        <!--            android:id="@+id/animation_view"-->
-        <!--            android:layout_width="90dp"-->
-        <!--            android:layout_height="90dp"-->
-        <!--            android:layout_gravity="center"-->
-        <!--            app:lottie_loop="true"-->
-        <!--            app:lottie_rawRes="@raw/login"-->
-        <!--            app:lottie_autoPlay="true"/>-->
-        <ImageView
-            android:layout_width="@dimen/_50mdp"
-            android:layout_height="@dimen/_50mdp"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/_10mdp"
-            android:src="@drawable/login_ppng" />
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/animation_view"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:layout_gravity="center"
+                    app:lottie_loop="true"
+                    app:lottie_rawRes="@raw/login"
+                    app:lottie_autoPlay="true"/>
+<!--        <ImageView-->
+<!--            android:layout_width="@dimen/_50mdp"-->
+<!--            android:layout_height="@dimen/_50mdp"-->
+<!--            android:layout_gravity="center"-->
+<!--            android:layout_marginTop="@dimen/_10mdp"-->
+<!--            android:src="@drawable/login_ppng" />-->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
