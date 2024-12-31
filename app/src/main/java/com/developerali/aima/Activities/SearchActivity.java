@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.developerali.aima.Adapters.FollowAdapter;
@@ -37,7 +38,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.miguelcatalan.materialsearchview.MaterialSearchView;
+//import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -61,7 +62,7 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.S
         setContentView(binding.getRoot());
 
         initFirebase();
-        setupToolbar();
+        //setupToolbar();
 
         dbHelper = new DB_Helper(this);
         ArrayList<RecentSearchModel> searchModelArrayList = dbHelper.getAllSearchQueries();
@@ -78,13 +79,12 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.S
         loadSearchHis(recentSearches);
 
 
-        binding.searchView.setVoiceSearch(true);
-        binding.searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+        binding.searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 searchProfile(query);
                 binding.progressBar4.setVisibility(View.VISIBLE);
-                return false;
+                return true;
             }
 
             @Override
@@ -93,17 +93,33 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.S
             }
         });
 
-        binding.searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
-            @Override
-            public void onSearchViewShown() {
-                toggleSearchUIVisibility(true);
-            }
 
-            @Override
-            public void onSearchViewClosed() {
-                toggleSearchUIVisibility(false);
-            }
-        });
+//        binding.searchView.setVoiceSearch(true);
+//        binding.searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                searchProfile(query);
+//                binding.progressBar4.setVisibility(View.VISIBLE);
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//                return false;
+//            }
+//        });
+
+//        binding.searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+//            @Override
+//            public void onSearchViewShown() {
+//                toggleSearchUIVisibility(true);
+//            }
+//
+//            @Override
+//            public void onSearchViewClosed() {
+//                toggleSearchUIVisibility(false);
+//            }
+//        });
 
         binding.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -144,7 +160,7 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.S
      * Sets up the toolbar with home button and title.
      */
     private void setupToolbar() {
-        setSupportActionBar(binding.toolbar);
+        //setSupportActionBar(binding.toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -488,22 +504,22 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.S
         binding.progressBar4.setVisibility(View.GONE);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.serach_menu, menu);
-        MenuItem item = menu.findItem(R.id.action_search);
-        binding.searchView.setMenuItem(item);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.serach_menu, menu);
+//        MenuItem item = menu.findItem(R.id.action_search);
+//        binding.searchView.setMenuItem(item);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        if (item.getItemId() == android.R.id.home) {
+//            finish();
+//            return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @Override
     public void onShowAction(RecentSearchModel searchModel) {

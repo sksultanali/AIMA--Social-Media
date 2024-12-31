@@ -180,10 +180,10 @@ public class DonationPage extends AppCompatActivity implements PaymentResultList
                     options.put("currency", "INR");
                     options.put("amount", normalPrice);
 
-                JSONObject preFill = new JSONObject();
-//                preFill.put("email", user.getEmail());
-                preFill.put("contact", "+91"+phoneNum);
-                options.put("prefill", preFill);
+                    JSONObject preFill = new JSONObject();
+    //                preFill.put("email", user.getEmail());
+                    preFill.put("contact", "+91"+phoneNum);
+                    options.put("prefill", preFill);
 
                     checkout.open(activity, options);
 
