@@ -248,16 +248,6 @@
                     android:scheme="io.rzp" />
             </intent-filter>
         </activity>
-
-        <meta-data
-            android:name="com.phonepe.android.sdk.isUAT"
-            android:value="true" />
-        <meta-data
-            android:name="com.phonepe.android.sdk.isSimulator"
-            android:value="true" />
-        <meta-data
-            android:name="com.phonepe.android.sdk.MerchantId"
-            android:value="ALLINDIAONLINE" />
     </application>
 
 </manifest>
