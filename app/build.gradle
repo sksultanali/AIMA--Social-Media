@@ -12,8 +12,8 @@ android {
         applicationId "com.developerali.aima"
         minSdk 26
         targetSdk 35
-        versionCode 18
-        versionName "4.5"
+        versionCode 19
+        versionName "4.6"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -101,7 +101,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.11.0'
     implementation 'com.karumi:dexter:6.2.3'
 
-    implementation 'com.razorpay:checkout:1.6.40'
+    implementation 'com.razorpay:checkout:1.6.38'
 
     //    implementation 'com.facebook.android:facebook-android-sdk:latest.release'
     //    implementation 'com.facebook.android:facebook-login:16.1.3'
