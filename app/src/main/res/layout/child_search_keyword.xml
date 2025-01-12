@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/_10mdp"
+    android:gravity="center"
+    android:background="@color/white"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="@dimen/_18mdp"
+        android:layout_height="@dimen/_18mdp"
+        app:tint="@color/icon_color"
+        android:visibility="visible"
+        android:layout_marginEnd="@dimen/_10mdp"
+        android:src="@drawable/profile_24"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_11font_mdp"
+            android:fontFamily="@font/manrope_medium"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:text="Transit Text"/>
+        <TextView
+            android:id="@+id/typeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_11font_mdp"
+            android:fontFamily="@font/manrope_medium"
+            android:layout_marginTop="@dimen/_4mdp"
+            android:paddingTop="@dimen/_1mdp"
+            android:paddingBottom="@dimen/_1mdp"
+            android:paddingStart="@dimen/_8mdp"
+            android:paddingEnd="@dimen/_8mdp"
+            android:background="@drawable/bg_gray_round_corner"
+            android:text="Railway"/>
+
+    </LinearLayout>
+    <TextView
+        android:id="@+id/placeDistance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_12font_mdp"
+        android:visibility="gone"
+        android:textColor="@color/black"
+        android:text="0.0 km"/>
+    <ImageView
+        android:id="@+id/iconSearch"
+        android:layout_width="@dimen/_18mdp"
+        android:layout_height="@dimen/_18mdp"
+        app:tint="@color/icon_color"
+        android:visibility="visible"
+        android:layout_marginEnd="@dimen/_10mdp"
+        android:src="@drawable/search_24"/>
+</LinearLayout>

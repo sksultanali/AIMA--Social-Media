@@ -29,7 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.developerali.aima.Adapters.UsagesAdapter;
-import com.developerali.aima.CommonFeatures;
+import com.developerali.aima.Helpers.CommonFeatures;
 import com.developerali.aima.Models.UsagesModel;
 import com.developerali.aima.Models.UserModel;
 import com.developerali.aima.Models.WithdrawModel;

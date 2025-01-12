@@ -12,6 +12,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.developerali.aima.Helpers.Helper;
+import com.developerali.aima.Model_Apis.ApiService;
+import com.developerali.aima.Model_Apis.RetrofitClient;
+import com.developerali.aima.Model_Apis.UserDetails;
+import com.developerali.aima.Model_Apis.VideoResponse;
 import com.developerali.aima.Models.UserModel;
 import com.developerali.aima.Models.VideoModel;
 import com.developerali.aima.R;
@@ -24,15 +29,20 @@ import com.google.firebase.database.ValueEventListener;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class VideoShow extends AppCompatActivity {
 
     ActivityVideoShowBinding binding;
-    VideoModel videoModel;
+    VideoResponse.PostData videoModel;
     FirebaseDatabase database;
     Activity activity;
     private long startTime;
     private long totalSeconds;
     SharedPreferences sharedPreferences;
+    ApiService apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +50,7 @@ public class VideoShow extends AppCompatActivity {
         binding = ActivityVideoShowBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         database = FirebaseDatabase.getInstance();
+        apiService = RetrofitClient.getClient().create(ApiService.class);
 
         Intent intent = getIntent();
         activity = VideoShow.this;
@@ -51,7 +62,7 @@ public class VideoShow extends AppCompatActivity {
             binding.youtubePostView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
                 @Override
                 public void onReady(@NonNull YouTubePlayer youTubePlayer) {
-                    youTubePlayer.loadVideo(videoModel.getVideoId(), 0f);
+                    youTubePlayer.loadVideo(videoModel.getYouTubeId(), 0f);
                 }
             });
 
@@ -70,49 +81,59 @@ public class VideoShow extends AppCompatActivity {
                 binding.discoverCaption.setText(videoModel.getCaption());
             });
 
+            long time = Helper.convertToLongTime(videoModel.getTime());
+            String timeAgo = (time == -1) ? Helper.formatDate("yyyy-MM-dd HH:mm:ss", "dd LLL yyyy", videoModel.getTime()) :
+                    TimeAgo.using(time);
+            binding.discoverProfile.setText(videoModel.getType() + " • " + timeAgo + " •");
+            binding.discoverProfileName.setText(videoModel.getName());
+            if (videoModel.getVerified() != 0){
+                binding.verifiedProfile.setVisibility(View.VISIBLE);
+            }else {
+                binding.verifiedProfile.setVisibility(View.GONE);
+            }
 
-            database.getReference().child("users").child(videoModel.getUploader())
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if (snapshot.exists()){
-                                UserModel userModel = snapshot.getValue(UserModel.class);
-                                String timeAgo = TimeAgo.using(videoModel.getTime());
-                                binding.discoverProfileName.setText(userModel.getName());
-                                if (userModel.isVerified()){
-                                    binding.verifiedProfile.setVisibility(View.VISIBLE);
-                                }
-                                if (userModel.getType() != null){
-                                    binding.discoverProfile.setText(userModel.getType() + " • " + timeAgo + " •");
-                                }else {
-                                    binding.discoverProfile.setText("Public Profile" + " • " + timeAgo + " •");
-                                }
-                                if (userModel.getImage() != null && !activity.isDestroyed()){
 
-                                    Glide.with(VideoShow.this)
-                                            .load(userModel.getImage())
-                                            .placeholder(getDrawable(R.drawable.placeholder))
-                                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                                            .into(binding.discoverProfileImage);
-                                }
+            if (videoModel.getUser_image() != null && !activity.isDestroyed() && !videoModel.getUser_image().isEmpty()){
 
-                                binding.videoProfile.setOnClickListener(v->{
-                                    if (videoModel.getUploader() != null && !videoModel.getUploader().equalsIgnoreCase("admin")){
-                                        Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
-                                        i.putExtra("profileId", videoModel.getUploader());
-                                        startActivity(i);
-                                    }else {
-                                        Toast.makeText(VideoShow.this, "not possible...", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-                        }
+                Glide.with(VideoShow.this)
+                        .load(videoModel.getUser_image())
+                        .placeholder(getDrawable(R.drawable.placeholder))
+                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                        .into(binding.discoverProfileImage);
+            }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
+            binding.videoProfile.setOnClickListener(v->{
+                if (videoModel.getUploader() != null && !videoModel.getUploader().equalsIgnoreCase("admin")){
+                    Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+                    i.putExtra("profileId", videoModel.getUploader());
+                    startActivity(i);
+                }else {
+                    Toast.makeText(VideoShow.this, "not possible...", Toast.LENGTH_SHORT).show();
+                }
+            });
 
-                        }
-                    });
+
+//            Call<UserDetails> call = apiService.getUserDetails(
+//                    "getUserDetails", videoModel.getUploader()
+//            );
+//
+//            call.enqueue(new Callback<UserDetails>() {
+//                @Override
+//                public void onResponse(Call<UserDetails> call, Response<UserDetails> response) {
+//                    if (response.isSuccessful() && response.body() != null){
+//                        UserDetails apiResponse = response.body();
+//                        if (apiResponse.getStatus().equalsIgnoreCase("success")){
+//                            UserModel userModel = apiResponse.getData();
+//
+//
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<UserDetails> call, Throwable t) {
+//                }
+//            });
 
             binding.videoShare.setOnClickListener(c->{
                 Toast.makeText(VideoShow.this, "loading request...", Toast.LENGTH_SHORT).show();

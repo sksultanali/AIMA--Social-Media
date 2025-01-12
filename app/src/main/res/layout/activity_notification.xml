@@ -13,7 +13,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/white"
         android:orientation="horizontal"
-        android:padding="8dp"
+        android:padding="@dimen/_10mdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -32,10 +32,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="10dp"
-            android:fontFamily="@font/signika_negative_bold"
+            android:fontFamily="@font/manrope_extrabold"
             android:text="Notifications"
             android:textColor="@color/backgroundBottomColour"
-            android:textSize="22sp"
+            android:textSize="@dimen/_14font_mdp"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/clearAll"
@@ -68,6 +68,7 @@
         android:layout_marginTop="10dp"
         android:orientation="vertical"
         android:overScrollMode="never"
+        tools:listitem="@layout/item_notifications"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view4" />
@@ -89,6 +90,8 @@
         android:gravity="center"
         android:text="No notification yet !"
         android:visibility="gone"
+        android:textSize="@dimen/_12font_mdp"
+        android:fontFamily="@font/manrope_bold"
         android:layout_marginTop="@dimen/_150mdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

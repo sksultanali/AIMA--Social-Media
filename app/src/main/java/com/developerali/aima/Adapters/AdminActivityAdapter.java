@@ -61,17 +61,17 @@ public class AdminActivityAdapter extends RecyclerView.Adapter<AdminActivityAdap
             holder.binding.discover.setVisibility(View.GONE);
         }
 
-        String timeAgo = TimeAgo.using(postModel.getTime());
-        holder.binding.adminName.setText("Admin Activity • " + timeAgo + " •");
-        holder.binding.likeTextCount.setText(postModel.getLikesCount() + " likes • " + postModel.getCommentsCount() + " comments");
-
-        holder.binding.discoverClose.setOnClickListener(c->{
-            //removing from list onBindViewHolder
-            models.remove(position);
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, models.size());
-            notifyDataSetChanged();
-        });
+//        String timeAgo = TimeAgo.using(postModel.getTime());
+//        holder.binding.adminName.setText("Admin Activity • " + timeAgo + " •");
+//        holder.binding.likeTextCount.setText(postModel.getLikesCount() + " likes • " + postModel.getCommentsCount() + " comments");
+//
+//        holder.binding.discoverClose.setOnClickListener(c->{
+//            //removing from list onBindViewHolder
+//            models.remove(position);
+//            notifyItemRemoved(position);
+//            notifyItemRangeChanged(position, models.size());
+//            notifyDataSetChanged();
+//        });
 
         holder.itemView.setOnClickListener(v->{
             Intent i = new Intent(context.getApplicationContext(), See_Post.class);

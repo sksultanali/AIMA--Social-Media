@@ -1,4 +1,4 @@
-package com.developerali.aima;
+package com.developerali.aima.Helpers;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;

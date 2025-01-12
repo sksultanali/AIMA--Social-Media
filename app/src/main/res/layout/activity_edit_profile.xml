@@ -88,33 +88,42 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="@dimen/_10mdp"
                 android:background="@drawable/background_text_donation"
+                android:elevation="@dimen/_1mdp"
                 android:paddingStart="10dp"
                 android:paddingTop="5dp"
                 android:paddingEnd="10dp"
                 android:paddingBottom="5dp"
                 android:text="@string/basic_details"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:textSize="@dimen/_11font_mdp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:id="@+id/editName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_15mdp"
+                android:layout_marginTop="@dimen/_10mdp"
                 android:gravity="center"
                 android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/_16mdp"
+                    android:layout_height="@dimen/_16mdp"
+                    android:src="@drawable/profile_24"
+                    app:tint="@color/backgroundBottomColour" />
 
                 <TextView
                     android:id="@+id/dashName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10mdp"
                     android:layout_marginEnd="@dimen/_20mdp"
                     android:layout_weight="1"
-                    android:drawableStart="@drawable/profile_24"
-                    android:drawablePadding="@dimen/_5mdp"
                     android:text="@string/profile_name"
-                    android:textSize="16sp" />
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_11font_mdp" />
 
                 <ImageView
                     android:layout_width="20dp"
@@ -128,20 +137,28 @@
                 android:id="@+id/editBio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_15mdp"
+                android:layout_marginTop="@dimen/_10mdp"
                 android:gravity="center"
                 android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/_14mdp"
+                    android:layout_height="@dimen/_14mdp"
+                    android:layout_marginStart="@dimen/_1mdp"
+                    android:layout_marginEnd="@dimen/_1mdp"
+                    android:src="@drawable/text_icon"
+                    app:tint="@color/backgroundBottomColour" />
 
                 <TextView
                     android:id="@+id/bioName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10mdp"
                     android:layout_marginEnd="@dimen/_20mdp"
                     android:layout_weight="1"
-                    android:drawableStart="@drawable/text_fields_24"
-                    android:drawablePadding="@dimen/_5mdp"
                     android:text="@string/edit_bio"
-                    android:textSize="16sp" />
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_11font_mdp" />
 
                 <ImageView
                     android:layout_width="20dp"
@@ -155,20 +172,28 @@
                 android:id="@+id/editAbout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_15mdp"
+                android:layout_marginTop="@dimen/_10mdp"
                 android:gravity="center"
                 android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/_14mdp"
+                    android:layout_height="@dimen/_14mdp"
+                    android:layout_marginStart="@dimen/_1mdp"
+                    android:layout_marginEnd="@dimen/_1mdp"
+                    android:src="@drawable/text_icon"
+                    app:tint="@color/backgroundBottomColour" />
 
                 <TextView
                     android:id="@+id/dashAbout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10mdp"
                     android:layout_marginEnd="@dimen/_20mdp"
                     android:layout_weight="1"
-                    android:drawableStart="@drawable/text_fields_24"
-                    android:drawablePadding="@dimen/_5mdp"
                     android:text="@string/about"
-                    android:textSize="16sp" />
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_11font_mdp" />
 
                 <ImageView
                     android:layout_width="20dp"
@@ -179,39 +204,44 @@
             </LinearLayout>
 
 
-
-
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
                 android:background="@drawable/background_text_donation"
+                android:elevation="@dimen/_1mdp"
                 android:paddingStart="10dp"
                 android:paddingTop="5dp"
                 android:paddingEnd="10dp"
                 android:paddingBottom="5dp"
                 android:text="@string/social_media"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:textSize="@dimen/_11font_mdp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:id="@+id/editFb"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_15mdp"
+                android:layout_marginTop="@dimen/_10mdp"
                 android:gravity="center"
                 android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/_16mdp"
+                    android:layout_height="@dimen/_16mdp"
+                    android:src="@drawable/facebook" />
 
                 <TextView
                     android:id="@+id/fbLink"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10mdp"
                     android:layout_marginEnd="@dimen/_20mdp"
                     android:layout_weight="1"
-                    android:drawableStart="@drawable/insert_link_24"
-                    android:drawablePadding="@dimen/_5mdp"
                     android:text="@string/fb_profile_link"
-                    android:textSize="16sp" />
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_11font_mdp" />
 
                 <ImageView
                     android:layout_width="20dp"
@@ -225,20 +255,25 @@
                 android:id="@+id/editWhatsapp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_15mdp"
+                android:layout_marginTop="@dimen/_10mdp"
                 android:gravity="center"
                 android:orientation="horizontal">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="@dimen/_16mdp"
+                    android:layout_height="@dimen/_16mdp"
+                    android:src="@drawable/whatsapp" />
 
                 <TextView
                     android:id="@+id/whatsappLink"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10mdp"
                     android:layout_marginEnd="@dimen/_20mdp"
                     android:layout_weight="1"
-                    android:drawableStart="@drawable/call_24"
-                    android:drawablePadding="@dimen/_5mdp"
                     android:text="@string/whatsapp_number"
-                    android:textSize="16sp" />
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_11font_mdp" />
 
                 <ImageView
                     android:layout_width="20dp"
@@ -252,20 +287,26 @@
                 android:id="@+id/editPhone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_15mdp"
+                android:layout_marginTop="@dimen/_10mdp"
                 android:gravity="center"
                 android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/_16mdp"
+                    android:layout_height="@dimen/_16mdp"
+                    app:tint="@color/backgroundBottomColour"
+                    android:src="@drawable/call_24" />
 
                 <TextView
                     android:id="@+id/phoneNoText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10mdp"
                     android:layout_marginEnd="@dimen/_20mdp"
                     android:layout_weight="1"
-                    android:drawableStart="@drawable/call_24"
-                    android:drawablePadding="@dimen/_5mdp"
                     android:text="@string/phone_number"
-                    android:textSize="16sp" />
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_11font_mdp" />
 
                 <ImageView
                     android:layout_width="20dp"
@@ -275,13 +316,92 @@
                     app:tint="@color/black" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/saveProfile"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_15mdp"
-                android:layout_gravity="center"
-                android:text="Save"/>
+                android:layout_marginTop="25dp"
+                android:background="@drawable/background_text_donation"
+                android:elevation="@dimen/_1mdp"
+                android:paddingStart="10dp"
+                android:paddingTop="5dp"
+                android:paddingEnd="10dp"
+                android:paddingBottom="5dp"
+                android:text="@string/other_info"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_11font_mdp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10mdp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/_14mdp"
+                    android:layout_height="@dimen/_14mdp"
+                    android:layout_marginStart="@dimen/_1mdp"
+                    android:layout_marginEnd="@dimen/_1mdp"
+                    android:src="@drawable/key"
+                    app:tint="@color/backgroundBottomColour" />
+
+                <TextView
+                    android:id="@+id/tokenText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10mdp"
+                    android:layout_weight="1"
+                    android:text="Update available"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_11font_mdp" />
+
+                <TextView
+                    android:id="@+id/tokenBn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5mdp"
+                    android:gravity="end"
+                    android:text="Update Now"
+                    android:textColor="@color/backgroundBottomColour"
+                    android:textSize="@dimen/_11font_mdp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10mdp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="@dimen/_16mdp"
+                    android:layout_height="@dimen/_16mdp"
+                    android:src="@drawable/update" />
+
+                <TextView
+                    android:id="@+id/textUpdate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_10mdp"
+                    android:layout_weight="1"
+                    android:text="Update available"
+                    android:textSize="@dimen/_11font_mdp"
+                    android:textColor="@color/black" />
+
+                <TextView
+                    android:id="@+id/updateBn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5mdp"
+                    android:gravity="end"
+                    android:text="Update Now"
+                    android:textColor="@color/backgroundBottomColour"
+                    android:textSize="@dimen/_11font_mdp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+
+
         </LinearLayout>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

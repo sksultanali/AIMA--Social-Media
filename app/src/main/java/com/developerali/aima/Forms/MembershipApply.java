@@ -74,7 +74,8 @@ public class MembershipApply extends AppCompatActivity implements PaymentResultL
         progressDialog.setCanceledOnTouchOutside(false);
 
         //formName.add("Choose Plan & Make Payment");
-        formName.add("Step: 1 - Fill Form Data");
+        formName.add("Step: 1 - Fill form data");
+        formName.add("Step: 2 - Re_enter important data");
         formName.add("Step: 2 - Pay and Submit");
 
         binding.stepView.getState()
@@ -82,6 +83,7 @@ public class MembershipApply extends AppCompatActivity implements PaymentResultL
                 .steps(new ArrayList<String>() {{
                     add("step 1");
                     add("step 2");
+                    add("step 3");
                 }})
                 .stepsNumber(3)
                 .animationDuration(getResources().getInteger(android.R.integer.config_shortAnimTime))
@@ -106,7 +108,6 @@ public class MembershipApply extends AppCompatActivity implements PaymentResultL
             }else {
                 binding.stepView.done(true);
             }
-
 //            if (position == 1){
 //                finalSubmit();
 //            }
@@ -126,8 +127,6 @@ public class MembershipApply extends AppCompatActivity implements PaymentResultL
 
         ArrayAdapter<String> obj = new ArrayAdapter<String>(MembershipApply.this, R.layout.layout_spinner_items, validity);
         binding.spinnerValidity.setAdapter(obj);
-//        ArrayAdapter<String> obj2 = new ArrayAdapter<String>(MembershipApply.this, R.layout.layout_spinner_items, payWith);
-//        binding.spinnerPayWith.setAdapter(obj2);
 
         binding.spinnerValidity.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

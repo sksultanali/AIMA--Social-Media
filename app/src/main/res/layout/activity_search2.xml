@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray"
+    tools:context=".Activities.SearchActivity2">
+
+    <LinearLayout
+        android:id="@+id/linearLayout16"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center"
+        android:padding="@dimen/_10mdp"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/goBack"
+            android:layout_width="@dimen/_20mdp"
+            android:layout_height="@dimen/_20mdp"
+            android:layout_marginEnd="@dimen/_10mdp"
+            android:src="@drawable/back_24"
+            app:tint="@color/black" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/react_background"
+            android:gravity="center"
+            android:elevation="@dimen/_1mdp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/keyword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/gray"
+                android:fontFamily="@font/manrope_medium"
+                android:padding="@dimen/_3mdp"
+                android:textSize="@dimen/_11font_mdp"
+                android:layout_margin="@dimen/_5mdp"
+                android:singleLine="true" />
+
+            <ImageView
+                android:id="@+id/cancelBtn"
+                android:layout_width="@dimen/_18mdp"
+                android:layout_height="@dimen/_18mdp"
+                android:layout_marginStart="@dimen/_5mdp"
+                android:layout_marginEnd="@dimen/_5mdp"
+                android:src="@drawable/close_24"
+                android:visibility="gone"
+                app:tint="@color/icon_color" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/searchBtn"
+            android:layout_width="@dimen/_20mdp"
+            android:layout_height="@dimen/_20mdp"
+            android:layout_marginStart="@dimen/_10mdp"
+            android:layout_marginEnd="@dimen/_5mdp"
+            android:src="@drawable/search_24"
+            android:visibility="gone"
+            app:tint="@color/black" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/searchRec"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        tools:listitem="@layout/child_search_keyword"
+        android:layout_marginTop="@dimen/_5mdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout16" />
+
+    <LinearLayout
+        android:id="@+id/noData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:layout_width="220dp"
+            android:layout_height="220dp"
+            android:layout_gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/no_data" />
+
+        <TextView
+            android:id="@+id/message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text=" No searched done yet!"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_11font_mdp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

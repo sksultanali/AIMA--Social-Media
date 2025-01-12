@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="@dimen/_8mdp"
     android:background="@drawable/background_white_linear"
     android:orientation="vertical">
@@ -9,59 +10,109 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textStyle="bold"
+        android:fontFamily="@font/manrope_extrabold"
         android:layout_marginBottom="@dimen/_10mdp"
         android:textColor="@color/backgroundBottomColour"
-        android:text="Choose App"/>
+        android:text="Choose Plan and Make Payment"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/_20mdp"
-        android:orientation="horizontal">
+        android:padding="@dimen/_5mdp"
+        android:background="@drawable/react_background"
+        android:orientation="vertical"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
         <LinearLayout
-            android:id="@+id/useApp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:layout_marginEnd="@dimen/_5mdp"
-            android:padding="@dimen/_10mdp"
-            android:background="@drawable/click_effect"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginEnd="@dimen/_10mdp"
-                android:src="@drawable/aimalogo"/>
+
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
+                android:layout_weight="1"
+                android:fontFamily="@font/manrope_medium"
+                android:padding="@dimen/_10mdp"
+                android:text="1. Application Fee\n         (One Time)"
                 android:textColor="@color/black"
-                android:text="Use AIMA"/>
+                android:textSize="@dimen/_11font_mdp" />
+
+            <TextView
+                android:id="@+id/processingFee"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_2mdp"
+                android:layout_weight="3"
+                android:background="@drawable/background_white_linear"
+                android:drawableStart="@drawable/currency_rupee_24"
+                android:fontFamily="@font/manrope_medium"
+                android:gravity="end"
+                android:padding="10dp"
+                android:text="0"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12font_mdp" />
         </LinearLayout>
-        <LinearLayout
-            android:id="@+id/useChrome"
+
+        <TextView
+            android:id="@+id/renewText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:layout_marginStart="@dimen/_5mdp"
-            android:layout_gravity="center"
-            android:padding="@dimen/_10mdp"
-            android:background="@drawable/click_effect"
+            android:layout_marginStart="@dimen/_10mdp"
+            android:layout_marginTop="@dimen/_10mdp"
+            android:fontFamily="@font/manrope_medium"
+            android:text="2. Membership Plan"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_11font_mdp"
+            android:visibility="visible" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_marginEnd="@dimen/_10mdp"
-                android:src="@drawable/chrome"/>
-            <TextView
-                android:layout_width="wrap_content"
+
+            <Spinner
+                android:id="@+id/spinnerValidity"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
+                android:layout_weight="1"
+                android:padding="@dimen/_10mdp" />
+
+            <TextView
+                android:id="@+id/validityPayment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_2mdp"
+                android:layout_weight="3"
+                android:background="@drawable/background_white_linear"
+                android:drawableStart="@drawable/currency_rupee_24"
+                android:fontFamily="@font/manrope_medium"
+                android:gravity="end"
+                android:padding="10dp"
+                android:text="120"
                 android:textColor="@color/black"
-                android:text="Use Chrome"/>
+                android:textSize="@dimen/_12font_mdp" />
         </LinearLayout>
     </LinearLayout>
+    <TextView
+        android:id="@+id/payBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_follow_background"
+        android:layout_gravity="center"
+        android:fontFamily="@font/manrope_bold"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/_10mdp"
+        android:layout_marginTop="@dimen/_15mdp"
+        android:paddingTop="@dimen/_5mdp"
+        android:paddingBottom="@dimen/_5mdp"
+        android:paddingStart="@dimen/_10mdp"
+        android:paddingEnd="@dimen/_10mdp"
+        android:text="Pay Now"
+        android:textSize="@dimen/_11font_mdp"
+        android:textColor="@drawable/text_colour_with_follow_btn" />
 </LinearLayout>

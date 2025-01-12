@@ -5,14 +5,15 @@
     android:orientation="horizontal"
     android:layout_marginTop="10dp"
     android:layout_marginEnd="10dp"
+    android:id="@+id/layout"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/CommentsProfileImage"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="@dimen/_35mdp"
+        android:layout_height="@dimen/_35mdp"
+        android:layout_marginStart="@dimen/_10mdp"
+        android:layout_gravity="center"
         android:contentDescription="@string/imagelogo"
         android:src="@drawable/placeholder"
         app:civ_border_color="@color/main_light_yellow"
@@ -22,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:padding="10dp"
+        android:padding="@dimen/_10mdp"
         android:background="@drawable/background_white_linear"
         android:layout_gravity="center"
         android:layout_marginStart="@dimen/_10mdp"
@@ -37,6 +38,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Name"
+                android:textSize="@dimen/_11font_mdp"
+                android:fontFamily="@font/manrope_bold"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
             <ImageView
@@ -47,13 +50,13 @@
                 android:src="@drawable/verified"
                 android:visibility="gone"/>
         </LinearLayout>
-
-
         <TextView
             android:id="@+id/actualComment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Public Profile"
+            android:textSize="@dimen/_11font_mdp"
+            android:fontFamily="@font/manrope_medium"
             android:textColor="@color/black" />
     </LinearLayout>
 

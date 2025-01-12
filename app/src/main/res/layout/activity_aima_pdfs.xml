@@ -29,7 +29,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textStyle="bold"
+            android:fontFamily="@font/manrope_extrabold"
             android:textSize="@dimen/_14font_mdp"
+            android:textColor="@color/backgroundBottomColour"
             android:layout_marginStart="@dimen/_10mdp"
             android:text="Docs and Notices"/>
     </LinearLayout>

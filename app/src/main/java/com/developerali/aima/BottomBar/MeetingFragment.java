@@ -14,6 +14,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.developerali.aima.Helpers.Helper;
+import com.developerali.aima.MainActivity;
 import com.developerali.aima.R;
 import com.developerali.aima.databinding.FragmentMeetingBinding;
 
@@ -56,6 +58,7 @@ public class MeetingFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentMeetingBinding.inflate(inflater, container, false);
+        Helper.changeStatusBarColor(getActivity(), R.color.white);
         bottomBar = getActivity().findViewById(R.id.bottomBar);
         bottomBar.setItemActiveIndex(2);
 

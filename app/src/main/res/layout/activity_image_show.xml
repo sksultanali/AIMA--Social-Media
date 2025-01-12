@@ -19,20 +19,21 @@
 
     <ImageView
         android:id="@+id/backImage"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="@dimen/_24mdp"
+        android:layout_height="@dimen/_24mdp"
         android:layout_margin="20dp"
         android:src="@drawable/back_24"
+        app:tint="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
     <ImageView
         android:id="@+id/downloadImage"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="@dimen/_20mdp"
+        android:layout_height="@dimen/_20mdp"
         android:layout_margin="20dp"
-        android:src="@drawable/share_24"
+        android:src="@drawable/download_icon"
         app:tint="@color/white"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -13,25 +13,41 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:padding="8dp"
+        android:padding="@dimen/_10mdp"
+        android:layout_gravity="center"
         android:orientation="horizontal">
         <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="@dimen/_35mdp"
+            android:layout_height="@dimen/_35mdp"
             app:civ_border_width="1dp"
+            android:layout_gravity="center"
             app:civ_border_color="@color/main_light_yellow"
             android:layout_marginStart="5dp"
             android:src="@drawable/aimalogo"/>
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
+            android:layout_marginStart="@dimen/_10mdp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:fontFamily="@font/signika_negative_bold"
-            android:text="Join Meeting"
-            android:layout_gravity="center"
-            android:textColor="@color/backgroundBottomColour"
-            android:textSize="22sp"
-            android:textStyle="bold" />
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/manrope_extrabold"
+                android:text="Join Meeting"
+                android:textColor="@color/backgroundBottomColour"
+                android:textSize="@dimen/_14font_mdp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/manrope_medium"
+                android:singleLine="true"
+                android:text="Enter random code, join and share"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_11font_mdp" />
+        </LinearLayout>
     </LinearLayout>
     <View
         android:layout_width="match_parent"
@@ -62,6 +78,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:textSize="@dimen/_11font_mdp"
+                android:fontFamily="@font/manrope_medium"
                 android:gravity="center"
                 android:text="Please enter secret code to join with members. Do not share with unknown people" />
 
@@ -75,6 +93,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/code"
                     android:layout_width="match_parent"
+                    android:textSize="@dimen/_11font_mdp"
                     android:layout_height="wrap_content" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -86,24 +105,40 @@
                 android:layout_marginBottom="10dp"
                 android:orientation="horizontal">
 
-                <Button
+                <TextView
                     android:id="@+id/joinBtn"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:layout_marginEnd="2dp"
+                    android:layout_marginEnd="@dimen/_2mdp"
+                    android:padding="@dimen/_5mdp"
+                    android:textSize="@dimen/_11font_mdp"
+                    android:gravity="center"
+                    android:fontFamily="@font/manrope_extrabold"
+                    android:textColor="@drawable/text_colour_with_follow_btn"
+                    android:background="@drawable/button_follow_background"
                     android:text="Join"
+                    android:textStyle="bold"
                     android:drawableLeft="@drawable/join_inner_24"
                     android:textAllCaps="false" />
 
-                <Button
+                <TextView
                     android:id="@+id/shareBtn"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Share"
+                    android:padding="@dimen/_5mdp"
+                    android:textSize="@dimen/_11font_mdp"
+                    android:fontFamily="@font/manrope_extrabold"
+                    android:textStyle="bold"
+                    android:textColor="@drawable/text_colour_with_follow_btn"
+                    android:background="@drawable/button_follow_background"
                     android:drawableLeft="@drawable/share_24"
-                    android:layout_marginStart="2dp"
+                    android:drawablePadding="@dimen/_5mdp"
+                    android:drawableTint="@color/white"
+                    android:gravity="center"
+                    android:layout_marginStart="@dimen/_2mdp"
                     android:textAllCaps="false" />
             </LinearLayout>
 

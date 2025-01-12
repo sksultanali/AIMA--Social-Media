@@ -55,6 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:visibility="gone"
             android:layout_weight="1">
             <TextView
                 android:layout_width="wrap_content"
@@ -112,26 +113,30 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_weight="1">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_10mdp"
-                android:paddingStart="@dimen/_10mdp"
-                android:paddingEnd="@dimen/_10mdp"
-                android:textColor="@color/black"
-                android:paddingTop="@dimen/_5mdp"
-                android:text="Bank Details"
                 android:background="@drawable/background_text_donation"
-                android:paddingBottom="@dimen/_5mdp"/>
+                android:fontFamily="@font/manrope_bold"
+                android:paddingStart="@dimen/_10mdp"
+                android:paddingTop="@dimen/_5mdp"
+                android:paddingEnd="@dimen/_10mdp"
+                android:paddingBottom="@dimen/_5mdp"
+                android:text="Bank Details"
+                android:textColor="@color/black" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_20mdp"
                 android:orientation="vertical"
                 android:padding="@dimen/_10mdp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/manrope_bold"
                     android:text="Bank Name- "
                     android:textColor="@color/black"
                     android:textStyle="bold" />
@@ -139,6 +144,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/manrope_medium"
                     android:text="Axis Bank"
                     android:textColor="@color/black" />
 
@@ -146,6 +152,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10mdp"
+                    android:fontFamily="@font/manrope_bold"
                     android:text="Account Number"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
@@ -156,6 +163,7 @@
                     android:layout_height="wrap_content"
                     android:drawableRight="@drawable/copy_24"
                     android:drawablePadding="@dimen/_5mdp"
+                    android:fontFamily="@font/manrope_medium"
                     android:text="921020042136859"
                     android:textColor="@color/black" />
 
@@ -163,6 +171,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_10mdp"
+                    android:fontFamily="@font/manrope_bold"
                     android:text="IFSC Code"
                     android:textColor="@color/black"
                     android:textStyle="bold" />
@@ -173,24 +182,33 @@
                     android:layout_height="wrap_content"
                     android:drawableRight="@drawable/copy_24"
                     android:drawablePadding="@dimen/_5mdp"
+                    android:fontFamily="@font/manrope_medium"
                     android:text="UTIB0001300"
                     android:textColor="@color/black" />
             </LinearLayout>
 
         </LinearLayout>
-
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/qr_code"
+            android:layout_marginEnd="@dimen/_15mdp"
+            android:layout_weight="2"/>
     </LinearLayout>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_10mdp"
-        android:paddingStart="@dimen/_10mdp"
-        android:paddingEnd="@dimen/_10mdp"
-        android:textColor="@color/black"
-        android:paddingTop="@dimen/_5mdp"
-        android:text="One Click Donation "
         android:background="@drawable/background_text_donation"
-        android:paddingBottom="@dimen/_5mdp"/>
+        android:fontFamily="@font/manrope_bold"
+        android:paddingStart="@dimen/_10mdp"
+        android:paddingTop="@dimen/_5mdp"
+        android:paddingEnd="@dimen/_10mdp"
+        android:paddingBottom="@dimen/_5mdp"
+        android:text="One Click Donation "
+        android:textColor="@color/black" />
 
 
     <com.skyfishjy.library.RippleBackground

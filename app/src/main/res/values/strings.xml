@@ -11,7 +11,7 @@
     <string name="donation_button">donation button</string>
     <string name="float_button">float button</string>
     <string name="create_a_story">Create a Story</string>
-    <string name="aima_discover">AIMA Book</string>
+    <string name="aima_discover">AIMA Social</string>
     <string name="imagelogo">imageLogo</string>
     <string name="profile_name">Profile Name</string>
     <string name="stories">stories</string>
@@ -31,7 +31,7 @@
     <string name="loading_please_wait">loading_please_wait</string>
     <string name="loading">loading</string>
     <string name="public_profile">Public Profile</string>
-    <string name="no_followers_yet">no followers!</string>
+    <string name="no_followers_yet">No followers!</string>
     <string name="read_more">...Read more</string>
     <string name="title_activity_comment">CommentActivity</string>
     <!-- Strings used for fragments for navigation -->
@@ -77,7 +77,7 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="tab_layout">tab_layout</string>
-    <string name="cardBackText">This ID Card is a property of All India Minority Association The bearer o f this card is an authorized member of AIMA. All the logo/ symbols are registered and strictly prohibited and punishable under the law.</string>
+    <string name="cardBackText">This is a digital ID Card of All India Minority Association. The owner of this card is an authorized member of AIMA.</string>
     <string name="no_posts_yet">no posts!</string>
 
     <string name="facebook_app_id">669209981393103</string>
@@ -90,4 +90,9 @@
 3. Must be a member for withdraw
 </string>
     <string name="search_history">search_history</string>
+    <string name="linkopener">linkOpener</string>
+    <string name="share">Share</string>
+    <string name="other_info">Other Info</string>
+    <string name="step1">You can fill this form only one time. No corrections or modification can not be done (If any issue arise then go to menu and contact to \'Help Center\')\nN.B- For filling this form click one below button!</string>
+    <string name="posts_follower_followings">Posts, followers and followings</string>
 </resources>

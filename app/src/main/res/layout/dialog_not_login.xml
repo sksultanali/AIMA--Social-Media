@@ -9,12 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginStart="@dimen/_10mdp"
-        android:layout_marginEnd="@dimen/_10mdp"
-        android:paddingTop="@dimen/_5mdp"
-        android:paddingBottom="@dimen/_10mdp"
-        android:paddingStart="@dimen/_10mdp"
-        android:paddingEnd="@dimen/_10mdp"
+        android:layout_marginStart="@dimen/_15mdp"
+        android:layout_marginEnd="@dimen/_15mdp"
+        android:padding="@dimen/_10mdp"
         android:background="@drawable/react_background">
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,12 +24,13 @@
                 android:text="Login Required"
                 android:textColor="@color/red_colour"
                 android:textStyle="bold"
-                android:textSize="18sp"
+                android:textSize="@dimen/_12font_mdp"
                 android:layout_gravity="center_vertical"/>
             <com.airbnb.lottie.LottieAnimationView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 app:lottie_loop="true"
+                android:visibility="gone"
                 app:lottie_autoPlay="true"
                 app:lottie_rawRes="@raw/notlogin"/>
         </LinearLayout>
@@ -40,7 +38,9 @@
             android:id="@+id/messageText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
+            android:layout_marginTop="@dimen/_5mdp"
+            android:textSize="@dimen/_11font_mdp"
+            android:textColor="@color/black"
             android:text="You are not logged in. This feature is required login. Please login to continue :) "
             android:layout_gravity="center_vertical"/>
 
@@ -66,8 +66,8 @@
                     android:id="@+id/noBtnText"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
+                    android:textColor="@drawable/text_colour_with_follow_btn"
+                    android:textSize="@dimen/_11font_mdp"
                     android:text="No"/>
             </LinearLayout>
             <LinearLayout
@@ -84,8 +84,8 @@
                     android:id="@+id/yesBtnText"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
+                    android:textColor="@drawable/text_colour_with_follow_btn"
+                    android:textSize="@dimen/_11font_mdp"
                     android:text="Login"/>
             </LinearLayout>
         </LinearLayout>

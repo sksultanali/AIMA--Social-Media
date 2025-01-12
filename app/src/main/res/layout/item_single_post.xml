@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:layout_marginTop="10dp">
+    android:layout_marginBottom="@dimen/_5mdp">
 
     <LinearLayout
         android:id="@+id/profileSegment"
@@ -110,18 +110,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:maxLines="3"
-        android:textSize="13sp"
-        android:layout_marginStart="@dimen/_5mdp"
-        android:layout_marginEnd="@dimen/_5mdp"
-        android:paddingTop="@dimen/_5mdp"
-        android:paddingStart="@dimen/_5mdp"
-        android:paddingEnd="@dimen/_5mdp"
-        android:paddingBottom="@dimen/_10mdp"
+        android:textSize="@dimen/_11font_mdp"
+        android:layout_margin="@dimen/_5mdp"
+        android:padding="@dimen/_5mdp"
         android:text="@string/sample_caption"
         app:layout_constraintTop_toBottomOf="@+id/profileSegment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
     <LinearLayout
         android:id="@+id/constraintDiscover"
         android:layout_width="match_parent"
@@ -153,22 +148,32 @@
             <com.makeramen.roundedimageview.RoundedImageView
                 android:id="@+id/discover"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
+                android:layout_height="@dimen/_180mdp"
+                android:layout_marginStart="@dimen/_5mdp"
+                android:layout_marginEnd="@dimen/_5mdp"
                 android:contentDescription="@string/imagelogo"
-                android:src="@drawable/image"
+                android:src="@drawable/placeholder"
                 android:visibility="visible"
+                android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHeight_max="@dimen/_320mdp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:riv_corner_radius="10dip"
                 app:riv_mutate_background="false" />
+            <com.qkopy.richlink.RichLinkViewQkopy
+                android:id="@+id/richLink"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_180mdp"
+                android:visibility="gone"
+                android:layout_marginStart="@dimen/_5mdp"
+                android:layout_marginEnd="@dimen/_5mdp"
+                android:contentDescription="@string/linkopener"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
-
     <LinearLayout
         android:id="@+id/lin11002"
         android:layout_width="match_parent"
@@ -216,7 +221,6 @@
                 android:text=" comments"/>
         </LinearLayout>
     </LinearLayout>
-
     <View
         android:id="@+id/view1002"
         android:layout_width="match_parent"
@@ -227,7 +231,6 @@
         android:background="@color/gray"
         android:layout_marginStart="30dp"
         android:layout_marginEnd="30dp"/>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -347,5 +350,4 @@
                 android:text="Share" />
         </LinearLayout>
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

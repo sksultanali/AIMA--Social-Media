@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.developerali.aima.Activities.WebViewActivity;
-import com.developerali.aima.Helper;
+import com.developerali.aima.Helpers.Helper;
 import com.developerali.aima.Models.pdfModel;
 import com.developerali.aima.R;
 import com.developerali.aima.databinding.ItemPdfsBinding;

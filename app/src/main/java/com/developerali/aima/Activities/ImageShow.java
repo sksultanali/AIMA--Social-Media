@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.developerali.aima.Helpers.ImageDownloader;
 import com.developerali.aima.R;
 import com.developerali.aima.databinding.ActivityImageShowBinding;
 
@@ -35,6 +36,7 @@ public class ImageShow extends AppCompatActivity {
     String url;
     Activity activity;
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 1;
+    ImageDownloader imageDownloader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class ImageShow extends AppCompatActivity {
         binding = ActivityImageShowBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         activity = ImageShow.this;
+        imageDownloader = new ImageDownloader(activity);
 
         url = getIntent().getStringExtra("image");
         if (url != null || !activity.isDestroyed()){
@@ -58,15 +61,8 @@ public class ImageShow extends AppCompatActivity {
         });
 
         binding.downloadImage.setOnClickListener(v->{
-            if (ContextCompat.checkSelfPermission(this,
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                // Permission is already granted, you can now take a screenshot
-                takeScreenshot();
-            } else {
-                // Permission is not granted, request it
-                ActivityCompat.requestPermissions(this, new String[]{
-                        android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_WRITE_EXTERNAL_STORAGE);
-            }
+            String fileName = "downloaded_image.jpg";
+            imageDownloader.downloadImage(url, fileName);
         });
 
 
@@ -79,17 +75,9 @@ public class ImageShow extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_WRITE_EXTERNAL_STORAGE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted, you can now take a screenshot
-                takeScreenshot();
-            } else {
-                // Permission denied, show a message or take appropriate action
-                Toast.makeText(ImageShow.this, "Permission denied", Toast.LENGTH_SHORT).show();
-                takeScreenshot();
-            }
-        }
+        imageDownloader.handlePermissionResult(requestCode, grantResults);
     }
+
 
     private void takeScreenshot() {
         Bitmap screenshotBitmap = getScreenShot(binding.imageShow);

@@ -19,7 +19,7 @@ import com.developerali.aima.Activities.MemberShip_Act;
 import com.developerali.aima.Activities.ProfileActivity;
 import com.developerali.aima.Activities.WebViewActivity;
 import com.developerali.aima.Adapters.AdminActivityAdapter;
-import com.developerali.aima.Helper;
+import com.developerali.aima.Helpers.Helper;
 import com.developerali.aima.Models.PostModel;
 import com.developerali.aima.R;
 import com.developerali.aima.databinding.FragmentMenuBinding;
@@ -61,6 +61,7 @@ public class MenuFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentMenuBinding.inflate(inflater, container, false);
+        Helper.changeStatusBarColor(getActivity(), R.color.white);
         bottomBar = getActivity().findViewById(R.id.bottomBar);
         bottomBar.setItemActiveIndex(4);
 
@@ -71,7 +72,6 @@ public class MenuFragment extends Fragment {
 
         //ImageSlider
         final ArrayList<SlideModel> slideModels = new ArrayList<>();
-
         database.getReference().child("banners")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -98,22 +98,36 @@ public class MenuFragment extends Fragment {
 
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
 
-        binding.donations.setOnClickListener(v->{
-            Intent intent = new Intent(getActivity().getApplicationContext(), DonationPage.class);
-            getActivity().startActivity(intent);
-        });
-        binding.memberShip.setOnClickListener(c->{
-            Intent i = new Intent(getActivity().getApplicationContext(), MemberShip_Act.class);
-            getActivity().startActivity(i);
-        });
+//        binding.donations.setOnClickListener(v->{
+//            Intent intent = new Intent(getActivity().getApplicationContext(), DonationPage.class);
+//            getActivity().startActivity(intent);
+//        });
+//        binding.memberShip.setOnClickListener(c->{
+//            Intent i = new Intent(getActivity().getApplicationContext(), MemberShip_Act.class);
+//            getActivity().startActivity(i);
+//        });
         binding.profile.setOnClickListener(v->{
             Intent intent = new Intent(getActivity().getApplicationContext(), ProfileActivity.class);
             getActivity().startActivity(intent);
         });
-        binding.meetings.setOnClickListener(c->{
-            transaction.replace(R.id.content, new MeetingFragment()).addToBackStack(null);
-            transaction.commit();
+//        binding.meetings.setOnClickListener(c->{
+//            transaction.replace(R.id.content, new MeetingFragment()).addToBackStack(null);
+//            transaction.commit();
+//        });
+
+        binding.ourWebsite.setOnClickListener(v->{
+            Helper.openLink(getActivity(), "https://aima.developerali.in/");
         });
+
+        binding.giveFeedback.setOnClickListener(v->{
+            Helper.openLink(getActivity(), "https://forms.gle/a2ejMTji3h5UixUVA");
+        });
+
+        binding.faceBookPage.setOnClickListener(v->{
+            Helper.openLink(getActivity(), "https://www.facebook.com/@SYEDRUHULAminbhaijaan");
+        });
+
+
 
         binding.terms.setOnClickListener(v->{
             if (Helper.isChromeCustomTabsSupported(getActivity())){
@@ -146,6 +160,19 @@ public class MenuFragment extends Fragment {
         binding.helpCentre.setOnClickListener(v->{
             try {
                 String message = "Hi, I'm using AIMA app. I wanted to know about something. Can we talk now?";
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("http://api.whatsapp.com/send?phone="+"+91"+"8967254087" + "&text="+ message));
+                startActivity(intent);
+            }catch (Exception e){
+                Helper.showAlertNoAction(getActivity(), "Error 404",
+                        "May be you don't have installed whatsapp in your device. We are only " +
+                                "available in whatsapp right now. Please try again later after installing whatsapp.", "Okay");
+            }
+        });
+
+        binding.contactDev.setOnClickListener(v->{
+            try {
+                String message = "Hi, I'm using AIMA app. I wanted to *discuss something about my business*. Can we talk now?";
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(Uri.parse("http://api.whatsapp.com/send?phone="+"+91"+"8967254087" + "&text="+ message));
                 startActivity(intent);

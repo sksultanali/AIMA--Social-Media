@@ -8,6 +8,8 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +19,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.developerali.aima.Adapters.PostAdapter;
+import com.developerali.aima.Helpers.Helper;
+import com.developerali.aima.Helpers.TextUtils;
 import com.developerali.aima.MainActivity;
+import com.developerali.aima.Model_Apis.ApiResponse;
+import com.developerali.aima.Model_Apis.ApiService;
+import com.developerali.aima.Model_Apis.PostResponse;
+import com.developerali.aima.Model_Apis.RetrofitClient;
+import com.developerali.aima.Model_Apis.SinglePostData;
+import com.developerali.aima.Model_Apis.UserDetails;
 import com.developerali.aima.Models.NotificationModel;
 import com.developerali.aima.Models.PostModel;
 import com.developerali.aima.Models.UserModel;
@@ -36,11 +48,17 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.rpc.Help;
 import com.like.LikeButton;
 import com.like.OnLikeListener;
+import com.qkopy.richlink.ViewListener;
 
 import java.util.Date;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class See_Post extends AppCompatActivity {
 
@@ -54,20 +72,21 @@ public class See_Post extends AppCompatActivity {
     private long startTime;
     private long totalSeconds;
     SharedPreferences sharedPreferences;
+    ApiService apiService;
+    int maxLength = 150;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivitySeePostBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        apiService = RetrofitClient.getClient().create(ApiService.class);
 
         firebaseFirestore = FirebaseFirestore.getInstance();
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
 
         activity = See_Post.this;
-
-
         isOpen = true;
 
         Intent intent = getIntent();
@@ -84,18 +103,11 @@ public class See_Post extends AppCompatActivity {
         }
 
         if (auth.getCurrentUser() != null){
-
             loadAllData(postId);
-            binding.backBtn.setOnClickListener(v->{
-                Intent i = new Intent(See_Post.this, MainActivity.class);
-                startActivity(i);
-                finish();
-            });
-
         }
 
 
-        binding.container.setOnClickListener(v->{
+        binding.postedImage.setOnClickListener(v->{
             if (isOpen){
                 binding.topView.setVisibility(View.GONE);
                 binding.bottomView.setVisibility(View.GONE);
@@ -107,6 +119,17 @@ public class See_Post extends AppCompatActivity {
             }
         });
 
+        binding.backBtn.setOnClickListener(v->{
+            Intent i;
+            if (auth.getCurrentUser() != null){
+                i = new Intent(See_Post.this, MainActivity.class);
+
+            }else {
+                i = new Intent(See_Post.this, Login.class);
+            }
+            startActivity(i);
+            finish();
+        });
 
 
 
@@ -140,69 +163,137 @@ public class See_Post extends AppCompatActivity {
     }
 
     private void loadAllData(String postId) {
+        Call<SinglePostData> call = apiService.getSinglePost(
+                "getSinglePost", postId
+        );
 
-        firebaseFirestore.collection("post")
-                .document(postId)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        PostModel postModel = documentSnapshot.toObject(PostModel.class);
+        call.enqueue(new Callback<SinglePostData>() {
+            @Override
+            public void onResponse(Call<SinglePostData> call, Response<SinglePostData> response) {
+                if (response.isSuccessful() && response.body() != null){
+                    SinglePostData singlePostData = response.body();
+                    if (singlePostData.getStatus().equalsIgnoreCase("success")){
+                        PostResponse.PostData postModel = singlePostData.getData();
 
-                        comments(postId, postModel.getUploader());
-                        //setting all details about post
-                        if (postModel.getCaption() != null){
-                            if (postModel.getCaption().length() > 150){
-                                binding.uploaderCaption.setText(postModel.getCaption().substring(0, 135) + "...Read More");
-                                binding.uploaderCaption.setOnClickListener(c->{
-                                    binding.uploaderCaption.setText(postModel.getCaption());
-                                    binding.container.performClick();
+                        List<String> links = TextUtils.extractLinks(postModel.getCaption());
+                        if (!links.isEmpty()){
+                            if (postModel.getImage() == null || postModel.getImage().isEmpty()){
+                                binding.richLink.setLink(links.get(0), activity, new ViewListener() {
+                                    @Override
+                                    public void onSuccess(boolean b) {
+                                        binding.richLink.setVisibility(View.VISIBLE);
+                                        binding.postedImage.setVisibility(View.GONE);
+                                    }
+
+                                    @Override
+                                    public void onError(@NonNull Exception e) {
+                                        binding.richLink.setVisibility(View.GONE);
+                                        binding.postedImage.setImageDrawable(activity.getDrawable(R.drawable.link_broken));
+                                        binding.postedImage.setVisibility(View.VISIBLE);
+                                    }
                                 });
-                            }else {
-                                binding.uploaderCaption.setText(postModel.getCaption());
                             }
                         }else {
-                            binding.uploaderCaption.setVisibility(View.GONE);
+                            binding.richLink.setVisibility(View.GONE);
                         }
 
-                        if (postModel.getImage() != null && !activity.isDestroyed() ){
-                            Glide.with(See_Post.this)
+                        if (postModel.getImage() != null && !postModel.getImage().isEmpty() && !activity.isDestroyed()){
+                            binding.postedImage.setVisibility(View.VISIBLE);
+                            Glide.with(activity)
                                     .load(postModel.getImage())
-                                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                                     .placeholder(R.drawable.placeholder)
+                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                    .skipMemoryCache(false)
                                     .into(binding.postedImage);
                         }else {
                             binding.bottomView.setVisibility(View.GONE);
                         }
-//                        else {
-//                            binding.postedImage.setVisibility(View.GONE);
-//                            binding.container.setBackgroundColor(getColor(R.color.darkGray));
-//                            binding.profileSection.setBackgroundColor(getColor(R.color.white));
-//                            Drawable drawable = ContextCompat.getDrawable(See_Post.this, R.drawable.public_24);
-//                            drawable.setColorFilter(getColor(R.color.black), PorterDuff.Mode.MULTIPLY);
-//                            binding.postedProfile.setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null);
-//                            binding.postedBy.setTextColor(getColor(R.color.black));
-//                            binding.postedProfile.setTextColor(getColor(R.color.black));
-//                            binding.textCommentFalse.setTextColor(getColor(R.color.black));
-//                            binding.textLikeFalse.setTextColor(getColor(R.color.black));
-//                            binding.likeTextCount.setTextColor(getColor(R.color.black));
-//                            binding.commentText.setTextColor(getColor(R.color.black));
-//                            binding.backBtn.setColorFilter(getColor(R.color.black));
-//                            binding.uploaderCaption.setTextColor(getColor(R.color.black));
-//                        }
 
-                        binding.commentText.setText(postModel.getCommentsCount()+"");
-                        binding.likeTextCount.setText(postModel.getLikesCount()+"");
+                        comments(postId, postModel.getUploader());
+                        LikeMethod(postModel);
+
+                        binding.uploaderProfileImage.setOnClickListener(v->{
+                            if (postModel.getUploader() != null && !postModel.getUploader().equalsIgnoreCase("admin")){
+                                Intent i = new Intent(activity.getApplicationContext(), ProfileActivity.class);
+                                i.putExtra("profileId", postModel.getUploader());
+                                activity.startActivity(i);
+                            }else {
+                                Helper.showAlertNoAction(See_Post.this, "Admin Profile",
+                                        "This profile can't be check by you. Have a good day!", "Thank You");
+                            }
+                        });
+
+                        //setting all details about post
+                        binding.commentText.setText(String.valueOf(postModel.getCommentsCount()));
+                        binding.likeTextCount.setText(String.valueOf(postModel.getLikesCount()));
+
+
+                        long time = Helper.convertToLongTime(postModel.getTime());
+                        String timeAgo = (time == -1) ? Helper.formatDate("yyyy-MM-dd HH:mm:ss",
+                                "dd LLL yyyy", postModel.getTime()) : TimeAgo.using(time);
+
+                        if (postModel.getUploader().equalsIgnoreCase("admin")){
+                            binding.postedBy.setText("Admin Post");
+                            binding.verifiedProfile.setVisibility(View.VISIBLE);
+                            binding.postedProfile.setText("App Admin" + " • " + timeAgo + " •");
+                            binding.uploaderProfileImage.setImageDrawable(activity.getDrawable(R.drawable.aimalogo));
+                        }else {
+                            binding.postedBy.setText(postModel.getName());
+                            if (postModel.getType() != null){
+                                binding.postedProfile.setText(postModel.getType() + " • " + timeAgo + " •");
+                            }else {
+                                binding.postedProfile.setText("Public Profile" + " • " + timeAgo + " •");
+                            }
+                            if (postModel.getVerified() != 0){
+                                binding.verifiedProfile.setVisibility(View.VISIBLE);
+                            }else {
+                                binding.verifiedProfile.setVisibility(View.GONE);
+                            }
+                            if (postModel.getUser_image() != null && !activity.isDestroyed()){
+                                Glide.with(activity.getApplicationContext())
+                                        .load(postModel.getUser_image())
+                                        .placeholder(activity.getDrawable(R.drawable.profileplaceholder))
+                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                        .override(50, 50)
+                                        .priority(Priority.HIGH)
+                                        .into(binding.uploaderProfileImage);
+                            }
+                        }
+
+
+                        if (postModel.getCaption() != null && !postModel.getCaption().isEmpty()) {
+                            String fullCaption = postModel.getCaption();
+                            String displayText;
+                            if (fullCaption.length() > maxLength) {
+                                String truncatedText = fullCaption.substring(0, maxLength);
+                                int lastNewLineIndex = truncatedText.lastIndexOf('\n');
+                                if (lastNewLineIndex != -1) {
+                                    displayText = truncatedText.substring(0, lastNewLineIndex) + "... Read more";
+                                } else {
+                                    displayText = truncatedText + "... Read more";
+                                }
+                            } else {
+                                displayText = fullCaption;
+                            }
+
+                            SpannableString spannableString = TextUtils.applySpannable(activity, displayText, fullCaption, binding.uploaderCaption);
+                            binding.uploaderCaption.setText(spannableString);
+                            binding.uploaderCaption.setMovementMethod(LinkMovementMethod.getInstance());
+                            binding.uploaderCaption.setHighlightColor(Color.TRANSPARENT);
+                        } else {
+                            binding.uploaderCaption.setVisibility(View.GONE);
+                        }
+
+
                         binding.spinKit.setVisibility(View.GONE);
 
 
-                        //getting all data about uploader!
-                        getUserDetails(postModel.getUploader(), postModel.getTime());
+
 
 
                         //get already liked or not?
                         database.getReference().child("likes")
-                                .child(documentSnapshot.getId())
+                                .child(postModel.getId())
                                 .child(auth.getCurrentUser().getUid())
                                 .addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
@@ -212,6 +303,9 @@ public class See_Post extends AppCompatActivity {
                                             if (like){
                                                 binding.discoverLike.setLiked(true);
                                                 binding.likeText.setText("Liked");
+                                            }else {
+                                                binding.discoverLike.setLiked(false);
+                                                binding.likeText.setText("Like");
                                             }
                                         }
                                     }
@@ -222,36 +316,31 @@ public class See_Post extends AppCompatActivity {
                                     }
                                 });
 
-
-                        //get like workings
-                        LikeMethod(documentSnapshot.getId(), postModel.getUploader());
-
-
                         //sharing
                         binding.share01.setOnClickListener(c->{
                             Toast.makeText(See_Post.this, "loading request...", Toast.LENGTH_SHORT).show();
                             binding.discoverShare.performClick();
                             Intent sharingIntent = new Intent(Intent.ACTION_SEND);
                             sharingIntent.setType("text/html");
-                            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT,
-                                    "This post is shared from AIMA App. Check using app only ! \n\n" +
-                                            " link: https://i.aima.post/" + documentSnapshot.getId());
+                            sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, Helper.generateShareText(postId));
                             if (sharingIntent.resolveActivity(getPackageManager()) != null) {
                                 startActivity(Intent.createChooser(sharingIntent,"Share using"));
                             }
 
                         });
+                    }else {
+                        Helper.showAlertNoAction(See_Post.this, "Failed",
+                                singlePostData.getMessage(), "Okay");
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(See_Post.this, "post not exist !", Toast.LENGTH_SHORT).show();
-                        binding.spinKit.setVisibility(View.GONE);
-                    }
-                });
+                }
+            }
 
-
-
+            @Override
+            public void onFailure(Call<SinglePostData> call, Throwable t) {
+                Helper.showAlertNoAction(See_Post.this, "Error 404",
+                        t.getLocalizedMessage(), "Okay");
+            }
+        });
 
         binding.postedImage.setOnClickListener(v->{
             binding.container.performClick();
@@ -293,7 +382,7 @@ public class See_Post extends AppCompatActivity {
         });
     }
 
-    private void LikeMethod(String postId, String uploader) {
+    private void LikeMethod(PostResponse.PostData postModel) {
         binding.like01.setOnClickListener(c->{
             binding.discoverLike.performClick();
         });
@@ -302,31 +391,29 @@ public class See_Post extends AppCompatActivity {
             @Override
             public void liked(LikeButton likeButton) {
                 binding.discoverLike.setEnabled(false);
-                int k = Integer.parseInt(binding.likeTextCount.getText().toString()) + 1;
-                binding.likeTextCount.setText(k+"");
+                int k = postModel.getLikesCount() + 1;
+                binding.likeTextCount.setText(String.valueOf(k));
+
                 database.getReference().child("likes")
-                        .child(postId)
+                        .child(postModel.getId())
                         .child(auth.getCurrentUser().getUid())
                         .setValue(true).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
-                                firebaseFirestore.collection("post")
-                                        .document(postId)
-                                        .update("likesCount", FieldValue.increment(1))
-                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                    @Override
-                                                    public void onSuccess(Void unused) {
-                                                        NotificationModel notificationModel = new NotificationModel(auth.getCurrentUser().getUid(),
-                                                                "like", postId, new Date().getTime(), false);
-                                                        database.getReference().child("notification")
-                                                                .child(uploader)
-                                                                .push()
-                                                                .setValue(notificationModel);
+                                Call<ApiResponse> call = apiService.updatePostField(
+                                        "updatePostField", postModel.getId(), "likesCount", String.valueOf(1)
+                                );
 
-                                                        binding.likeText.setText("liked");
-                                                        binding.discoverLike.setEnabled(true);
-                                                    }
-                                                });
+                                NotificationModel notificationModel = new NotificationModel(auth.getCurrentUser().getUid(),
+                                        "like", postModel.getId(), new Date().getTime(), false);
+                                database.getReference().child("notification")
+                                        .child(postModel.getUploader()).push().setValue(notificationModel);
+                                if (postModel.getToken() != null && !postModel.getToken().isEmpty() &&
+                                        !postModel.getToken().equalsIgnoreCase("NA")){
+                                    MainActivity.sendNotification(postModel.getToken(), "Post Liked",
+                                            "Someone liked your post!");
+                                }
+                                startCall(call, true);
                             }
                         });
             }
@@ -334,74 +421,99 @@ public class See_Post extends AppCompatActivity {
             @Override
             public void unLiked(LikeButton likeButton) {
                 binding.discoverLike.setEnabled(false);
-                int k = Integer.parseInt(binding.likeTextCount.getText().toString()) - 1;
-                binding.likeTextCount.setText(k+"");
+                int k = postModel.getLikesCount() - 1;
+                binding.likeTextCount.setText(String.valueOf(k));
+
                 database.getReference().child("likes")
-                        .child(postId)
+                        .child(postModel.getId())
                         .child(auth.getCurrentUser().getUid())
                         .removeValue()
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
-                                firebaseFirestore.collection("post")
-                                        .document(postId)
-                                        .update("likesCount", FieldValue.increment(-1));
-
-                                binding.likeText.setText("like");
-                                binding.discoverLike.setEnabled(true);
+                                Call<ApiResponse> call = apiService.updatePostField(
+                                        "updatePostField", postModel.getId(), "likesCount", String.valueOf(-1)
+                                );
+                                startCall(call, true);
                             }
                         });
             }
         });
     }
 
-    private void getUserDetails(String uploader, long timestamp) {
+    public void startCall(Call<ApiResponse> call, boolean liked) {
+        if (liked){
+            binding.likeText.setText("liked");
+            binding.discoverLike.setEnabled(true);
+        }else {
+            binding.likeText.setText("like");
+            binding.discoverLike.setEnabled(true);
+        }
 
-        database.getReference().child("users")
-                .child(uploader)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()){
-                            UserModel userModel = snapshot.getValue(UserModel.class);
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
 
-                            String timeAgo = TimeAgo.using(timestamp);
-                            binding.postedBy.setText(userModel.getName());
+            }
 
-                            if (userModel.isVerified()){
-                                binding.verifiedProfile.setVisibility(View.VISIBLE);
-                            }
-                            if (userModel.getType() != null){
-                                binding.postedProfile.setText(userModel.getType() + " • " + timeAgo + " •");
-                            }else {
-                                binding.postedProfile.setText("Public Profile" + " • " + timeAgo + " •");
-                            }
-                            if (userModel.getImage() != null && !activity.isDestroyed()){
-                                Glide.with(getApplicationContext())
-                                                .load(userModel.getImage())
-                                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                                                        .placeholder(getDrawable(R.drawable.placeholder))
-                                                                .into(binding.uploaderProfileImage);
-                            }
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
 
-                            binding.seePostProfile.setOnClickListener(c->{
-                                if (!snapshot.getKey().equalsIgnoreCase("admin")){
-                                    Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
-                                    i.putExtra("profileId", snapshot.getKey());
-                                    startActivity(i);
-                                }else {
-                                    Toast.makeText(activity, "not possible...", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
+            }
+        });
     }
+
+//    private void getUserDetails(String uploader) {
+//
+//        Call<UserDetails> call = apiService.getUserDetails(
+//                "getUserDetails", uploader
+//        );
+//
+//        call.enqueue(new Callback<UserDetails>() {
+//            @Override
+//            public void onResponse(Call<UserDetails> call, Response<UserDetails> response) {
+//                if (response.isSuccessful() && response.body() != null){
+//                    UserDetails apiResponse = response.body();
+//                    if (apiResponse.getStatus().equalsIgnoreCase("success")){
+//                        UserModel userModel = apiResponse.getData();
+//
+//                        //String timeAgo = TimeAgo.using(timestamp);
+//                        binding.postedBy.setText(userModel.getName());
+//                        //binding.postedProfile.setText(userModel.getType() + " • " + timeAgo + " •");
+//
+//                        if (userModel.getVerified() != 0){
+//                            binding.verifiedProfile.setVisibility(View.VISIBLE);
+//                        }else {
+//                            binding.verifiedProfile.setVisibility(View.GONE);
+//                        }
+//
+//                        if (userModel.getImage() != null && !activity.isDestroyed() &&
+//                                !userModel.getImage().isEmpty()){
+//                            Glide.with(getApplicationContext())
+//                                    .load(userModel.getImage())
+//                                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+//                                    .placeholder(getDrawable(R.drawable.placeholder))
+//                                    .into(binding.uploaderProfileImage);
+//                        }
+//
+//                        binding.seePostProfile.setOnClickListener(c->{
+//                            if (!userModel.getUserId().equalsIgnoreCase("admin")){
+//                                Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+//                                i.putExtra("profileId", userModel.getUserId());
+//                                startActivity(i);
+//                            }else {
+//                                Toast.makeText(activity, "not possible...", Toast.LENGTH_SHORT).show();
+//                            }
+//                        });
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<UserDetails> call, Throwable t) {
+//            }
+//        });
+//    }
 
     public String extractLink (Uri link){
 

@@ -11,11 +11,12 @@
     <LinearLayout
         android:id="@+id/linearLayout9"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="8dp"
+        android:padding="@dimen/_10mdp"
+        android:elevation="@dimen/_1mdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -24,55 +25,53 @@
             android:id="@+id/profileDashboard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/_5mdp"
+            android:layout_weight="1"
             android:drawableLeft="@drawable/back_24"
             android:drawablePadding="@dimen/_8mdp"
             android:drawableTint="@color/black"
-            android:fontFamily="@font/signika_negative_bold"
-            android:text="Post"
+            android:fontFamily="@font/manrope_extrabold"
+            android:text="Share Something"
             android:textColor="@color/black"
-            android:textSize="20sp"
+            android:textSize="@dimen/_14font_mdp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/postBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/react_background"
+            android:paddingTop="@dimen/_4mdp"
+            android:paddingBottom="@dimen/_4mdp"
+            android:paddingStart="@dimen/_10mdp"
+            android:paddingEnd="@dimen/_10mdp"
+            android:text="POST"
+            android:enabled="false"
+            android:fontFamily="@font/manrope_medium"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_11font_mdp"
+            app:layout_constraintBottom_toBottomOf="@+id/linearLayout9"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/linearLayout9" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/postBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/_20mdp"
-        android:background="@drawable/button_already_followd"
-        android:paddingTop="@dimen/_5mdp"
-        android:paddingBottom="@dimen/_5mdp"
-        android:paddingStart="@dimen/_10mdp"
-        android:paddingEnd="@dimen/_10mdp"
-        android:text="POST"
-        android:enabled="false"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayout9"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/linearLayout9" />
-
 
     <LinearLayout
         android:id="@+id/linearLayout10"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="10dp"
+        android:padding="@dimen/_10mdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout9">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/uploader_image"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="@dimen/_35mdp"
+            android:layout_height="@dimen/_35mdp"
             android:layout_gravity="center"
-            android:src="@drawable/placeholder"
-            app:civ_border_color="@color/darkGray"
+            android:src="@drawable/profileplaceholder"
+            app:civ_border_color="@color/backgroundBottomColour"
             app:civ_border_width="1dp" />
 
         <LinearLayout
@@ -82,14 +81,28 @@
             android:layout_marginStart="10dp"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/uploader_Name"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAllCaps="true"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:layout_weight="1"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/uploader_Name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:text="Name"
+                    android:fontFamily="@font/manrope_bold"
+                    android:textSize="@dimen/_11font_mdp"
+                    android:textStyle="bold" />
+                <ImageView
+                    android:id="@+id/verifiedProfile"
+                    android:layout_width="@dimen/_16mdp"
+                    android:layout_height="@dimen/_16mdp"
+                    android:layout_marginStart="2dp"
+                    android:src="@drawable/verified"
+                    android:visibility="gone" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -100,13 +113,17 @@
                     android:id="@+id/uploader_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:fontFamily="@font/manrope_medium"
+                    android:textSize="@dimen/_11font_mdp" />
 
                 <TextView
                     android:id="@+id/textCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="" />
+                    android:text=""
+                    android:fontFamily="@font/manrope_medium"
+                    android:textSize="@dimen/_11font_mdp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -116,29 +133,28 @@
         android:id="@+id/uploadContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_10mdp"
+        android:layout_marginEnd="@dimen/_10mdp"
+        android:elevation="@dimen/_1mdp"
+        android:fontFamily="@font/manrope_medium"
         android:background="@drawable/background_linear"
         android:editable="true"
         android:enabled="true"
         android:focusable="true"
         android:gravity="top"
-        android:layout_marginStart="@dimen/_5mdp"
-        android:layout_marginEnd="@dimen/_5mdp"
         android:hint="Write Something Here"
         android:inputType="textMultiLine"
         android:isScrollContainer="true"
         android:maxLength="2500"
         android:maxLines="8"
         android:minLines="5"
-        android:paddingTop="@dimen/_20mdp"
-        android:paddingStart="@dimen/_10mdp"
-        android:paddingEnd="@dimen/_10mdp"
-        android:paddingBottom="@dimen/_10mdp"
+        android:padding="@dimen/_10mdp"
         android:scrollbars="vertical"
         android:textColor="@color/black"
+        android:textSize="@dimen/_11font_mdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout10" />
-
 
     <LinearLayout
         android:id="@+id/linearLayout15"
@@ -176,7 +192,6 @@
         android:id="@+id/linearLayout14"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_10mdp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -186,34 +201,42 @@
             android:id="@+id/uploadImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="@dimen/_5mdp"
+            android:padding="@dimen/_5mdp"
             android:background="@color/white"
-            android:orientation="horizontal"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp">
+            android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="@dimen/_20mdp"
+                android:layout_height="@dimen/_20mdp"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
+                android:scaleType="centerCrop"
                 android:src="@drawable/imageicon" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:layout_marginStart="@dimen/_10mdp"
                 android:layout_weight="1"
+                android:padding="@dimen/_5mdp"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/P_Phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="Upload Images (1024 x 557)"
+                    android:fontFamily="@font/manrope_bold"
+                    android:text="Upload Images"
                     android:textColor="@color/black"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/_11font_mdp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/manrope_medium"
+                    android:text="Share something for all"
+                    android:textSize="@dimen/_10font_mdp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -227,33 +250,42 @@
             android:id="@+id/uploadVideo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="@dimen/_5mdp"
+            android:padding="@dimen/_5mdp"
             android:background="@color/white"
-            android:orientation="horizontal"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp">
+            android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="@dimen/_20mdp"
+                android:layout_height="@dimen/_20mdp"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
+                android:scaleType="centerCrop"
                 android:src="@drawable/videosicon" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:layout_marginStart="@dimen/_10mdp"
                 android:layout_weight="1"
+                android:padding="@dimen/_5mdp"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:fontFamily="@font/manrope_bold"
                     android:text="Upload Videos"
                     android:textColor="@color/black"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/_11font_mdp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/manrope_medium"
+                    android:text="We only support YouTube link"
+                    android:textSize="@dimen/_10font_mdp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -271,30 +303,39 @@
             android:layout_marginBottom="10dp"
             android:background="@color/white"
             android:orientation="horizontal"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp">
+            android:padding="@dimen/_5mdp">
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="@dimen/_20mdp"
+                android:layout_height="@dimen/_20mdp"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
+                android:scaleType="centerCrop"
                 android:src="@drawable/shortsicon" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:layout_marginStart="@dimen/_10mdp"
                 android:layout_weight="1"
+                android:padding="@dimen/_5mdp"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+                    android:fontFamily="@font/manrope_bold"
                     android:text="Upload Shorts"
                     android:textColor="@color/black"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/_11font_mdp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/manrope_medium"
+                    android:text="We only support YouTube link"
+                    android:textSize="@dimen/_10font_mdp" />
             </LinearLayout>
         </LinearLayout>
 

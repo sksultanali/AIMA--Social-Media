@@ -10,16 +10,17 @@
         android:name="android.hardware.telephony"
         android:required="false" />
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-<!--    <uses-sdk android:targetSdkVersion="35" android:minSdkVersion="26"-->
-<!--        tools:overrideLibrary="com.razorpay"/>-->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
@@ -33,6 +34,36 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AIMA"
         tools:targetApi="31">
+        <activity
+            android:name=".Activities.CheckMapActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.MembershipApplication"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.SearchResults"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.SearchActivity2"
+            android:exported="false" />
+        <activity
+            android:name=".Activities.MyPostActivity"
+            android:exported="false" />
+
+        <service
+            android:name=".Notifications.FirebaseMessagingService"
+            android:exported="true"
+            android:permission="TODO"
+            tools:ignore="ExportedService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCPX1Nv9DdjtO4Ls6bCsJTpGwg3_LMoT2o" />
+
         <activity
             android:name=".HomeBottomBar.AimaGallery"
             android:exported="false" />
@@ -159,6 +190,7 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <data
                     android:host="rzp.io"
                     android:scheme="io.rzp" />
@@ -176,12 +208,12 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:scheme="https"/>
-                <data android:host="alpha.jitsi.net"/>
-                <data android:scheme="https"/>
-                <data android:host="beta.meet.jit.si"/>
-                <data android:scheme="https"/>
-                <data android:host="meet.jit.si"/>
+                <data android:scheme="https" />
+                <data android:host="alpha.jitsi.net" />
+                <data android:scheme="https" />
+                <data android:host="beta.meet.jit.si" />
+                <data android:scheme="https" />
+                <data android:host="meet.jit.si" />
             </intent-filter>
 
             <meta-data
@@ -201,23 +233,18 @@
         </service>
         <service
             android:name=".JitsiMeetOngoingConferenceService"
-            android:exported="false" />
-
-<!--        <activity-->
-<!--            android:name=".SplashScreen"-->
-<!--            android:exported="true"-->
-<!--            android:theme="@style/Theme.Splash.AIMA">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
-
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
-
-<!--            <meta-data-->
-<!--                android:name="android.app.lib_name"-->
-<!--                android:value="" />-->
-<!--        </activity>-->
-
+            android:exported="false" /> <!-- <activity -->
+        <!-- android:name=".SplashScreen" -->
+        <!-- android:exported="true" -->
+        <!-- android:theme="@style/Theme.Splash.AIMA"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.MAIN" /> -->
+        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+        <!-- </intent-filter> -->
+        <!-- <meta-data -->
+        <!-- android:name="android.app.lib_name" -->
+        <!-- android:value="" /> -->
+        <!-- </activity> -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.developerali.aima.provider"

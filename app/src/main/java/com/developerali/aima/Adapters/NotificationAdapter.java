@@ -16,6 +16,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.developerali.aima.Activities.Comments_Post;
 import com.developerali.aima.Activities.ProfileActivity;
 import com.developerali.aima.Activities.See_Post;
+import com.developerali.aima.Helpers.Helper;
+import com.developerali.aima.Model_Apis.ApiService;
+import com.developerali.aima.Model_Apis.RetrofitClient;
+import com.developerali.aima.Model_Apis.UserDetails;
 import com.developerali.aima.Models.NotificationModel;
 import com.developerali.aima.Models.UserModel;
 import com.developerali.aima.R;
@@ -30,16 +34,22 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.viewHolder>{
 
     ArrayList<NotificationModel> models;
     Activity activity;
     FirebaseDatabase database;
     FirebaseAuth auth;
+    ApiService apiService;
 
     public NotificationAdapter(ArrayList<NotificationModel> models, Activity activity) {
         this.models = models;
         this.activity = activity;
+        apiService = RetrofitClient.getClient().create(ApiService.class);
     }
 
     @NonNull
@@ -67,49 +77,54 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
                     + " • ") + notificationModel.getType());
         }
 
-        database.getReference().child("users")
-                .child(notificationModel.getNotifyBy())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()){
-                            UserModel userModel = snapshot.getValue(UserModel.class);
-                            if (userModel != null){
-                                if (userModel.getImage() != null && !activity.isDestroyed()){
-                                    Glide.with(activity.getApplicationContext())
-                                            .load(userModel.getImage())
-                                            .skipMemoryCache(true)
-                                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                                            .placeholder(activity.getDrawable(R.drawable.profileplaceholder))
-                                            .into(holder.binding.notificationImage);
-                                }
-                                String timeAgo = TimeAgo.using(notificationModel.getNotifyAt());
 
-                                if (notificationModel.getType().equalsIgnoreCase("like")){
-                                    holder.binding.notificationType.setText(Html.fromHtml("<b>" + userModel.getName() + "</b>"
-                                            + " • " + timeAgo
-                                            + " •  liked on your post."));
+        Call<UserDetails> call = apiService.getUserDetails(
+                "getUserDetails", notificationModel.getNotifyBy()
+        );
+
+        call.enqueue(new Callback<UserDetails>() {
+            @Override
+            public void onResponse(Call<UserDetails> call, Response<UserDetails> response) {
+                if (response.isSuccessful() && response.body() != null){
+                    UserDetails apiResponse = response.body();
+                    if (apiResponse.getStatus().equalsIgnoreCase("success")){
+                        UserModel userModel = apiResponse.getData();
+                        if (userModel != null){
+                            if (userModel.getImage() != null && !activity.isDestroyed()){
+                                Glide.with(activity.getApplicationContext())
+                                        .load(userModel.getImage())
+                                        .skipMemoryCache(true)
+                                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                                        .placeholder(activity.getDrawable(R.drawable.profileplaceholder))
+                                        .into(holder.binding.notificationImage);
+                            }
+                            String timeAgo = TimeAgo.using(notificationModel.getNotifyAt());
+
+                            if (notificationModel.getType().equalsIgnoreCase("like")){
+                                holder.binding.notificationType.setText(Html.fromHtml("<b>" + userModel.getName() + "</b>"
+                                        + " • " + timeAgo
+                                        + " •  liked on your post."));
 
 
-                                }else if (notificationModel.getType().equalsIgnoreCase("comment")){
-                                    holder.binding.notificationType.setText(Html.fromHtml("<b>" + userModel.getName() + "</b>"
-                                            + " • " + timeAgo
-                                            + " • commented on your post."));
-                                }else if (notificationModel.getType().equalsIgnoreCase("follow")){
+                            }else if (notificationModel.getType().equalsIgnoreCase("comment")){
+                                holder.binding.notificationType.setText(Html.fromHtml("<b>" + userModel.getName() + "</b>"
+                                        + " • " + timeAgo
+                                        + " • commented on your post."));
+                            }else if (notificationModel.getType().equalsIgnoreCase("follow")){
 
-                                    holder.binding.notificationType.setText(Html.fromHtml("<b>" + userModel.getName() + "</b>" + " • "
-                                            + timeAgo
-                                            + " • followed your profile. See profile"));
-                                }
+                                holder.binding.notificationType.setText(Html.fromHtml("<b>" + userModel.getName() + "</b>" + " • "
+                                        + timeAgo
+                                        + " • followed your profile. See profile"));
                             }
                         }
                     }
+                }
+            }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
+            @Override
+            public void onFailure(Call<UserDetails> call, Throwable t) {
+            }
+        });
 
         holder.itemView.setOnClickListener(v->{
             database.getReference().child("notification")

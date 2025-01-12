@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.developerali.aima.Activities.See_Post;
+import com.developerali.aima.Model_Apis.PostResponse;
 import com.developerali.aima.Models.PostModel;
 import com.developerali.aima.R;
 import com.developerali.aima.databinding.ItemPostProfileBinding;
@@ -27,10 +28,10 @@ import java.util.ArrayList;
 
 public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.viewHolder>{
 
-    ArrayList<PostModel> postModels;
+    ArrayList<PostResponse.PostData> postModels;
     Activity activity;
 
-    public ProfilePostAdapter(ArrayList<PostModel> postModels, Activity activity) {
+    public ProfilePostAdapter(ArrayList<PostResponse.PostData> postModels, Activity activity) {
         this.postModels = postModels;
         this.activity = activity;
     }
@@ -44,7 +45,7 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, @SuppressLint("RecyclerView") int position) {
-        PostModel postModel = postModels.get(position);
+        PostResponse.PostData postModel = postModels.get(position);
         if (postModel.getImage() != null && !activity.isDestroyed()){
             Glide.with(activity.getApplicationContext())
                     .load(postModel.getImage())

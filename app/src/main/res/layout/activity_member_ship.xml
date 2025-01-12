@@ -30,14 +30,13 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 app:tint="@color/backgroundBottomColour"
-                android:layout_marginEnd="@dimen/_5mdp"
                 android:src="@drawable/back_24"/>
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/memberProfile"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_marginStart="5dp"
+                android:layout_width="@dimen/_35mdp"
+                android:layout_height="@dimen/_35mdp"
+                android:layout_marginStart="@dimen/_10mdp"
                 android:contentDescription="@string/imagelogo"
                 android:src="@drawable/profileplaceholder"
                 app:civ_border_color="@color/main_light_yellow"
@@ -59,24 +58,34 @@
                         android:id="@+id/profile_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/manrope_extrabold"
                         android:textStyle="bold"
+                        android:text="Name"
                         android:textColor="@color/backgroundBottomColour"
-                        android:textSize="18sp" />
+                        android:textSize="@dimen/_14font_mdp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/profile_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Public Profile"
+                        android:fontFamily="@font/manrope_medium"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_10font_mdp"/>
                     <ImageView
                         android:id="@+id/verifiedProfile"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="@dimen/_16mdp"
+                        android:layout_height="@dimen/_16mdp"
                         android:layout_marginStart="2dp"
                         android:src="@drawable/verified"
                         android:visibility="gone" />
                 </LinearLayout>
-
-                <TextView
-                    android:id="@+id/profile_type"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/backgroundBottomColour"
-                    android:textSize="15sp" />
             </LinearLayout>
 
             <ImageView
@@ -110,8 +119,8 @@
         android:id="@+id/easyFlipView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_160mdp"
-        android:layout_marginStart="@dimen/_20mdp"
-        android:layout_marginEnd="@dimen/_20mdp"
+        android:layout_marginStart="@dimen/_10mdp"
+        android:layout_marginEnd="@dimen/_10mdp"
         android:layout_marginTop="@dimen/_15mdp"
         android:background="@drawable/background_white_linear"
         android:orientation="vertical"
@@ -119,93 +128,104 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout3" />
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/frontCard"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_150mdp"
-        android:layout_marginStart="@dimen/_25mdp"
-        android:layout_marginEnd="@dimen/_25mdp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:orientation="vertical"
         android:visibility="gone"
-        android:background="@drawable/frontcard"
-        android:gravity="center_vertical|center_horizontal"
+        android:background="@drawable/front_member_card_back"
         app:layout_constraintBottom_toBottomOf="@+id/easyFlipView"
         app:layout_constraintEnd_toEndOf="@+id/easyFlipView"
         app:layout_constraintStart_toStartOf="@+id/easyFlipView"
         app:layout_constraintTop_toTopOf="@+id/easyFlipView">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="@dimen/_10mdp"
-            android:textColor="@color/countBackgroundColour"
-            android:text="ALL INDIA MINORITY ASSOCIATION"/>
-
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha=".3"
+            android:scaleType="fitXY"
+            android:src="@drawable/frontcard"/>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="@dimen/_10mdp"
-            android:paddingEnd="@dimen/_10mdp"
-            android:paddingTop="@dimen/_5mdp"
-            android:paddingBottom="@dimen/_5mdp"
-            android:orientation="horizontal">
-            <ImageView
-                android:id="@+id/imageOnCard"
-                android:layout_width="@dimen/_55mdp"
-                android:layout_height="@dimen/_65mdp"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/profileplaceholder"/>
-            <LinearLayout
+            android:layout_height="match_parent"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="vertical">
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="@dimen/_10mdp"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/uidNo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:text="UID: E- 123-123-546"/>
-                <TextView
-                    android:id="@+id/nameOnCard"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:textColor="@color/black"
-                    android:text="Name: SK SULTAN ALI"/>
-                <TextView
-                    android:id="@+id/dob"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:textColor="@color/black"
-                    android:text="DOB: 14-01-2003"/>
-                <TextView
-                    android:id="@+id/valid"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="12sp"
-                    android:textColor="@color/black"
-                    android:text="Valid Upto: 21-02-2030"/>
+                android:textSize="@dimen/_12font_mdp"
+                android:textStyle="bold"
+                android:layout_marginBottom="@dimen/_10mdp"
+                android:textColor="@color/countBackgroundColour"
+                android:text="ALL INDIA MINORITY ASSOCIATION"/>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/_5mdp"
+                android:paddingBottom="@dimen/_5mdp"
+                android:weightSum="5"
+                android:orientation="horizontal">
+                <ImageView
+                    android:id="@+id/imageOnCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_45mdp"
+                    android:layout_weight="2"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/profileplaceholder"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="@dimen/_5mdp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/uidNo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="UID: E- 123-123-546"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_11font_mdp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/nameOnCard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Name: SK SULTAN ALI"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_11font_mdp" />
+
+                    <TextView
+                        android:id="@+id/dob"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="DOB: 14-01-2003"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_11font_mdp" />
+
+                    <TextView
+                        android:id="@+id/valid"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Valid Upto: 21-02-2030"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/_11font_mdp" />
+
+                </LinearLayout>
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_30mdp"
+                    android:layout_weight="2"
+                    android:src="@drawable/aimalogo"/>
             </LinearLayout>
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="@dimen/_40mdp"
-                android:layout_height="@dimen/_40mdp"
-                android:src="@drawable/aimalogo"/>
         </LinearLayout>
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <LinearLayout
         android:id="@+id/backCard"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_150mdp"
-        android:layout_marginStart="@dimen/_25mdp"
-        android:layout_marginEnd="@dimen/_25mdp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:orientation="vertical"
         android:background="@drawable/background_white_linear"
         android:visibility="gone"
@@ -223,7 +243,7 @@
             android:gravity="center"
             android:text="@string/cardBackText"
             android:textColor="@color/black"
-            android:textSize="11sp" />
+            android:textSize="@dimen/_10font_mdp" />
 
         <TextView
             android:id="@+id/cardHolderName"
@@ -234,7 +254,7 @@
             android:text="@string/loading_please_wait"
             android:textAllCaps="true"
             android:textColor="@color/black"
-            android:textSize="13sp" />
+            android:textSize="@dimen/_11font_mdp" />
 
         <TextView
             android:id="@+id/fatherName"
@@ -243,7 +263,7 @@
             android:gravity="center"
             android:text="@string/loading_please_wait"
             android:textColor="@color/black"
-            android:textSize="12sp" />
+            android:textSize="@dimen/_11font_mdp" />
 
         <TextView
             android:id="@+id/cardHolderAddress"
@@ -253,7 +273,7 @@
             android:gravity="center"
             android:text="@string/cardBackText"
             android:textColor="@color/black"
-            android:textSize="12sp" />
+            android:textSize="@dimen/_11font_mdp" />
     </LinearLayout>
 
     <com.airbnb.lottie.LottieAnimationView
@@ -268,7 +288,6 @@
         app:layout_constraintEnd_toEndOf="@+id/easyFlipView"
         app:layout_constraintStart_toStartOf="@+id/easyFlipView"
         app:layout_constraintTop_toTopOf="@+id/easyFlipView"/>
-
 
     <LinearLayout
         android:id="@+id/cardView2"
@@ -290,6 +309,8 @@
             android:id="@+id/member_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/manrope_bold"
+            android:textSize="@dimen/_11font_mdp"
             android:gravity="center"
             android:textStyle="bold" />
     </LinearLayout>
@@ -312,6 +333,9 @@
             android:paddingTop="@dimen/_5mdp"
             android:paddingEnd="@dimen/_10mdp"
             android:paddingBottom="@dimen/_5mdp"
+            android:textStyle="bold"
+            android:fontFamily="@font/manrope_bold"
+            android:textSize="@dimen/_11font_mdp"
             android:text="Services For You"
             android:textColor="@color/black" />
 
@@ -374,13 +398,15 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Activate Old"
+                        android:fontFamily="@font/manrope_bold"
+                        android:text="Sync Old"
                         android:textColor="@color/white"
                         android:textStyle="bold" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/manrope_medium"
                         android:text="Membership"
                         android:textColor="@color/white"
                         android:textStyle="bold" />
@@ -426,6 +452,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/manrope_bold"
                         android:text="New Member"
                         android:textColor="@color/white"
                         android:textStyle="bold" />
@@ -433,6 +460,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/manrope_bold"
                         android:text="Form"
                         android:textColor="@color/white"
                         android:textStyle="bold" />
@@ -488,6 +516,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/manrope_bold"
                         android:text="Renew Member"
                         android:textColor="@color/white"
                         android:textStyle="bold" />
@@ -495,6 +524,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/manrope_bold"
                         android:text="Card"
                         android:textColor="@color/white"
                         android:textStyle="bold" />
@@ -539,6 +569,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/manrope_bold"
                         android:text="Raise a"
                         android:textColor="@color/white"
                         android:textStyle="bold" />
@@ -546,6 +577,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/manrope_bold"
                         android:text="Complain"
                         android:textColor="@color/white"
                         android:textStyle="bold" />
@@ -563,6 +595,7 @@
         android:layout_marginEnd="@dimen/_10mdp"
         android:background="@drawable/post_click_effect"
         android:orientation="horizontal"
+        android:visibility="gone"
         android:padding="@dimen/_10mdp"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout60">
         <TextView

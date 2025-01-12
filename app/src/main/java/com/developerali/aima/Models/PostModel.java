@@ -7,18 +7,9 @@ import androidx.annotation.NonNull;
 
 public class PostModel implements Parcelable{
 
-    String id, image, uploader, caption;
+    String id, image, uploader, caption, status;
     int likesCount, commentsCount;
-    long time;
-    boolean approved;
-
-    public PostModel(String uploader, long time) {
-        this.uploader = uploader;
-        this.time = time;
-    }
-
-    public PostModel() {
-    }
+    String time;
 
     protected PostModel(Parcel in) {
         id = in.readString();
@@ -27,8 +18,8 @@ public class PostModel implements Parcelable{
         caption = in.readString();
         likesCount = in.readInt();
         commentsCount = in.readInt();
-        time = in.readLong();
-        approved = in.readByte() != 0;
+        time = in.readString();
+        status = in.readString();
     }
 
     public static final Creator<PostModel> CREATOR = new Creator<PostModel>() {
@@ -91,20 +82,20 @@ public class PostModel implements Parcelable{
         this.commentsCount = commentsCount;
     }
 
-    public long getTime() {
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getTime() {
         return time;
     }
 
-    public void setTime(long time) {
+    public void setTime(String time) {
         this.time = time;
-    }
-
-    public boolean isApproved() {
-        return approved;
-    }
-
-    public void setApproved(boolean approved) {
-        this.approved = approved;
     }
 
     @Override
@@ -120,7 +111,7 @@ public class PostModel implements Parcelable{
         dest.writeString(caption);
         dest.writeInt(likesCount);
         dest.writeInt(commentsCount);
-        dest.writeLong(time);
-        dest.writeByte((byte) (approved ? 1 : 0));
+        dest.writeString(time);
+        dest.writeString(status);
     }
 }

@@ -26,6 +26,7 @@
     <color name="darkGray">#D5D7DC</color>
     <color name="black_shade">#A1000000</color>
     <color name="profile_black_shade">#59000000</color>
+    <color name="see_post_background">#373535</color>
     <color name="red_colour">#F44336</color>
     <color name="green_colour">#4CAF50</color>
     <color name="blue_colour">#2196F3</color>
@@ -39,4 +40,22 @@
     <color name="main_dark_green">#215733</color>
     <color name="main_light_colour">#D6D2FF</color>
 
+    <color name="transparentColor" >#00FFFFFF</color>
+    <color name="blue_purple">#3F51B5</color>
+    <color name="light_blue_purple">#96A6FF</color>
+    <color name="back_green_light">#85FF8A</color>
+    <color name="back_blue_light">#9485CAFF</color>
+
+    <color name="real_purple">#673AB7</color>
+    <color name="light_real_purple">#CBB0FD</color>
+
+    <color name="light_color1_blue">#C9C9FF</color>
+    <color name="light_green_color2">#e6fade</color>
+    <color name="light_colour_yellow">#fff8ce</color>
+    <color name="light_colour_orange">#FFDFCE</color>
+    <color name="light_red">#ffdfd6</color>
+
+    <color name="dark_icon_color">#757272</color>
+    <color name="icon_color">#97989A</color>
+    <color name="selected_date">#FFCCCCCC</color>
 </resources>

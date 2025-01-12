@@ -23,7 +23,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.developerali.aima.Adapters.CommentAdapter;
-import com.developerali.aima.CommonFeatures;
+import com.developerali.aima.Adapters.PostAdapter;
+import com.developerali.aima.Helpers.CommonFeatures;
+import com.developerali.aima.Helpers.Helper;
+import com.developerali.aima.MainActivity;
+import com.developerali.aima.Model_Apis.ApiResponse;
+import com.developerali.aima.Model_Apis.ApiService;
+import com.developerali.aima.Model_Apis.RetrofitClient;
+import com.developerali.aima.Model_Apis.UserDetails;
 import com.developerali.aima.Models.CommentModel;
 import com.developerali.aima.Models.NotificationModel;
 import com.developerali.aima.Models.UserModel;
@@ -39,9 +46,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.rpc.Help;
 
 import java.util.ArrayList;
 import java.util.Date;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Comments_Post extends AppCompatActivity {
 
@@ -53,18 +65,19 @@ public class Comments_Post extends AppCompatActivity {
     FirebaseFirestore firebaseFirestore;
     CommentAdapter adapter;
     FirebaseAuth auth;
-
-    String postId, uploader;
+    String postId, uploader, uploaderToken;
     private long startTime;
     Long totalSeconds;
     Activity activity;
     SharedPreferences sharedPreferences;
+    ApiService apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityCommentsPostBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        apiService = RetrofitClient.getClient().create(ApiService.class);
 
         CommonFeatures.lowerColour(getWindow(), getResources());
         activity = Comments_Post.this;
@@ -85,40 +98,44 @@ public class Comments_Post extends AppCompatActivity {
         progressDialog.setCanceledOnTouchOutside(false);
 
         binding.backComments.setOnClickListener(v->{
-            finish();
+            onBackPressed();
         });
-
-
-
-
 
         binding.commentInput.setOnClickListener(v->{
             showBottomBar();
         });
 
-        database.getReference().child("users").child(auth.getCurrentUser().getUid())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()){
-                            UserModel myModel = snapshot.getValue(UserModel.class);
-                            if (myModel != null && myModel.getImage() != null && !activity.isDestroyed()){
-                                Glide.with(Comments_Post.this)
-                                        .load(myModel.getImage())
-                                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                                        .placeholder(R.drawable.profileplaceholder)
-                                        .into(binding.commenterProfileImage);
-                            }
-                        }
+        Call<UserDetails> call = apiService.getUserDetails(
+                "getUserDetails", uploader
+        );
+
+        call.enqueue(new Callback<UserDetails>() {
+            @Override
+            public void onResponse(Call<UserDetails> call, Response<UserDetails> response) {
+                if (response.isSuccessful() && response.body() != null){
+                    UserDetails apiResponse = response.body();
+                    if (apiResponse.getStatus().equalsIgnoreCase("success")){
+                        uploaderToken = apiResponse.getData().getToken();
                     }
+                }
+            }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+            @Override
+            public void onFailure(Call<UserDetails> call, Throwable t) {
+            }
+        });
 
-                    }
-                });
 
-
+        if (Helper.userDetails != null){
+            if (Helper.userDetails.getImage() != null  && !Helper.userDetails.getImage().isEmpty() &&
+                    !activity.isDestroyed()){
+                Glide.with(Comments_Post.this)
+                    .load(Helper.userDetails.getImage())
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                    .placeholder(R.drawable.profileplaceholder)
+                    .into(binding.commenterProfileImage);
+            }
+        }
 
 
 
@@ -161,39 +178,35 @@ public class Comments_Post extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
-//                            database.getReference().child("posts").child(model.getId())
-//                                    .child("commentsCount")
-//                                    .setValue(model.getCommentsCount() + 1)
-//                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                        @Override
-//                                        public void onSuccess(Void unused) {
-//                                            progressDialog.dismiss();
-//                                            dialog.dismiss();
-//                                            adapter.notifyDataSetChanged();
-//                                        }
-//                                    });
+                            Call<ApiResponse> call = apiService.updatePostField(
+                                    "updatePostField", postId, "commentsCount", String.valueOf(1)
+                            );
+                            call.enqueue(new Callback<ApiResponse>() {
+                                @Override
+                                public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
 
-                            //Increase Comment Count by 1 in Firebase Firestore
-                            firebaseFirestore.collection("post")
-                                    .document(postId)
-                                    .update("commentsCount", FieldValue.increment(1))
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                }
+
+                                @Override
+                                public void onFailure(Call<ApiResponse> call, Throwable t) {
+
+                                }
+                            });
+                            NotificationModel notificationModel = new NotificationModel(auth.getCurrentUser().getUid(),
+                                    "comment", postId, new Date().getTime(), false);
+                            if (uploaderToken != null && !uploaderToken.isEmpty() &&
+                                    !uploaderToken.equalsIgnoreCase("NA")){
+                                MainActivity.sendNotification(uploaderToken, "Post Comment",
+                                        "Someone commented on your post!");
+                            }
+                            database.getReference().child("notification")
+                                    .child(uploader)
+                                    .push()
+                                    .setValue(notificationModel).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void unused) {
-
-
-                                            NotificationModel notificationModel = new NotificationModel(auth.getCurrentUser().getUid(),
-                                                    "comment", postId, new Date().getTime(), false);
-                                            database.getReference().child("notification")
-                                                    .child(uploader)
-                                                    .push()
-                                                    .setValue(notificationModel).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                        @Override
-                                                        public void onSuccess(Void unused) {
-                                                            dialog.dismiss();
-                                                            progressDialog.dismiss();
-                                                        }
-                                                    });
+                                            dialog.dismiss();
+                                            progressDialog.dismiss();
                                         }
                                     });
                         }
@@ -243,6 +256,7 @@ public class Comments_Post extends AppCompatActivity {
         // Show the dialog
         dialog.show();
     }
+
 
     public void getRefresh(){
         arrayList = new ArrayList<>();

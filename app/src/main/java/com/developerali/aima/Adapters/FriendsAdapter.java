@@ -12,6 +12,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.developerali.aima.Activities.ProfileActivity;
+import com.developerali.aima.Model_Apis.ApiService;
+import com.developerali.aima.Model_Apis.RetrofitClient;
+import com.developerali.aima.Model_Apis.UserDetails;
 import com.developerali.aima.Models.FollowModel;
 import com.developerali.aima.Models.UserModel;
 import com.developerali.aima.R;
@@ -23,16 +26,22 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.viewHolder>{
 
     ArrayList<FollowModel> models;
     Activity context;
     FirebaseDatabase database;
-
+    ApiService apiService;
+    Call<UserDetails> call;
 
     public FriendsAdapter(ArrayList<FollowModel> list, Activity context){
         this.context = context;
         this.models = list;
+        apiService = RetrofitClient.getClient().create(ApiService.class);
     }
 
     @NonNull
@@ -45,13 +54,16 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.viewHold
     @Override
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
         FollowModel followModel = models.get(position);
-        database = FirebaseDatabase.getInstance();
-        database.getReference().child("users").child(followModel.getFollowBy())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        UserModel userModel = snapshot.getValue(UserModel.class);
-                        if (userModel != null && userModel.getImage() != null){
+
+        call = apiService.getUserDetails("getUserDetails", followModel.getFollowBy());
+        call.enqueue(new Callback<UserDetails>() {
+            @Override
+            public void onResponse(Call<UserDetails> call, Response<UserDetails> response) {
+                if (response.isSuccessful() && response.body() != null){
+                    UserDetails userDetails = response.body();
+                    if (userDetails.getStatus().equalsIgnoreCase("success")){
+                        UserModel userModel = userDetails.getData();
+                        if (userModel.getImage() != null && !userModel.getImage().isEmpty()){
                             Glide.with(context)
                                     .load(userModel.getImage())
                                     .placeholder(context.getDrawable(R.drawable.profileplaceholder))
@@ -59,12 +71,15 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.viewHold
                                     .into(holder.binding.followerProfile);
                         }
                     }
+                }
+            }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+            @Override
+            public void onFailure(Call<UserDetails> call, Throwable t) {
 
-                    }
-                });
+            }
+        });
+
         holder.itemView.setOnClickListener(v->{
             Intent i = new Intent(context.getApplicationContext(), ProfileActivity.class);
             i.putExtra("profileId", followModel.getFollowBy());

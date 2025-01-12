@@ -84,7 +84,7 @@
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
             android:background="@drawable/back_white_gray_stroke_click_effect"
-            android:elevation="5dp"
+            android:elevation="@dimen/_1mdp"
             android:orientation="horizontal"
             android:paddingStart="@dimen/_10mdp"
             android:paddingTop="@dimen/_5mdp"

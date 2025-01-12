@@ -20,7 +20,7 @@
             android:paddingBottom="@dimen/_5mdp"
             android:paddingStart="@dimen/_10mdp"
             android:paddingEnd="@dimen/_10mdp"
-            android:text="0/2000"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="16sp"/>
         <TextView

@@ -76,7 +76,7 @@
             android:paddingStart="@dimen/_5mdp"
             android:paddingEnd="@dimen/_5mdp"
             android:paddingBottom="@dimen/_5mdp"
-            android:textColor="@color/white"
+            android:textColor="@drawable/text_colour_with_follow_btn"
             android:background="@drawable/button_follow_background"
             android:text="See All" />
     </LinearLayout>

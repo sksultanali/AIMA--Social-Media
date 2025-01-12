@@ -8,12 +8,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginStart="@dimen/_10mdp"
-        android:layout_marginEnd="@dimen/_10mdp"
-        android:paddingTop="@dimen/_5mdp"
-        android:paddingBottom="@dimen/_10mdp"
-        android:paddingStart="@dimen/_10mdp"
-        android:paddingEnd="@dimen/_10mdp"
+        android:layout_marginStart="@dimen/_15mdp"
+        android:layout_marginEnd="@dimen/_15mdp"
+        android:padding="@dimen/_10mdp"
         android:background="@drawable/react_background">
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,18 +23,19 @@
                 android:text="Donation Details"
                 android:textColor="@color/backgroundBottomColour"
                 android:textStyle="bold"
-                android:textSize="18sp"
+                android:textSize="@dimen/_12font_mdp"
                 android:layout_gravity="center_vertical"/>
         </LinearLayout>
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/_5mdp"
+            android:layout_marginTop="@dimen/_10mdp"
             android:hint="Donation Amount">
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/donateAmount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/_11font_mdp"
                 android:inputType="number"/>
         </com.google.android.material.textfield.TextInputLayout>
         <com.google.android.material.textfield.TextInputLayout
@@ -49,6 +47,7 @@
                 android:id="@+id/phoneNum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textSize="@dimen/_11font_mdp"
                 android:inputType="number"/>
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -58,8 +57,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginTop="@dimen/_15mdp"
-            android:paddingTop="5dp"
             android:layout_gravity="center"
+            android:paddingTop="5dp"
             android:paddingBottom="5dp"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
@@ -68,8 +67,8 @@
                 android:id="@+id/yesBtnText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColor="@color/white"
-                android:textSize="16sp"
+                android:textColor="@drawable/text_colour_with_follow_btn"
+                android:textSize="@dimen/_11font_mdp"
                 android:text="Donate"/>
         </LinearLayout>
     </LinearLayout>

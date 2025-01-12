@@ -2,27 +2,38 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:gravity="center"
+    android:background="@color/white"
     android:padding="@dimen/_10mdp">
 
     <ImageView
-        android:layout_width="@dimen/_18mdp"
-        android:layout_height="@dimen/_18mdp"
+        android:layout_width="@dimen/_20mdp"
+        android:layout_height="@dimen/_20mdp"
+        app:tint="@color/icon_color"
         android:src="@drawable/history_24"/>
-    <TextView
-        android:id="@+id/searchText"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/_14font_mdp"
         android:layout_weight="1"
-        android:layout_marginStart="@dimen/_5mdp"
-        android:text="@string/search_history"
-        android:singleLine="true"/>
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/searchText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_12font_mdp"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/_5mdp"
+            android:text="@string/search_history"
+            android:singleLine="true"/>
+    </LinearLayout>
+
     <ImageView
         android:id="@+id/closeBtn"
-        android:layout_width="@dimen/_18mdp"
-        android:layout_height="@dimen/_18mdp"
+        android:layout_width="@dimen/_20mdp"
+        android:layout_height="@dimen/_20mdp"
         android:layout_marginStart="@dimen/_5mdp"
+        app:tint="@color/icon_color"
         android:src="@drawable/close_24"/>
 </LinearLayout>

@@ -4,17 +4,17 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.developerali.aima.Helpers.Helper;
 import com.developerali.aima.MainActivity;
 import com.developerali.aima.Model_Apis.ApiResponse;
 import com.developerali.aima.Model_Apis.ApiService;
-import com.developerali.aima.Models.UserModel;
+import com.developerali.aima.Model_Apis.RetrofitClient;
 import com.developerali.aima.databinding.ActivitySignUpBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -49,6 +49,7 @@ public class SignUp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivitySignUpBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        apiService = RetrofitClient.getClient().create(ApiService.class);
 
         storage = FirebaseStorage.getInstance();
         database = FirebaseDatabase.getInstance();
@@ -140,12 +141,19 @@ public class SignUp extends AppCompatActivity {
         insertData.enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                dialog.setMessage("all set..!");
                 dialog.dismiss();
                 if (response.isSuccessful()){
-                    Intent i = new Intent(SignUp.this, MainActivity.class);
-                    startActivity(i);
-                    dialog.dismiss();
-                    finish();
+                    ApiResponse response1 = response.body();
+                    if (response1.getStatus().equalsIgnoreCase("success")){
+                        Intent i = new Intent(SignUp.this, MainActivity.class);
+                        startActivity(i);
+                        dialog.dismiss();
+                        finish();
+                    }else {
+                        Helper.showAlertNoAction(SignUp.this, "Failed",
+                                response1.getMessage(), "Okay");
+                    }
                 }else {
                     Toast.makeText(SignUp.this, response.message(), Toast.LENGTH_SHORT).show();
                 }
@@ -179,7 +187,8 @@ public class SignUp extends AppCompatActivity {
     }
 
     public void imageUpload(Uri imgData, String name, String email, String password){
-        Toast.makeText(this, "uploading", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "profile picture uploading...", Toast.LENGTH_SHORT).show();
+        dialog.setMessage("profile picture uploading...");
         String key = database.getReference().push().getKey();
         StorageReference reference = storage.getReference().child("profiles").child(key);
         reference.putFile(imgData).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
@@ -191,7 +200,8 @@ public class SignUp extends AppCompatActivity {
                         public void onSuccess(Uri uri) {
                             imageUrl = uri.toString();
                             signUpNow(imageUrl, email, password, name);
-                            Toast.makeText(SignUp.this, "uploaded success", Toast.LENGTH_SHORT).show();
+                            dialog.setMessage("creating you account...");
+                            //Toast.makeText(SignUp.this, "uploaded success", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -207,7 +217,8 @@ public class SignUp extends AppCompatActivity {
     }
 
     public void signUpNow(String image, String email, String password, String name) {
-        Toast.makeText(this, "signing up", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "signing up", Toast.LENGTH_SHORT).show();
+        //setMessage("profile picture uploading...");
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -222,7 +233,7 @@ public class SignUp extends AppCompatActivity {
                             token,
                             image
                     );
-
+                    dialog.setMessage("wait more few seconds...");
                     storeUserData(insertData);
                 }
             }

@@ -3,15 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="10dp"
+    android:padding="@dimen/_10mdp"
+    android:gravity="center"
+    android:elevation="@dimen/_1mdp"
     android:background="@color/white"
-    android:layout_marginTop="10dp"
+    android:layout_marginTop="@dimen/_5mdp"
     android:orientation="horizontal">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/followProfile"
-        android:layout_width="@dimen/_50mdp"
-        android:layout_height="@dimen/_50mdp"
+        android:layout_width="@dimen/_35mdp"
+        android:layout_height="@dimen/_35mdp"
         android:layout_marginStart="5dp"
         android:contentDescription="@string/imagelogo"
         android:src="@drawable/profileplaceholder"
@@ -20,8 +22,9 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:layout_gravity="center"
         android:orientation="vertical"
         android:layout_marginStart="10dp"
@@ -29,41 +32,65 @@
         app:layout_constraintStart_toEndOf="@+id/followProfile"
         app:layout_constraintTop_toTopOf="@+id/followProfile">
 
-        <TextView
-            android:id="@+id/followName"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/profile_name"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/followName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/profile_name"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_11font_mdp" />
+            <ImageView
+                android:id="@+id/verifiedProfile"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="2dp"
+                android:src="@drawable/verified"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@+id/dashBoardName"
+                app:layout_constraintStart_toEndOf="@+id/dashBoardName"
+                app:layout_constraintTop_toTopOf="@+id/dashBoardName" />
+        </LinearLayout>
+
         <TextView
             android:id="@+id/followMemberBio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:text="@string/profile_name"
-            android:textSize="14sp" />
+            android:textSize="@dimen/_11font_mdp" />
         <TextView
             android:id="@+id/followMemberType"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/profile_name"
-            android:textSize="14sp" />
-        <TextView
-            android:id="@+id/followButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_10mdp"
-            android:paddingTop="@dimen/_5mdp"
-            android:gravity="center"
-            android:paddingBottom="@dimen/_5mdp"
-            android:textColor="@color/white"
-            android:background="@drawable/button_follow_background"
-            android:text="Follow"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="@dimen/_11font_mdp" />
     </LinearLayout>
-
-
+    <TextView
+        android:id="@+id/followButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:paddingTop="@dimen/_10mdp"
+        android:paddingBottom="@dimen/_10mdp"
+        android:textColor="@color/backgroundBottomColour"
+        android:textSize="@dimen/_11font_mdp"
+        android:text="Follow" />
+    <TextView
+        android:id="@+id/unfollowButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="@dimen/_10mdp"
+        android:paddingBottom="@dimen/_10mdp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:textSize="@dimen/_11font_mdp"
+        android:textColor="@color/backgroundBottomColour"
+        android:text="Unfollow"/>
 </LinearLayout>

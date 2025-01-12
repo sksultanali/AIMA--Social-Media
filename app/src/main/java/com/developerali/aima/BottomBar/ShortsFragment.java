@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.developerali.aima.Adapters.ShortsAdapter;
+import com.developerali.aima.Helpers.Helper;
 import com.developerali.aima.Models.shortsModel;
 import com.developerali.aima.R;
 import com.developerali.aima.databinding.FragmentShortsBinding;
@@ -38,6 +39,7 @@ public class ShortsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentShortsBinding.inflate(inflater, container, false);
+        Helper.changeStatusBarColor(getActivity(), R.color.white);
         bottomBar = getActivity().findViewById(R.id.bottomBar);
         bottomBar.setItemActiveIndex(3);
 

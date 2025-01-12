@@ -8,11 +8,11 @@ public class NotificationRequest {
     }
 
     public static class Message {
-        private String topic;
+        private String token;
         private Notification notification;
 
-        public Message(String topic, Notification notification) {
-            this.topic = topic;
+        public Message(String token, Notification notification) {
+            this.token = token;
             this.notification = notification;
         }
     }

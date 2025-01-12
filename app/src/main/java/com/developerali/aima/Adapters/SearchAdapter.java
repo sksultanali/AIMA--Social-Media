@@ -2,6 +2,7 @@ package com.developerali.aima.Adapters;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +10,11 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.developerali.aima.DB_Helper;
+import com.developerali.aima.Activities.SearchResults;
+import com.developerali.aima.Helpers.DB_Helper;
 import com.developerali.aima.Models.RecentSearchModel;
 import com.developerali.aima.R;
+import com.developerali.aima.databinding.ChildSearchKeywordBinding;
 import com.developerali.aima.databinding.LayoutSerachHistoryBinding;
 
 import java.util.ArrayList;
@@ -20,20 +23,18 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     ArrayList<RecentSearchModel> arrayList;
     Activity activity;
-    SelectedItem selectedItem;
     private final DB_Helper dbHelper;
 
-    public SearchAdapter(ArrayList<RecentSearchModel> arrayList, Activity activity, SelectedItem selectedItem) {
+    public SearchAdapter(ArrayList<RecentSearchModel> arrayList, Activity activity) {
         this.arrayList = arrayList;
         this.activity = activity;
-        this.selectedItem = selectedItem;
         dbHelper = new DB_Helper(activity);
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(activity).inflate(R.layout.layout_serach_history, parent, false);
+        View view = LayoutInflater.from(activity).inflate(R.layout.child_search_keyword, parent, false);
         return new ViewHolder(view);
     }
 
@@ -41,12 +42,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         RecentSearchModel recentSearchModel = arrayList.get(position);
-        holder.binding.searchText.setText(recentSearchModel.getSearch_query());
-        holder.binding.searchText.setOnClickListener(v->{
-            selectedItem.onShowAction(recentSearchModel);
-        });
+        holder.binding.name.setText(recentSearchModel.getSearch_query());
+        holder.binding.typeText.setText(recentSearchModel.getType());
 
-        holder.binding.closeBtn.setOnClickListener(v->{
+        holder.binding.icon.setImageDrawable(activity.getDrawable(R.drawable.history_24));
+        holder.binding.iconSearch.setImageDrawable(activity.getDrawable(R.drawable.close_24));
+
+        holder.binding.iconSearch.setOnClickListener(v->{
             dbHelper.deleteSearchQuery(recentSearchModel.getSearch_query());
             try {
                 arrayList.remove(position);
@@ -55,6 +57,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             }catch (Exception e){
 
             }
+        });
+
+        holder.itemView.setOnClickListener(v->{
+            Intent i = new Intent(activity.getApplicationContext(), SearchResults.class);
+            i.putExtra("type", recentSearchModel.getType());
+            i.putExtra("keyword", recentSearchModel.getSearch_query());
+            activity.startActivity(i);
         });
 
 
@@ -70,10 +79,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        LayoutSerachHistoryBinding binding;
+        ChildSearchKeywordBinding binding;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            binding = LayoutSerachHistoryBinding.bind(itemView);
+            binding = ChildSearchKeywordBinding.bind(itemView);
         }
     }
 }

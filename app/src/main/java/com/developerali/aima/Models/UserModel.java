@@ -7,10 +7,9 @@ import androidx.annotation.NonNull;
 
 public class UserModel implements Parcelable {
 
-    String name, email, password, image, cover, whatsapp, facebook, phone, about, bio, type, userId;
-    int follower, following, posts, stars;
-    long verifiedValid;
-    boolean verified;
+    String name, email, password, image, cover, whatsapp, facebook, phone, about, bio, type, user_id, token;
+    int follower, following, posts, stars, verified_valid;
+    int verified;
 
     public UserModel() {
     }
@@ -32,11 +31,13 @@ public class UserModel implements Parcelable {
         about = in.readString();
         bio = in.readString();
         type = in.readString();
-        userId = in.readString();
+        user_id = in.readString();
         follower = in.readInt();
         following = in.readInt();
         posts = in.readInt();
-        verified = in.readByte() != 0;
+        verified = in.readInt();
+        verified_valid = in.readInt();
+        token = in.readString();
     }
 
     public static final Creator<UserModel> CREATOR = new Creator<UserModel>() {
@@ -73,6 +74,14 @@ public class UserModel implements Parcelable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getImage() {
@@ -140,11 +149,11 @@ public class UserModel implements Parcelable {
     }
 
     public String getUserId() {
-        return userId;
+        return user_id;
     }
 
     public void setUserId(String userId) {
-        this.userId = userId;
+        this.user_id = userId;
     }
 
     public int getFollower() {
@@ -171,15 +180,27 @@ public class UserModel implements Parcelable {
         this.posts = posts;
     }
 
-    public boolean isVerified() {
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
+    public int getVerified_valid() {
+        return verified_valid;
+    }
+
+    public void setVerified_valid(int verified_valid) {
+        this.verified_valid = verified_valid;
+    }
+
+    public int getVerified() {
         return verified;
     }
 
-    public long getVerifiedValid() {
-        return verifiedValid;
-    }
-
-    public void setVerified(boolean verified) {
+    public void setVerified(int verified) {
         this.verified = verified;
     }
 
@@ -201,11 +222,13 @@ public class UserModel implements Parcelable {
         dest.writeString(about);
         dest.writeString(bio);
         dest.writeString(type);
-        dest.writeString(userId);
+        dest.writeString(user_id);
         dest.writeInt(follower);
         dest.writeInt(following);
         dest.writeInt(posts);
-        dest.writeByte((byte) (verified ? 1 : 0));
+        dest.writeInt(verified);
+        dest.writeInt(verified_valid);
+        dest.writeString(token);
     }
 
     public int getStars() {

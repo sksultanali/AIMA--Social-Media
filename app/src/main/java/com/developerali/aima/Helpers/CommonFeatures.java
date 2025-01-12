@@ -1,4 +1,4 @@
-package com.developerali.aima;
+package com.developerali.aima.Helpers;
 
 
 import android.content.Context;
@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.view.Window;
 
 import com.developerali.aima.Models.UsagesModel;
+import com.developerali.aima.R;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 

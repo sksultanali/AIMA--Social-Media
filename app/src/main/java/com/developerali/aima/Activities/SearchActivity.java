@@ -2,8 +2,6 @@ package com.developerali.aima.Activities;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -18,13 +16,12 @@ import com.developerali.aima.Adapters.FollowAdapter;
 import com.developerali.aima.Adapters.PostAdapter;
 import com.developerali.aima.Adapters.SearchAdapter;
 import com.developerali.aima.Adapters.VideoPostAdapter;
-import com.developerali.aima.CommonFeatures;
-import com.developerali.aima.DB_Helper;
+import com.developerali.aima.Helpers.CommonFeatures;
+import com.developerali.aima.Helpers.DB_Helper;
 import com.developerali.aima.Models.PostModel;
 import com.developerali.aima.Models.RecentSearchModel;
 import com.developerali.aima.Models.UserModel;
 import com.developerali.aima.Models.VideoModel;
-import com.developerali.aima.R;
 import com.developerali.aima.databinding.ActivitySearchBinding;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -137,7 +134,7 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.S
         binding.userRecyclerView.setLayoutManager(lnm);
         if (recentSearches != null){
             Collections.reverse(recentSearches);
-            SearchAdapter adapter = new SearchAdapter(recentSearches, SearchActivity.this, SearchActivity.this);
+            SearchAdapter adapter = new SearchAdapter(recentSearches, SearchActivity.this);
             binding.userRecyclerView.setAdapter(adapter);
             binding.noData.setVisibility(View.GONE);
         }
@@ -314,7 +311,7 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.S
         if (videoModelArrayList.isEmpty()) {
             loadDefaultVideos();
         } else {
-            displayVideoResults(videoModelArrayList);
+            //displayVideoResults(videoModelArrayList);
         }
     }
 
@@ -339,7 +336,7 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.S
                             videoModelArrayList.add(videoModel);
                         }
                     }
-                    displayVideoResults(videoModelArrayList);
+                    //displayVideoResults(videoModelArrayList);
                 }).addOnFailureListener(e ->
                         Toast.makeText(SearchActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show());
     }
@@ -349,18 +346,18 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.S
      *
      * @param videoModelArrayList The list of video models to display.
      */
-    private void displayVideoResults(ArrayList<VideoModel> videoModelArrayList) {
-        VideoPostAdapter videoPostAdapter = new VideoPostAdapter(videoModelArrayList, getLifecycle(), SearchActivity.this);
-        binding.userRecyclerView.setLayoutManager(new LinearLayoutManager(SearchActivity.this));
-        binding.userRecyclerView.setAdapter(videoPostAdapter);
-        videoPostAdapter.notifyDataSetChanged();
-
-        if (videoModelArrayList.isEmpty()) {
-            binding.noData.setVisibility(View.VISIBLE);
-        }
-
-        binding.progressBar4.setVisibility(View.GONE);
-    }
+//    private void displayVideoResults(ArrayList<VideoModel> videoModelArrayList) {
+//        VideoPostAdapter videoPostAdapter = new VideoPostAdapter(videoModelArrayList, getLifecycle(), SearchActivity.this);
+//        binding.userRecyclerView.setLayoutManager(new LinearLayoutManager(SearchActivity.this));
+//        binding.userRecyclerView.setAdapter(videoPostAdapter);
+//        videoPostAdapter.notifyDataSetChanged();
+//
+//        if (videoModelArrayList.isEmpty()) {
+//            binding.noData.setVisibility(View.VISIBLE);
+//        }
+//
+//        binding.progressBar4.setVisibility(View.GONE);
+//    }
 
     /**
      * Searches for posts from Firestore based on their descriptions.
@@ -369,40 +366,40 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.S
      */
     private void searchPosts(String queryText) {
         ArrayList<PostModel> postModelArrayList = new ArrayList<>();
-        firebaseFirestore.collection("posts")
-                .whereEqualTo("description", queryText)
-                .get().addOnSuccessListener(queryDocumentSnapshots -> {
-                    if (!queryDocumentSnapshots.isEmpty()) {
-                        for (DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()) {
-                            PostModel postModel = snapshot.toObject(PostModel.class);
-                            postModel.setId(snapshot.getId());
-                            postModel.setId(snapshot.getId());
-                            postModel.setImage(snapshot.getString("image"));
-                            postModel.setUploader(snapshot.getString("uploader"));
-                            if (snapshot.getString("caption") != null){
-                                postModel.setCaption(snapshot.getString("caption"));
-                            }
-
-                            postModel.setTime(snapshot.getLong("time"));
-                            postModel.setCommentsCount(postModel.getCommentsCount());
-                            postModel.setLikesCount(postModel.getLikesCount());
-                            postModel.setApproved(snapshot.getBoolean("approved"));
-
-                            if (postModel != null) {
-                                postModelArrayList.add(postModel);
-                            }
-                        }
-
-                        if (postModelArrayList.isEmpty()) {
-                            loadDefaultPosts();
-                        } else {
-                            displayPostResults(postModelArrayList);
-                        }
-                    }else {
-                        loadDefaultPosts();
-                    }
-                }).addOnFailureListener(e ->
-                        Toast.makeText(SearchActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show());
+//        firebaseFirestore.collection("posts")
+//                .whereEqualTo("description", queryText)
+//                .get().addOnSuccessListener(queryDocumentSnapshots -> {
+//                    if (!queryDocumentSnapshots.isEmpty()) {
+//                        for (DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()) {
+//                            PostModel postModel = snapshot.toObject(PostModel.class);
+//                            postModel.setId(snapshot.getId());
+//                            postModel.setId(snapshot.getId());
+//                            postModel.setImage(snapshot.getString("image"));
+//                            postModel.setUploader(snapshot.getString("uploader"));
+//                            if (snapshot.getString("caption") != null){
+//                                postModel.setCaption(snapshot.getString("caption"));
+//                            }
+//
+//                            postModel.setTime(snapshot.getLong("time"));
+//                            postModel.setCommentsCount(postModel.getCommentsCount());
+//                            postModel.setLikesCount(postModel.getLikesCount());
+//                            postModel.setApproved(snapshot.getBoolean("approved"));
+//
+//                            if (postModel != null) {
+//                                postModelArrayList.add(postModel);
+//                            }
+//                        }
+//
+//                        if (postModelArrayList.isEmpty()) {
+//                            loadDefaultPosts();
+//                        } else {
+//                            displayPostResults(postModelArrayList);
+//                        }
+//                    }else {
+//                        loadDefaultPosts();
+//                    }
+//                }).addOnFailureListener(e ->
+//                        Toast.makeText(SearchActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show());
 
 
     }
@@ -410,99 +407,99 @@ public class SearchActivity extends AppCompatActivity implements SearchAdapter.S
     /**
      * Loads a default set of posts when no search results are found.
      */
-    private void loadDefaultPosts() {
-        ArrayList<PostModel> postModelArrayList = new ArrayList<>();
-
-        firebaseFirestore.collection("post")
-                .whereEqualTo("approved", true)  // Ensures we only fetch approved posts
-                .limit(10)
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        if (!queryDocumentSnapshots.isEmpty()) {
-
-                            postModelArrayList.clear();
-                            for (DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()) {
-                                PostModel postModel = snapshot.toObject(PostModel.class);
-                                if (postModel != null) {
-                                    postModel.setId(snapshot.getId());
-
-                                    if (snapshot.getString("image") != null) {
-                                        postModel.setImage(snapshot.getString("image"));
-                                    } else {
-                                        postModel.setImage("");  // Set default or empty image if null
-                                    }
-
-                                    if (snapshot.getString("uploader") != null) {
-                                        postModel.setUploader(snapshot.getString("uploader"));
-                                    } else {
-                                        postModel.setUploader("Unknown");  // Handle missing uploader
-                                    }
-
-                                    if (snapshot.getString("caption") != null) {
-                                        postModel.setCaption(snapshot.getString("caption"));
-                                    } else {
-                                        postModel.setCaption("");  // Set default caption if null
-                                    }
-
-                                    if (snapshot.getLong("time") != null) {
-                                        postModel.setTime(snapshot.getLong("time"));
-                                    }
-
-                                    if (snapshot.getLong("commentsCount") != null) {
-                                        postModel.setCommentsCount(Math.toIntExact(snapshot.getLong("commentsCount")));
-                                    } else {
-                                        postModel.setCommentsCount(Math.toIntExact(0L));  // Set default count if missing
-                                    }
-
-                                    if (snapshot.getLong("likesCount") != null) {
-                                        postModel.setLikesCount(Math.toIntExact(snapshot.getLong("likesCount")));
-                                    } else {
-                                        postModel.setLikesCount(Math.toIntExact(0L));  // Set default count if missing
-                                    }
-
-                                    postModel.setApproved(snapshot.getBoolean("approved") != null
-                                            ? snapshot.getBoolean("approved")
-                                            : false);  // Set approved safely
-
-                                    postModelArrayList.add(postModel);  // Add postModel to the list
-                                }
-                            }
-
-                            displayPostResults(postModelArrayList);  // Show the posts in the UI
-
-                        } else {
-                            Toast.makeText(SearchActivity.this, "No approved posts found", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(SearchActivity.this, "Error: " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
+//    private void loadDefaultPosts() {
+//        ArrayList<PostModel> postModelArrayList = new ArrayList<>();
+//
+//        firebaseFirestore.collection("post")
+//                .whereEqualTo("approved", true)  // Ensures we only fetch approved posts
+//                .limit(10)
+//                .get()
+//                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                        if (!queryDocumentSnapshots.isEmpty()) {
+//
+//                            postModelArrayList.clear();
+//                            for (DocumentSnapshot snapshot : queryDocumentSnapshots.getDocuments()) {
+//                                PostModel postModel = snapshot.toObject(PostModel.class);
+//                                if (postModel != null) {
+//                                    postModel.setId(snapshot.getId());
+//
+//                                    if (snapshot.getString("image") != null) {
+//                                        postModel.setImage(snapshot.getString("image"));
+//                                    } else {
+//                                        postModel.setImage("");  // Set default or empty image if null
+//                                    }
+//
+//                                    if (snapshot.getString("uploader") != null) {
+//                                        postModel.setUploader(snapshot.getString("uploader"));
+//                                    } else {
+//                                        postModel.setUploader("Unknown");  // Handle missing uploader
+//                                    }
+//
+//                                    if (snapshot.getString("caption") != null) {
+//                                        postModel.setCaption(snapshot.getString("caption"));
+//                                    } else {
+//                                        postModel.setCaption("");  // Set default caption if null
+//                                    }
+//
+//                                    if (snapshot.getLong("time") != null) {
+//                                        postModel.setTime(snapshot.getLong("time"));
+//                                    }
+//
+//                                    if (snapshot.getLong("commentsCount") != null) {
+//                                        postModel.setCommentsCount(Math.toIntExact(snapshot.getLong("commentsCount")));
+//                                    } else {
+//                                        postModel.setCommentsCount(Math.toIntExact(0L));  // Set default count if missing
+//                                    }
+//
+//                                    if (snapshot.getLong("likesCount") != null) {
+//                                        postModel.setLikesCount(Math.toIntExact(snapshot.getLong("likesCount")));
+//                                    } else {
+//                                        postModel.setLikesCount(Math.toIntExact(0L));  // Set default count if missing
+//                                    }
+//
+////                                    postModel.setApproved(snapshot.getBoolean("approved") != null
+////                                            ? snapshot.getBoolean("approved")
+////                                            : false);  // Set approved safely
+//
+//                                    postModelArrayList.add(postModel);  // Add postModel to the list
+//                                }
+//                            }
+//
+//                            displayPostResults(postModelArrayList);  // Show the posts in the UI
+//
+//                        } else {
+//                            Toast.makeText(SearchActivity.this, "No approved posts found", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Toast.makeText(SearchActivity.this, "Error: " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//    }
 
 
     /**
      * Displays the search results for posts in the RecyclerView.
      *
-     * @param postModelArrayList The list of post models to display.
+//     * @param postModelArrayList The list of post models to display.
      */
-    private void displayPostResults(ArrayList<PostModel> postModelArrayList) {
-        PostAdapter postAdapter = new PostAdapter(postModelArrayList, SearchActivity.this);
-        binding.userRecyclerView.setLayoutManager(new LinearLayoutManager(SearchActivity.this));
-        binding.userRecyclerView.setAdapter(postAdapter);
-        postAdapter.notifyDataSetChanged();
-
-        if (postModelArrayList.isEmpty()) {
-            binding.noData.setVisibility(View.VISIBLE);
-        }
-
-        binding.progressBar4.setVisibility(View.GONE);
-    }
+//    private void displayPostResults(ArrayList<PostModel> postModelArrayList) {
+//        PostAdapter postAdapter = new PostAdapter(postModelArrayList, SearchActivity.this);
+//        binding.userRecyclerView.setLayoutManager(new LinearLayoutManager(SearchActivity.this));
+//        binding.userRecyclerView.setAdapter(postAdapter);
+//        postAdapter.notifyDataSetChanged();
+//
+//        if (postModelArrayList.isEmpty()) {
+//            binding.noData.setVisibility(View.VISIBLE);
+//        }
+//
+//        binding.progressBar4.setVisibility(View.GONE);
+//    }
 
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {

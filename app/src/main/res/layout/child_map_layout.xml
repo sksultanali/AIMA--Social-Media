@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/_5mdp"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/linearLayout12"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/back_white_border_gray"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:padding="@dimen/_10mdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <androidx.cardview.widget.CardView
+            android:layout_width="@dimen/_70mdp"
+            android:layout_height="match_parent"
+            app:cardCornerRadius="@dimen/_10mdp">
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/placeholder"/>
+        </androidx.cardview.widget.CardView>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="@dimen/_10mdp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/propName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/manrope_extrabold"
+                android:text="Property Name"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12font_mdp" />
+            <TextView
+                android:id="@+id/des"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/manrope_extrabold"
+                android:minLines="2"
+                android:maxLines="2"
+                android:text="Use Coupon For Booking"
+                android:textSize="@dimen/_11font_mdp" />
+            <TextView
+                android:id="@+id/tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:fontFamily="@font/manrope_extrabold"
+                android:text="Limited period offer"
+                android:textColor="@color/blue_purple"
+                android:textSize="@dimen/_11font_mdp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_follow_background"
+        android:fontFamily="@font/manrope_extrabold"
+        android:paddingStart="@dimen/_10mdp"
+        android:paddingEnd="@dimen/_10mdp"
+        android:paddingTop="@dimen/_5mdp"
+        android:paddingBottom="@dimen/_5mdp"
+        android:text="Start Now"
+        android:textColor="@drawable/text_colour_with_follow_btn"
+        android:layout_marginEnd="@dimen/_15mdp"
+        android:textSize="@dimen/_12font_mdp"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout12"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout12"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout12" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,12 +5,15 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,8 +27,13 @@ import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.developerali.aima.Helper;
+import com.developerali.aima.Helpers.Helper;
+import com.developerali.aima.Helpers.UserDataUpdate;
 import com.developerali.aima.MainActivity;
+import com.developerali.aima.Model_Apis.ApiResponse;
+import com.developerali.aima.Model_Apis.ApiService;
+import com.developerali.aima.Model_Apis.ImageUploadResponse;
+import com.developerali.aima.Model_Apis.RetrofitClient;
 import com.developerali.aima.Models.PostModel;
 import com.developerali.aima.Models.UserModel;
 import com.developerali.aima.Models.VideoModel;
@@ -50,9 +58,21 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PostActivity extends AppCompatActivity {
 
@@ -64,6 +84,7 @@ public class PostActivity extends AppCompatActivity {
     FirebaseAuth auth;
     ProgressDialog dialog;
     FirebaseFirestore firebaseFirestore;
+    ApiService apiService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,9 +96,20 @@ public class PostActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
+        apiService = RetrofitClient.getClient().create(ApiService.class);
 
         if (auth.getCurrentUser().getUid() != null){
-            getUploaderInfo(auth.getCurrentUser().getUid());
+            if (Helper.userDetails != null){
+                if (Helper.userDetails.getImage() != null && !Helper.userDetails.getImage().isEmpty()){
+                    Glide.with(getApplicationContext())
+                            .load(Helper.userDetails.getImage())
+                            .placeholder(getDrawable(R.drawable.profileplaceholder))
+                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                            .into(binding.uploaderImage);
+                }
+                binding.uploaderName.setText(Helper.userDetails.getName());
+                binding.uploaderType.setText(Helper.userDetails.getType());
+            }
         }else {
             showNotLoginDialog();
         }
@@ -89,7 +121,6 @@ public class PostActivity extends AppCompatActivity {
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
 
-
         Intent intent = getIntent();
         //Handle text data
         if (intent.hasExtra(Intent.EXTRA_TEXT)) {
@@ -97,7 +128,8 @@ public class PostActivity extends AppCompatActivity {
             binding.uploadContent.setText(sharedFromAnotherApp);
             if (sharedFromAnotherApp.length() >= 50){
                 binding.postBtn.setEnabled(true);
-                binding.postBtn.setBackground(getDrawable(R.drawable.button_follow_background));
+                binding.postBtn.setBackground(getDrawable(R.drawable.bg_main_background_corner));
+                binding.postBtn.setTextColor(getColor(R.color.white));
             }
         }
 
@@ -107,7 +139,8 @@ public class PostActivity extends AppCompatActivity {
             binding.imageSeen.setImageURI(imageUri);
             binding.imageSeen.setVisibility(View.VISIBLE);
             binding.postBtn.setEnabled(true);
-            binding.postBtn.setBackground(getDrawable(R.drawable.button_follow_background));
+            binding.postBtn.setBackground(getDrawable(R.drawable.bg_main_background_corner));
+            binding.postBtn.setTextColor(getColor(R.color.white));
         }
 
         if (intent.getStringExtra("uri") != null){
@@ -115,7 +148,8 @@ public class PostActivity extends AppCompatActivity {
             binding.imageSeen.setImageURI(imageUri);
             binding.imageSeen.setVisibility(View.VISIBLE);
             binding.postBtn.setEnabled(true);
-            binding.postBtn.setBackground(getDrawable(R.drawable.button_follow_background));
+            binding.postBtn.setBackground(getDrawable(R.drawable.bg_main_background_corner));
+            binding.postBtn.setTextColor(getColor(R.color.white));
         }
 
         binding.uploadContent.addTextChangedListener(new TextWatcher() {
@@ -126,9 +160,14 @@ public class PostActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence count, int i, int i1, int i2) {
-                if (count.toString().length() >= 15){
+                if (count.toString().length() >= 5){
                     binding.postBtn.setEnabled(true);
-                    binding.postBtn.setBackground(getDrawable(R.drawable.button_follow_background));
+                    binding.postBtn.setBackground(getDrawable(R.drawable.bg_main_background_corner));
+                    binding.postBtn.setTextColor(getColor(R.color.white));
+                }else {
+                    binding.postBtn.setEnabled(false);
+                    binding.postBtn.setBackground(getDrawable(R.drawable.react_background));
+                    binding.postBtn.setTextColor(getColor(R.color.black));
                 }
 
                 binding.textCount.setText(count.toString().length() + "/2500");
@@ -160,7 +199,7 @@ public class PostActivity extends AppCompatActivity {
             }else{
                 ImagePicker.with(this)
                         .crop()	    			//Crop image(Optional), Check Customization for more option
-                        .compress(1024)			//Final image size will be less than 3 MB(Optional)
+                        .compress(100)			//Final image size will be less than 3 MB(Optional)
                         .maxResultSize(512, 512)	//Final image resolution will be less than 1080 x 1080(Optional)
                         .start(85);
             }
@@ -173,44 +212,47 @@ public class PostActivity extends AppCompatActivity {
         });
 
         binding.uploadVideo.setOnClickListener(v->{
-            firebaseFirestore.collection("video")
-                    .document(key)
-                    .get()
-                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            if (documentSnapshot.exists()){
-                                Helper.showAlertNoAction(PostActivity.this, "Limit Exceed !",
-                                        "You can post only once a day. Please try tomorrow!", "Okay");
-                            }else {
-                                showLinkInsertDialog("video");
-                            }
-                        }
-                    });
+            showLinkInsertDialog("video");
+//            firebaseFirestore.collection("video")
+//                    .document(key)
+//                    .get()
+//                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                        @Override
+//                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                            if (documentSnapshot.exists()){
+//                                Helper.showAlertNoAction(PostActivity.this, "Limit Exceed !",
+//                                        "You can post only once a day. Please try tomorrow!", "Okay");
+//                            }else {
+//
+//                            }
+//                        }
+//                    });
         });
 
 //        binding.postBtn.setEnabled(true);
         
         binding.postBtn.setOnClickListener(v->{
-            firebaseFirestore.collection("post")
-                    .document(key)
-                    .get()
-                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            if (documentSnapshot.exists()){
-                                Helper.showAlertNoAction(PostActivity.this, "Limit Exceed !",
-                                        "You can post only once a day. Please try tomorrow!", "Okay");
-                            }else {
-                                dialog.show();
-                                if (imageUri != null){
-                                    uploadImage(imageUri);
-                                }else {
-                                    uploadPost(null);
-                                }
-                            }
-                        }
-                    });
+            dialog.show();
+            if (imageUri != null){
+                dialog.setMessage("Image upload processing");
+                uploadImage(imageUri);
+            }else {
+                uploadPost(null);
+            }
+//            firebaseFirestore.collection("post")
+//                    .document(key)
+//                    .get()
+//                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//                        @Override
+//                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                            if (documentSnapshot.exists()){
+//                                Helper.showAlertNoAction(PostActivity.this, "Limit Exceed !",
+//                                        "You can post only once a day. Please try tomorrow!", "Okay");
+//                            }else {
+//
+//                            }
+//                        }
+//                    });
         });
 
         binding.profileDashboard.setOnClickListener(v->{
@@ -229,7 +271,7 @@ public class PostActivity extends AppCompatActivity {
                 ImagePicker.with(this)
                         .crop()//Crop image(Optional), Check Customization for more option
                         .cameraOnly()
-                        .compress(1024)            //Final image size will be less than 3 MB(Optional)
+                        .compress(100)            //Final image size will be less than 3 MB(Optional)
                         .maxResultSize(512, 512)    //Final image resolution will be less than 1080 x 1080(Optional)
                         .start(85);
             } else {
@@ -241,11 +283,8 @@ public class PostActivity extends AppCompatActivity {
 
     private void showLinkInsertDialog(String name) {
         DialogLinkInsertBinding dialogLinkInsertBinding = DialogLinkInsertBinding.inflate(getLayoutInflater());
-
         Dialog dialog1 = new Dialog(PostActivity.this);
-
         dialog1.setContentView(dialogLinkInsertBinding.getRoot());
-
         dialog1.getWindow().setGravity(Gravity.CENTER_VERTICAL);
         dialog1.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog1.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -286,35 +325,63 @@ public class PostActivity extends AppCompatActivity {
                     }
 
                     if (name.equalsIgnoreCase("video")){
-                        VideoModel videoModel = new VideoModel();
-                        videoModel.setVideoId(youTubeId);
-                        videoModel.setTime(new Date().getTime());
-                        videoModel.setApproved(false);
-                        videoModel.setUploader(auth.getCurrentUser().getUid());
+                        //                        VideoModel videoModel = new VideoModel();
+//                        videoModel.setVideoId(youTubeId);
+//                        videoModel.setTime(new Date().getTime());
+//                        videoModel.setApproved(false);
+//                        videoModel.setUploader(auth.getCurrentUser().getUid());
+//                        String description = binding.uploadContent.getText().toString();
+//                        videoModel.setCaption(description);
+//
+//                        dialogLinkInsertBinding.submitBtn.setEnabled(false);
+//                        dialogLinkInsertBinding.submitBtn.setBackground(getDrawable(R.drawable.button_already_followd));
+//                        firebaseFirestore.collection("video")
+//                                .document(key)
+//                                .set(videoModel).addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                    @Override
+//                                    public void onSuccess(Void unused) {
+//                                        Toast.makeText(PostActivity.this, "posted video.", Toast.LENGTH_SHORT).show();
+//                                        dialog.dismiss();
+//                                        Intent i = new Intent(PostActivity.this, MainActivity.class);
+//                                        startActivity(i);
+//                                        finish();
+//                                    }
+//                                });
                         String description = binding.uploadContent.getText().toString();
-                        videoModel.setCaption(description);
+                        Call<ApiResponse> call = apiService.insertVideo(
+                                "insertVideo", auth.getCurrentUser().getUid(), youTubeId, description
+                        );
 
-                        dialogLinkInsertBinding.submitBtn.setEnabled(false);
-                        dialogLinkInsertBinding.submitBtn.setBackground(getDrawable(R.drawable.button_already_followd));
-                        firebaseFirestore.collection("video")
-                                .document(key)
-                                .set(videoModel).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void unused) {
-                                        Toast.makeText(PostActivity.this, "posted video.", Toast.LENGTH_SHORT).show();
+                        call.enqueue(new Callback<ApiResponse>() {
+                            @Override
+                            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                if (response.isSuccessful()){
+                                    ApiResponse apiResponse = response.body();
+                                    if (apiResponse.getStatus().equalsIgnoreCase("success")){
                                         dialog.dismiss();
                                         Intent i = new Intent(PostActivity.this, MainActivity.class);
                                         startActivity(i);
                                         finish();
+                                    }else {
+                                        dialog.dismiss();
+                                        Helper.showAlertNoAction(PostActivity.this,
+                                                "Failed", apiResponse.getMessage(), "Okay");
                                     }
-                                });
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                dialog.dismiss();
+                                Toast.makeText(PostActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
 
                 }else {
                     Toast.makeText(this, "Please Insert YouTube Video", Toast.LENGTH_LONG).show();
                     dialogLinkInsertBinding.linkInsert.setError("Please Insert YouTube Video");
                 }
-
 
             }else {
                 dialogLinkInsertBinding.linkInsert.setError("Can't Empty");
@@ -397,114 +464,186 @@ public class PostActivity extends AppCompatActivity {
         }
     }
 
-
-    public void uploadImage(Uri imageUri){
-
-        dialog.show();
-
-//        String key = database.getReference().push().getKey();
-        String key = Helper.dateKey(Helper.LongToLocalDate(new Date().getTime())) + auth.getCurrentUser().getUid();
-
-        StorageReference reference = storage.getReference().child("uploads")
-                .child(auth.getCurrentUser().getUid()).child(key);
-        reference.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                if (task.isSuccessful()){
-                    reference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Uri> task) {
-                            String imageUrl = task.getResult().toString();
-                            uploadPost(imageUrl);
-
-                        }
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(PostActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                }
+    private void uploadImage(Uri imageUri) {
+        try {
+            File file = uriToFile(imageUri);
+            if (file != null) {
+                uploadImageFile(file);
+            } else {
+                Toast.makeText(PostActivity.this, "Failed to get file from URI", Toast.LENGTH_SHORT).show();
             }
-        }).addOnFailureListener(new OnFailureListener() {
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(PostActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void uploadImageFile(File file) {
+        ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
+
+        RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
+
+        Call<ImageUploadResponse> call = apiService.uploadImage("uploadImage", "testing", body);
+        call.enqueue(new Callback<ImageUploadResponse>() {
             @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(PostActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            public void onResponse(Call<ImageUploadResponse> call, Response<ImageUploadResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    ImageUploadResponse imageResponse = response.body();
+                    if (imageResponse.getStatus().equalsIgnoreCase("success")) {
+                        //Toast.makeText(PostActivity.this, "Uploaded: " + imageResponse.getData().getUrl(), Toast.LENGTH_SHORT).show();
+                        String imageUrl = imageResponse.getData().getUrl();
+                        dialog.setMessage("creating new post....");
+                        uploadPost(imageUrl);
+
+                    }else {
+                        Toast.makeText(PostActivity.this, "Not Uploaded: " + imageResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                    //progressDialog.incrementProgressBy(1);
+                } else {
+                    Toast.makeText(PostActivity.this, "Upload failed.", Toast.LENGTH_SHORT).show();
+                }
+
+//                Log.d("UploadDebug", "File name: " + file.getName());
+//                Log.d("UploadDebug", "File size: " + file.length());
+//                Log.d("UploadDebug", "File path: " + file.getAbsolutePath());
+//
+//                Log.d("UploadResponse", "Response code: " + response.code());
+//                Log.d("UploadResponse", "Response body: " + response.body());
+//                Log.d("UploadResponse", "Error body: " + response.errorBody());
+
+            }
+
+            @Override
+            public void onFailure(Call<ImageUploadResponse> call, Throwable t) {
+                t.printStackTrace();
+                Toast.makeText(PostActivity.this, "Upload error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    public void getUploaderInfo(String profId){
-        database.getReference("users")
-                .child(profId)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()){
-                            try {
-                                UserModel userModel = snapshot.getValue(UserModel.class);
-
-                                if (userModel != null){
-                                    if (userModel.getImage() != null){
-                                        Glide.with(getApplicationContext())
-                                                .load(userModel.getImage())
-                                                .placeholder(getDrawable(R.drawable.profileplaceholder))
-                                                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                                                .into(binding.uploaderImage);
-                                    }
-                                    binding.uploaderName.setText(userModel.getName());
-                                    if (userModel.getType() != null){
-                                        binding.uploaderType.setText(userModel.getType());
-                                    }else {
-                                        binding.uploaderType.setText("Public Profile");
-                                    }
-                                }
-                            }catch (Exception e){
-
-                            }
-                        }
+    private File uriToFile(Uri uri) throws IOException {
+        File file = null;
+        if ("content".equals(uri.getScheme())) {
+            try (InputStream inputStream = getContentResolver().openInputStream(uri)) {
+                String fileName = getFileName(uri);
+                File cacheFile = new File(getCacheDir(), fileName);
+                try (OutputStream outputStream = new FileOutputStream(cacheFile)) {
+                    byte[] buffer = new byte[1024];
+                    int length;
+                    while ((length = inputStream.read(buffer)) > 0) {
+                        outputStream.write(buffer, 0, length);
                     }
+                }
+                file = cacheFile;
+            }
+        } else if ("file".equals(uri.getScheme())) {
+            file = new File(uri.getPath());
+        }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
+        return file;
     }
 
+    private String getFileName(Uri uri) {
+        String fileName = null;
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        if (cursor != null) {
+            int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+            if (nameIndex != -1 && cursor.moveToFirst()) {
+                fileName = cursor.getString(nameIndex);
+            }
+            cursor.close();
+        }
+        if (fileName == null) {
+            fileName = uri.getLastPathSegment();
+        }
+        return fileName;
+    }
+
+
+//    public void uploadImage(Uri imageUri){
+//        dialog.show();
+//        String key = database.getReference().push().getKey();
+//
+//
+//        StorageReference reference = storage.getReference().child("uploads")
+//                .child(auth.getCurrentUser().getUid()).child(key);
+//
+//        reference.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+//                if (task.isSuccessful()){
+//                    reference.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<Uri> task) {
+//                            String imageUrl = task.getResult().toString();
+//                            dialog.setMessage("creating new post....");
+//                            uploadPost(imageUrl);
+//
+//                        }
+//                    }).addOnFailureListener(new OnFailureListener() {
+//                        @Override
+//                        public void onFailure(@NonNull Exception e) {
+//                            Toast.makeText(PostActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
+//                }
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Toast.makeText(PostActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
+
     public void uploadPost(String image){
-
-        PostModel postModel = new PostModel();
         String description = binding.uploadContent.getText().toString();
-        if (description != null){
-            postModel.setCaption(description);
-        }
-        postModel.setUploader(auth.getCurrentUser().getUid());
-        postModel.setTime(new Date().getTime());
-        if (image != null){
-            postModel.setImage(image);
-        }
-        postModel.setApproved(false);
+        Call<ApiResponse> call = apiService.insertPost(
+                "insertPost", auth.getCurrentUser().getUid(), image, description
+        );
+        dialog.setMessage("almost done...");
+        call.enqueue(new Callback<ApiResponse>() {
+            @Override
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                if (response.isSuccessful()){
+                    ApiResponse response1 = response.body();
+                    if (response1.getStatus().equalsIgnoreCase("success")){
+                        UserDataUpdate userDataUpdate = new UserDataUpdate();
+                        userDataUpdate.enqueueUpdateTask(auth.getCurrentUser().getUid(), "posts", String.valueOf(1), ()->{});
 
-        String key = Helper.dateKey(Helper.LongToLocalDate(new Date().getTime())) + auth.getCurrentUser().getUid();
-
-        firebaseFirestore.collection("post")
-                .document(key)
-                .set(postModel)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
                         dialog.dismiss();
                         Intent i = new Intent(PostActivity.this, MainActivity.class);
                         startActivity(i);
                         finish();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
+                    }else {
                         dialog.dismiss();
+                        Helper.showAlertNoAction(PostActivity.this,
+                                response1.getStatus(), response1.getMessage(), "Okay");
                     }
-                });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
+                dialog.dismiss();
+                Toast.makeText(PostActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+//        firebaseFirestore.collection("post")
+//                .document(key)
+//                .set(postModel)
+//                .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void unused) {
+//
+//                    }
+//                }).addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        dialog.dismiss();
+//                    }
+//                });
 
 
 

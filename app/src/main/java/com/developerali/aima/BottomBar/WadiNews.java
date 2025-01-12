@@ -24,6 +24,8 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.developerali.aima.Helpers.Helper;
+import com.developerali.aima.MainActivity;
 import com.developerali.aima.R;
 import com.developerali.aima.databinding.FragmentWadiNewsBinding;
 import com.karumi.dexter.Dexter;
@@ -56,7 +58,7 @@ public class WadiNews extends Fragment{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentWadiNewsBinding.inflate(inflater, container, false);
-
+        Helper.changeStatusBarToDark(getActivity(), R.color.black);
         SmoothBottomBar bottomBar = getActivity().findViewById(R.id.bottomBar);
         bottomBar.setItemActiveIndex(1);
 

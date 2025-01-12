@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:background="@color/backgroundColour"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.MembershipApplication">
+
+    <LinearLayout
+        android:id="@+id/linearLayout17"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:elevation="@dimen/_1mdp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="@dimen/_10mdp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/myProfile"
+            android:layout_width="@dimen/_20mdp"
+            android:layout_height="@dimen/_20mdp"
+            android:contentDescription="@string/imagelogo"
+            android:src="@drawable/back_24"
+            app:tint="@color/backgroundBottomColour" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_10mdp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/manrope_extrabold"
+                android:singleLine="true"
+                android:text="New Membership"
+                android:textColor="@color/backgroundBottomColour"
+                android:textSize="@dimen/_14font_mdp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/manrope_medium"
+                    android:text="Apply membership in just 3 steps"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_10font_mdp" />
+
+                <ImageView
+                    android:id="@+id/verifiedProfile"
+                    android:layout_width="@dimen/_16mdp"
+                    android:layout_height="@dimen/_16mdp"
+                    android:layout_marginStart="2dp"
+                    android:src="@drawable/verified"
+                    android:visibility="gone" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout17">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10mdp"
+                android:background="@drawable/background_text_donation"
+                android:fontFamily="@font/manrope_bold"
+                android:paddingStart="@dimen/_10mdp"
+                android:paddingTop="@dimen/_5mdp"
+                android:paddingEnd="@dimen/_10mdp"
+                android:paddingBottom="@dimen/_5mdp"
+                android:text="My User Id"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_11font_mdp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/profileLink"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10mdp"
+                android:layout_marginStart="@dimen/_25mdp"
+                android:layout_marginEnd="@dimen/_10mdp"
+                android:layout_marginBottom="5dp"
+                android:singleLine="true"
+                android:fontFamily="@font/manrope_medium"
+                android:padding="@dimen/_5mdp"
+                android:gravity="center"
+                android:background="@drawable/react_background"
+                android:drawableEnd="@drawable/copy_24"
+                android:text="@string/loading"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dashBoardAbout" />
+
+            <TextView
+                android:id="@+id/step1Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10mdp"
+                android:background="@drawable/background_text_donation"
+                android:fontFamily="@font/manrope_bold"
+                android:paddingStart="@dimen/_10mdp"
+                android:paddingTop="@dimen/_5mdp"
+                android:paddingEnd="@dimen/_10mdp"
+                android:paddingBottom="@dimen/_5mdp"
+                android:text="Step 01 : Fill google form"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_11font_mdp"
+                android:textStyle="bold" />
+            <LinearLayout
+                android:id="@+id/step1Lay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10mdp"
+                android:layout_marginEnd="@dimen/_10mdp"
+                android:layout_marginStart="@dimen/_25mdp"
+                android:padding="@dimen/_10mdp"
+                android:background="@drawable/post_click_effect"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/step1Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/step1"
+                    android:textColor="@color/black"
+                    android:fontFamily="@font/manrope_medium"
+                    android:textSize="@dimen/_11font_mdp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:layout_marginBottom="@dimen/_10mdp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/openLink"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_follow_background"
+                        android:layout_gravity="end"
+                        android:fontFamily="@font/manrope_bold"
+                        android:paddingTop="@dimen/_4mdp"
+                        android:paddingBottom="@dimen/_4mdp"
+                        android:paddingStart="@dimen/_10mdp"
+                        android:paddingEnd="@dimen/_10mdp"
+                        android:text="Open Link"
+                        android:textSize="@dimen/_11font_mdp"
+                        android:textColor="@drawable/text_colour_with_follow_btn" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/step2Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10mdp"
+                android:background="@drawable/background_text_donation"
+                android:fontFamily="@font/manrope_bold"
+                android:paddingStart="@dimen/_10mdp"
+                android:paddingTop="@dimen/_5mdp"
+                android:paddingEnd="@dimen/_10mdp"
+                android:paddingBottom="@dimen/_5mdp"
+                android:text="Step 02 : Re_enter important data"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_11font_mdp"
+                android:textStyle="bold" />
+            <LinearLayout
+                android:id="@+id/step2Lay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginTop="@dimen/_10mdp"
+                android:layout_marginEnd="@dimen/_10mdp"
+                android:layout_marginStart="@dimen/_25mdp"
+                android:padding="@dimen/_10mdp"
+                android:background="@drawable/post_click_effect"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/step2Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/manrope_medium"
+                    android:text="@string/step1"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_11font_mdp"/>
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/uploader_image"
+                    android:layout_width="@dimen/_45mdp"
+                    android:layout_height="@dimen/_45mdp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/profileplaceholder"
+                    app:civ_border_color="@color/backgroundBottomColour"
+                    app:civ_border_width="1dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/manrope_medium"
+                    android:text="Name"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_10font_mdp" />
+
+                <EditText
+                    android:id="@+id/nameEd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5mdp"
+                    android:background="@drawable/background_linear"
+                    android:fontFamily="@font/manrope_medium"
+                    android:hint="Enter name as per Aadhaar card"
+                    android:inputType="text"
+                    android:padding="@dimen/_10mdp"
+                    android:textSize="@dimen/_11font_mdp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10mdp"
+                    android:fontFamily="@font/manrope_medium"
+                    android:text="Father Name"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_10font_mdp" />
+
+                <EditText
+                    android:id="@+id/fatherEd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5mdp"
+                    android:background="@drawable/background_linear"
+                    android:fontFamily="@font/manrope_medium"
+                    android:hint="Enter name your father name"
+                    android:inputType="text"
+                    android:padding="@dimen/_10mdp"
+                    android:textSize="@dimen/_11font_mdp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10mdp"
+                    android:fontFamily="@font/manrope_medium"
+                    android:text="DOB"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_10font_mdp" />
+
+                <TextView
+                    android:id="@+id/dobEd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5mdp"
+                    android:background="@drawable/background_linear"
+                    android:drawableEnd="@drawable/calendar_month_24"
+                    android:drawableTint="@color/icon_color"
+                    android:fontFamily="@font/manrope_medium"
+                    android:hint="Choose Date of Birth"
+                    android:inputType="text"
+                    android:padding="@dimen/_10mdp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_11font_mdp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_10mdp"
+                    android:fontFamily="@font/manrope_medium"
+                    android:text="Address"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_10font_mdp" />
+
+                <EditText
+                    android:id="@+id/address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/_5mdp"
+                    android:background="@drawable/background_linear"
+                    android:fontFamily="@font/manrope_medium"
+                    android:gravity="top"
+                    android:hint="Enter your complete address"
+                    android:minLines="3"
+                    android:padding="@dimen/_10mdp"
+                    android:textSize="@dimen/_11font_mdp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:layout_marginTop="@dimen/_15mdp"
+                    android:layout_marginBottom="@dimen/_10mdp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/step2Btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_follow_background"
+                        android:layout_gravity="end"
+                        android:paddingTop="@dimen/_4mdp"
+                        android:paddingBottom="@dimen/_4mdp"
+                        android:paddingStart="@dimen/_10mdp"
+                        android:paddingEnd="@dimen/_10mdp"
+                        android:fontFamily="@font/manrope_bold"
+                        android:text="Save Details"
+                        android:textSize="@dimen/_11font_mdp"
+                        android:textColor="@drawable/text_colour_with_follow_btn" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/step3Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10mdp"
+                android:background="@drawable/background_text_donation"
+                android:fontFamily="@font/manrope_bold"
+                android:paddingStart="@dimen/_10mdp"
+                android:paddingTop="@dimen/_5mdp"
+                android:paddingEnd="@dimen/_10mdp"
+                android:paddingBottom="@dimen/_5mdp"
+                android:text="Step 03 : Select plan and pay online"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_11font_mdp"
+                android:textStyle="bold" />
+            <LinearLayout
+                android:id="@+id/step3Lay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:layout_marginTop="@dimen/_10mdp"
+                android:layout_marginEnd="@dimen/_10mdp"
+                android:layout_marginStart="@dimen/_25mdp"
+                android:layout_marginBottom="@dimen/_100mdp"
+                android:padding="@dimen/_10mdp"
+                android:background="@drawable/post_click_effect"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/step3Text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/manrope_medium"
+                    android:text="@string/step1"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/_11font_mdp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/_5mdp"
+                    android:background="@drawable/react_background"
+                    android:orientation="vertical"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/_10mdp"
+                            android:fontFamily="@font/manrope_medium"
+                            android:text="1. Application Fee\n         (One Time)"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_11font_mdp" />
+
+                        <TextView
+                            android:id="@+id/processingFee"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/_2mdp"
+                            android:layout_weight="3"
+                            android:fontFamily="@font/manrope_medium"
+                            android:background="@drawable/background_white_linear"
+                            android:drawableStart="@drawable/currency_rupee_24"
+                            android:gravity="end"
+                            android:padding="10dp"
+                            android:text="100"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_12font_mdp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/renewText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_10mdp"
+                        android:layout_marginTop="@dimen/_10mdp"
+                        android:text="2. Membership Plan"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/manrope_medium"
+                        android:textSize="@dimen/_11font_mdp"
+                        android:visibility="visible" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <Spinner
+                            android:id="@+id/spinnerValidity"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:padding="@dimen/_10mdp" />
+
+                        <TextView
+                            android:id="@+id/validityPayment"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/_2mdp"
+                            android:layout_weight="3"
+                            android:fontFamily="@font/manrope_medium"
+                            android:background="@drawable/background_white_linear"
+                            android:drawableStart="@drawable/currency_rupee_24"
+                            android:gravity="end"
+                            android:padding="10dp"
+                            android:text="120"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/_12font_mdp" />
+                    </LinearLayout>
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/payBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_follow_background"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_marginTop="@dimen/_15mdp"
+                    android:paddingTop="@dimen/_4mdp"
+                    android:paddingBottom="@dimen/_4mdp"
+                    android:paddingStart="@dimen/_10mdp"
+                    android:paddingEnd="@dimen/_10mdp"
+                    android:fontFamily="@font/manrope_bold"
+                    android:text="Pay Now"
+                    android:textSize="@dimen/_11font_mdp"
+                    android:textColor="@drawable/text_colour_with_follow_btn" />
+
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
