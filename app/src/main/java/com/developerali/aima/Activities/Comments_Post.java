@@ -268,8 +268,8 @@ public class Comments_Post extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()){
-
                             arrayList.clear();
+                            String pId = postId;
 
                             for (DataSnapshot snapshot1 : snapshot.getChildren()){
                                 CommentModel commentModel = snapshot1.getValue(CommentModel.class);
@@ -277,7 +277,7 @@ public class Comments_Post extends AppCompatActivity {
                                 if (commentModel != null){
                                     commentModel.setCommentId(snapshot1.getKey());
                                     commentModel.setCommentedBy(commentModel.getCommentedBy());
-                                    commentModel.setPostId(postId);
+                                    commentModel.setPostId(pId);
                                     arrayList.add(commentModel);
                                 }
                             }

@@ -49,7 +49,6 @@ public class MyPostActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         Helper.changeStatusBarToDark(MyPostActivity.this, R.color.backgroundBottomColour);
         profileId = getIntent().getStringExtra("profileId");
-        Helper.tempId = profileId;
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.content, new NormalPost());

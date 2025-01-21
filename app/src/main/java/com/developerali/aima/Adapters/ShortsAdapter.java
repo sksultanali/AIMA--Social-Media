@@ -41,6 +41,9 @@ public class ShortsAdapter extends FirebaseRecyclerAdapter<shortsModel, ShortsAd
 
     @Override
     protected void onBindViewHolder(@NonNull viewHolder holder, int position, @NonNull shortsModel model) {
+        if (position >= getItemCount() || position < 0) {
+            return; // Safeguard against invalid positions
+        }
         holder.setdata(model);
     }
 
@@ -152,4 +155,16 @@ public class ShortsAdapter extends FirebaseRecyclerAdapter<shortsModel, ShortsAd
 
         }
     }
+
+    @Override
+    public void onDataChanged() {
+        super.onDataChanged();
+        notifyDataSetChanged(); // Notify adapter of data set changes
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
 }

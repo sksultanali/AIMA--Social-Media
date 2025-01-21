@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -118,6 +119,10 @@ public class Helper {
     }
 
     public static void saveUserDetailsToSharedPref(Activity activity, UserModel userDetails) {
+        if (activity == null || activity.isFinishing() || activity.isDestroyed()) {
+            Log.e("Helper", "Invalid activity; cannot save user details.");
+            return;
+        }
         SharedPreferences sharedPreferences = activity.getSharedPreferences("userPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();
@@ -215,28 +220,44 @@ public class Helper {
         }
     }
 
-    @SuppressLint("ResourceAsColor")
+    @SuppressLint("InflateParams")
     public static void showAlertNoAction(Activity activity, String title, String content, String yesText) {
-        DialogNotLoginBinding dialogBinding = DialogNotLoginBinding.inflate(LayoutInflater.from(activity));
+        // Ensure the activity is valid
+        if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
+            // Ensure this runs on the main thread
+            activity.runOnUiThread(() -> {
+                // Inflate the custom dialog binding
+                DialogNotLoginBinding dialogBinding = DialogNotLoginBinding.inflate(LayoutInflater.from(activity));
 
-        AlertDialog dialog = new AlertDialog.Builder(activity)
-                .setView(dialogBinding.getRoot())
-                .create();
+                // Create the AlertDialog
+                AlertDialog dialog = new AlertDialog.Builder(activity)
+                        .setView(dialogBinding.getRoot())
+                        .create();
 
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.R.color.transparent));
+                // Set transparent background for the dialog
+                if (dialog.getWindow() != null) {
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                }
 
-        dialogBinding.titleText.setText(title);
-        dialogBinding.messageText.setText(Html.fromHtml(content));
+                // Set dialog content
+                dialogBinding.titleText.setText(title);
+                dialogBinding.messageText.setText(Html.fromHtml(content));
+                dialogBinding.yesBtnText.setText(yesText);
 
-        dialogBinding.yesBtnText.setText(yesText);
-        dialogBinding.noBtn.setVisibility(View.GONE);
+                // Hide the "No" button
+                dialogBinding.noBtn.setVisibility(View.GONE);
 
-        dialogBinding.loginBtn.setOnClickListener(v->{
-            dialog.dismiss();
-        });
+                // Set click listener for the "Yes" button
+                dialogBinding.loginBtn.setOnClickListener(v -> {
+                    dialog.dismiss(); // Dismiss the dialog when "Yes" is clicked
+                });
 
-        dialog.show();
+                // Show the dialog
+                dialog.show();
+            });
+        }
     }
+
 
     public static String getFutureDate(int monthsToAdd) {
         LocalDate today = LocalDate.now();

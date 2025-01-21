@@ -1,6 +1,7 @@
 package com.developerali.aima.Adapters;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +20,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.developerali.aima.Activities.ProfileActivity;
 import com.developerali.aima.Activities.VideoShow;
 import com.developerali.aima.Helpers.Helper;
+import com.developerali.aima.Model_Apis.ApiResponse;
+import com.developerali.aima.Model_Apis.ApiService;
 import com.developerali.aima.Model_Apis.PostResponse;
+import com.developerali.aima.Model_Apis.RetrofitClient;
 import com.developerali.aima.Model_Apis.VideoResponse;
 import com.developerali.aima.Models.UserModel;
 import com.developerali.aima.Models.VideoModel;
@@ -36,6 +40,10 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.Abs
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class VideoPostAdapter extends RecyclerView.Adapter<VideoPostAdapter.viewHolder>{
 
     Activity activity;
@@ -44,6 +52,7 @@ public class VideoPostAdapter extends RecyclerView.Adapter<VideoPostAdapter.view
     FirebaseDatabase database;
     boolean myPost;
     Animation animation;
+    ApiService apiService;
 
     public VideoPostAdapter(ArrayList<VideoResponse.PostData> models, Lifecycle lifecycle,
                             Activity activity, boolean myPost) {
@@ -52,6 +61,7 @@ public class VideoPostAdapter extends RecyclerView.Adapter<VideoPostAdapter.view
         this.activity = activity;
         this.myPost = myPost;
         animation = AnimationUtils.loadAnimation(activity, R.anim.blink);
+        apiService = RetrofitClient.getClient().create(ApiService.class);
     }
 
     @NonNull
@@ -107,6 +117,10 @@ public class VideoPostAdapter extends RecyclerView.Adapter<VideoPostAdapter.view
                 TimeAgo.using(time);
 
         if (myPost){
+
+            holder.binding.videoShare.setVisibility(View.GONE);
+            holder.binding.discoverDots.setVisibility(View.VISIBLE);
+
             if (Helper.userDetails != null){
                 videoModel.setUploader(Helper.userDetails.getUserId());
                 holder.binding.discoverProfileName.setText(Helper.userDetails.getName());
@@ -174,6 +188,90 @@ public class VideoPostAdapter extends RecyclerView.Adapter<VideoPostAdapter.view
             if (sharingIntent.resolveActivity(activity.getPackageManager()) != null) {
                 activity.startActivity(Intent.createChooser(sharingIntent,"Download Using"));
             }
+        });
+
+        holder.binding.discoverDots.setOnClickListener(c->{
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+            builder.setTitle("Select an Action")
+                    .setItems(new CharSequence[]{"Unpublish", "Delete Post", "Republish"}, (dialog, which) -> {
+                        switch (which) {
+                            case 0: // Copy Profile Link
+                                Call<ApiResponse> call = apiService.updateVideoField(
+                                        "updateVideoField", videoModel.getVideoId(), "status", "Unpublish"
+                                );
+                                call.enqueue(new Callback<ApiResponse>() {
+                                    @Override
+                                    public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                        if (response.isSuccessful() && response.body() != null){
+                                            ApiResponse apiResponse = response.body();
+                                            if (apiResponse.getStatus().equalsIgnoreCase("success")){
+                                                //Toast.makeText(activity, "unpublished...", Toast.LENGTH_SHORT).show();
+                                                holder.binding.discoverProfile.setText("Unpublished");
+                                            }else {
+                                                Toast.makeText(activity, apiResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                        Toast.makeText(activity, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                break;
+                            case 1: // Log Out
+                                Call<ApiResponse> call2 = apiService.updateVideoField(
+                                        "updateVideoField", videoModel.getVideoId(), "status", "Restricted"
+                                );
+                                call2.enqueue(new Callback<ApiResponse>() {
+                                    @Override
+                                    public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                        if (response.isSuccessful() && response.body() != null){
+                                            ApiResponse apiResponse = response.body();
+                                            if (apiResponse.getStatus().equalsIgnoreCase("success")){
+                                                Helper.showAlertNoAction(activity,
+                                                        "Request Submitted", "Your post will delete automatically after few hours.",
+                                                        "Okay");
+                                            }else {
+                                                Toast.makeText(activity, apiResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                        Toast.makeText(activity, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                break;
+                            case 2: // Copy Profile Link
+                                Call<ApiResponse> call3 = apiService.updateVideoField(
+                                        "updateVideoField", videoModel.getVideoId(), "status", "Pending Approval"
+                                );
+                                call3.enqueue(new Callback<ApiResponse>() {
+                                    @Override
+                                    public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                        if (response.isSuccessful() && response.body() != null){
+                                            ApiResponse apiResponse = response.body();
+                                            if (apiResponse.getStatus().equalsIgnoreCase("success")){
+                                                holder.binding.discoverProfile.setText("Re_Published");
+                                            }else {
+                                                Toast.makeText(activity, apiResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                        Toast.makeText(activity, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                break;
+                        }
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
+            notifyDataSetChanged();
         });
 
 

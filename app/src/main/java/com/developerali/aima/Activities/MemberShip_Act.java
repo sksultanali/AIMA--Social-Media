@@ -271,6 +271,11 @@ public class MemberShip_Act extends AppCompatActivity implements PaymentResultLi
                             
                         }else {
                             binding.memberMessage.setText(model.getStatus());
+                            binding.renewCard.setOnClickListener(v->{
+                                Helper.showAlertNoAction(MemberShip_Act.this, "Be Patience",
+                                        "You already applied for membership, please be patience. It will take up to 48 hours.",
+                                        "Okay");
+                            });
                         }
 //                        binding.payBtn.setEnabled(false);
 //                        binding.payBtn.setText("You are already a member!");
@@ -293,6 +298,11 @@ public class MemberShip_Act extends AppCompatActivity implements PaymentResultLi
                     }else {
                         binding.memberMessage.setText("Membership Not Activated");
                         binding.memberMessage.setTextColor(getColor(R.color.red_colour));
+                        binding.renewCard.setOnClickListener(v->{
+                            Helper.showAlertNoAction(MemberShip_Act.this, "Not Eligible",
+                                    "First be a member then only you can renew your membership...!",
+                                    "Okay");
+                        });
                     }
                 }
             }
@@ -302,7 +312,9 @@ public class MemberShip_Act extends AppCompatActivity implements PaymentResultLi
                 binding.memberMessage.setText("Membership Not Activated");
                 binding.memberMessage.setTextColor(getColor(R.color.red_colour));
                 binding.renewCard.setOnClickListener(v->{
-                    Toast.makeText(MemberShip_Act.this, "No Eligible", Toast.LENGTH_SHORT).show();
+                    Helper.showAlertNoAction(MemberShip_Act.this, "Error 405",
+                            "Something went wrong. Please try again later...!",
+                            "Okay");
                 });
             }
         });

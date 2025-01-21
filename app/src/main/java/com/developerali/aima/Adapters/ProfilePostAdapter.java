@@ -63,56 +63,56 @@ public class ProfilePostAdapter extends RecyclerView.Adapter<ProfilePostAdapter.
             activity.startActivity(i);
         });
 
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                if (postModel.getUploader().equalsIgnoreCase(FirebaseAuth.getInstance().getCurrentUser().getUid())){
-
-
-                    PopupMenu popupMenu = new PopupMenu(activity.getApplicationContext(), holder.binding.imageView1);
-                    popupMenu.getMenu().add("Delete");
-                    popupMenu.show();
-
-                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem menuItem) {
-
-                            holder.binding.progressCircular.setVisibility(View.VISIBLE);
-                            FirebaseFirestore.getInstance().collection("post")
-                                    .document(postModel.getId())
-                                    .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void unused) {
-                                            FirebaseDatabase.getInstance().getReference().child("likes")
-                                                    .child(postModel.getId()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                        @Override
-                                                        public void onSuccess(Void unused) {
-                                                            FirebaseDatabase.getInstance().getReference().child("comments")
-                                                                    .child(postModel.getId()).removeValue()
-                                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                        @Override
-                                                                        public void onSuccess(Void unused) {
-                                                                            holder.binding.progressCircular.setVisibility(View.GONE);
-                                                                            //removing from list onBindViewHolder
-                                                                            postModels.remove(position);
-                                                                            notifyItemRemoved(position);
-                                                                            notifyItemRangeChanged(position, postModels.size());
-                                                                            notifyDataSetChanged();
-                                                                        }
-                                                                    });
-                                                        }
-                                                    });
-                                        }
-                                    });
-
-                            return false;
-                        }
-                    });
-                }
-
-                return false;
-            }
-        });
+//        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View view) {
+//                if (postModel.getUploader().equalsIgnoreCase(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+//
+//
+//                    PopupMenu popupMenu = new PopupMenu(activity.getApplicationContext(), holder.binding.imageView1);
+//                    popupMenu.getMenu().add("Delete");
+//                    popupMenu.show();
+//
+//                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                        @Override
+//                        public boolean onMenuItemClick(MenuItem menuItem) {
+//
+//                            holder.binding.progressCircular.setVisibility(View.VISIBLE);
+//                            FirebaseFirestore.getInstance().collection("post")
+//                                    .document(postModel.getId())
+//                                    .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                        @Override
+//                                        public void onSuccess(Void unused) {
+//                                            FirebaseDatabase.getInstance().getReference().child("likes")
+//                                                    .child(postModel.getId()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                                        @Override
+//                                                        public void onSuccess(Void unused) {
+//                                                            FirebaseDatabase.getInstance().getReference().child("comments")
+//                                                                    .child(postModel.getId()).removeValue()
+//                                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                                                        @Override
+//                                                                        public void onSuccess(Void unused) {
+//                                                                            holder.binding.progressCircular.setVisibility(View.GONE);
+//                                                                            //removing from list onBindViewHolder
+//                                                                            postModels.remove(position);
+//                                                                            notifyItemRemoved(position);
+//                                                                            notifyItemRangeChanged(position, postModels.size());
+//                                                                            notifyDataSetChanged();
+//                                                                        }
+//                                                                    });
+//                                                        }
+//                                                    });
+//                                        }
+//                                    });
+//
+//                            return false;
+//                        }
+//                    });
+//                }
+//
+//                return false;
+//            }
+//        });
 
     }
 

@@ -396,7 +396,7 @@
                             android:drawableStart="@drawable/currency_rupee_24"
                             android:gravity="end"
                             android:padding="10dp"
-                            android:text="100"
+                            android:text="0"
                             android:textColor="@color/black"
                             android:textSize="@dimen/_12font_mdp" />
                     </LinearLayout>

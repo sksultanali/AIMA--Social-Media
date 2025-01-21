@@ -18,27 +18,43 @@ import com.developerali.aima.Helpers.Helper;
 import com.developerali.aima.MainActivity;
 import com.developerali.aima.R;
 import com.developerali.aima.databinding.FragmentMeetingBinding;
+import com.facebook.react.modules.core.PermissionListener;
 
 import org.jitsi.meet.sdk.BroadcastEvent;
 import org.jitsi.meet.sdk.BroadcastIntentHelper;
 import org.jitsi.meet.sdk.JitsiMeet;
 import org.jitsi.meet.sdk.JitsiMeetActivity;
+import org.jitsi.meet.sdk.JitsiMeetActivityDelegate;
+import org.jitsi.meet.sdk.JitsiMeetActivityInterface;
 import org.jitsi.meet.sdk.JitsiMeetConferenceOptions;
+import org.jitsi.meet.sdk.JitsiMeetView;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.SecureRandom;
 import java.util.Date;
 
 import me.ibrahimsn.lib.SmoothBottomBar;
 import timber.log.Timber;
 
 
-public class MeetingFragment extends Fragment {
+public class MeetingFragment extends Fragment implements JitsiMeetActivityInterface {
 
     FragmentMeetingBinding binding;
     private SmoothBottomBar bottomBar;
 
     public MeetingFragment(){}
+
+    private JitsiMeetView view;
+
+    @Override
+    public void onActivityResult(
+            int requestCode,
+            int resultCode,
+            Intent data) {
+        JitsiMeetActivityDelegate.onActivityResult(
+                getActivity(), requestCode, resultCode, data);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,43 +90,49 @@ public class MeetingFragment extends Fragment {
         }
 
 
+
+
         URL serverURL;
         try {
-            // When using JaaS, replace "https://meet.jit.si" with the proper serverURL
             serverURL = new URL("https://meet.jit.si");
+            JitsiMeetConferenceOptions defaultOptions
+                    = new JitsiMeetConferenceOptions.Builder()
+                    .setServerURL(serverURL)
+                    .setFeatureFlag("welcomepage.enabled", false)
+                    .build();
+            JitsiMeet.setDefaultConferenceOptions(defaultOptions);
         } catch (MalformedURLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Invalid server URL!");
+            Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
         }
-        JitsiMeetConferenceOptions defaultOptions
-                = new JitsiMeetConferenceOptions.Builder()
-                .setServerURL(serverURL)
-                // When using JaaS, set the obtained JWT here
-                //.setToken("MyJWT")
-                // Different features flags can be set
-                // .setFeatureFlag("toolbox.enabled", false)
-                // .setFeatureFlag("filmstrip.enabled", false)
-                .setFeatureFlag("welcomepage.enabled", false)
-                .build();
-        JitsiMeet.setDefaultConferenceOptions(defaultOptions);
 
         registerForBroadcastMessages();
 
         binding.joinBtn.setOnClickListener(c->{
-            if (binding.code.getText().toString().isEmpty()){
-                Toast.makeText(getActivity(), "Enter Secret Code", Toast.LENGTH_LONG).show();
-                binding.code.setError("Not Valid !");
+            String secCode = binding.code.getText().toString();
+            if (secCode.isEmpty()){
+                binding.code.setError("*");
+                Toast.makeText(getActivity(), "Enter any random name...", Toast.LENGTH_SHORT).show();
+//                try {
+//                    String code = generateSecretCode();
+//                    binding.code.setText(code);
+//                    JitsiMeetConferenceOptions options
+//                            = new JitsiMeetConferenceOptions.Builder()
+//                            .setRoom(code)
+//                            .build();
+//                    JitsiMeetActivity.launch(getActivity(), options);
+//                }catch (Exception e){
+//                    Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+//                }
             } else {
-                JitsiMeetConferenceOptions options
-                        = new JitsiMeetConferenceOptions.Builder()
-                        .setRoom(binding.code.getText().toString())
-                        // Settings for audio and video
-                        //.setAudioMuted(true)
-                        //.setVideoMuted(true)
-                        .build();
-                // Launch the new activity with the given options. The launch() method takes care
-                // of creating the required Intent and passing the options.
-                JitsiMeetActivity.launch(getActivity(), options);
+                try {
+                    JitsiMeetConferenceOptions options
+                            = new JitsiMeetConferenceOptions.Builder()
+                            .setRoom(secCode)
+                            .build();
+                    JitsiMeetActivity.launch(getActivity(), options);
+                }catch (Exception e){
+                    Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
 
         });
@@ -162,13 +184,22 @@ public class MeetingFragment extends Fragment {
         return binding.getRoot();
     }
 
-
-    @Override
-    public void onDestroy() {
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
-
-        super.onDestroy();
+    public static String generateSecretCode() {
+        String alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        SecureRandom random = new SecureRandom();
+        StringBuilder code = new StringBuilder(12);
+        for (int i = 0; i < 12; i++) {
+            code.append(alphabets.charAt(random.nextInt(alphabets.length())));
+        }
+        return code.toString().trim();
     }
+
+//    @Override
+//    public void onDestroy() {
+//        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+//
+//        super.onDestroy();
+//    }
 
     private void registerForBroadcastMessages() {
         IntentFilter intentFilter = new IntentFilter();
@@ -232,4 +263,55 @@ public class MeetingFragment extends Fragment {
         return post;
     }
 
+    @Override
+    public int checkPermission(String s, int i, int i1) {
+        return 0;
+    }
+
+    @Override
+    public int checkSelfPermission(String s) {
+        return 0;
+    }
+
+    @Override
+    public void requestPermissions(String[] strings, int i, PermissionListener permissionListener) {
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        view.dispose();
+        view = null;
+
+        JitsiMeetActivityDelegate.onHostDestroy(getActivity());
+    }
+
+//    @Override
+//    public void onNewIntent(Intent intent) {
+//        JitsiMeetActivityDelegate.onNewIntent(intent);
+//    }
+
+    @Override
+    public void onRequestPermissionsResult(
+            final int requestCode,
+            final String[] permissions,
+            final int[] grantResults) {
+        JitsiMeetActivityDelegate.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        JitsiMeetActivityDelegate.onHostResume(getActivity());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        JitsiMeetActivityDelegate.onHostPause(getActivity());
+    }
 }

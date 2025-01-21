@@ -394,6 +394,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         binding.viewAll.setOnClickListener(v->{
             Intent i = new Intent(ProfileActivity.this, MyPostActivity.class);
+            Helper.tempId = profileId;
             i.putExtra("profileId", profileId);
             startActivity(i);
         });
@@ -801,22 +802,22 @@ public class ProfileActivity extends AppCompatActivity {
         }else {
             binding.facebookImage.setOnClickListener(v->{
                 try {
+                    Intent facebookIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(fbLink));
                     PackageManager packageManager = getPackageManager();
-                    Intent facebookIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://facewebmodal/f?href=" + fbLink));
-                    if (packageManager.resolveActivity(facebookIntent, PackageManager.MATCH_DEFAULT_ONLY) != null) {
+                    if (packageManager != null && facebookIntent.resolveActivity(packageManager) != null) {
                         startActivity(facebookIntent);
                     } else {
                         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(fbLink)));
                     }
-                }catch (Exception e){
-                    Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Toast.makeText(this, "Error opening Facebook: " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
         }
 
 
         String whatsapp = userModel.getWhatsapp();
-        if (whatsapp == null || whatsapp.isEmpty()){
+        if (whatsapp == null || whatsapp.isEmpty() || whatsapp.length() < 9){
             binding.whatsappImage.setVisibility(View.GONE);
         }else {
             binding.whatsappImage.setOnClickListener(v->{
@@ -829,15 +830,21 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
 
-        String phoneNo = userModel.getPhone();
-        if (phoneNo == null || phoneNo.isEmpty()){
+        String phoneNo = userModel != null ? userModel.getPhone() : null;
+        if (phoneNo == null || phoneNo.trim().isEmpty() || phoneNo.length() < 9) {
             binding.callImage.setVisibility(View.GONE);
-        }else {
-            binding.callImage.setOnClickListener(v->{
-                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", "+91" + phoneNo, null));
-                startActivity(intent);
+        } else {
+            binding.callImage.setVisibility(View.VISIBLE);
+            binding.callImage.setOnClickListener(v -> {
+                try {
+                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", "+91" + phoneNo, null));
+                    startActivity(intent);
+                } catch (Exception e) {
+                    Toast.makeText(binding.getRoot().getContext(), "Error opening dialer: " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                }
             });
         }
+
 
         String email = userModel.getEmail();
         if (email == null || email.isEmpty()){

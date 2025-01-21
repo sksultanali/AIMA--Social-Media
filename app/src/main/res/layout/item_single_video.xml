@@ -98,6 +98,18 @@
             app:tint="#757272" />
 
         <ImageView
+            android:id="@+id/discoverDots"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/_10mdp"
+            android:src="@drawable/more"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/story"
+            app:layout_constraintTop_toTopOf="@+id/story"
+            app:tint="#757272" />
+
+        <ImageView
             android:id="@+id/fulScreen"
             android:layout_width="22dp"
             android:layout_height="22dp"

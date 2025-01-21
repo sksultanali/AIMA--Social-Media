@@ -154,9 +154,10 @@ public class MembershipApplication extends AppCompatActivity implements PaymentR
         });
 
         binding.openLink.setOnClickListener(v->{
-            Intent i = new Intent(MembershipApplication.this, WebViewActivity.class);
-            i.putExtra("provide", "https://docs.google.com/forms/d/e/1FAIpQLSdXOmDnMTPwT6ocBD0UCjFodn80R3lVJkECzr0enuMz1uOlvw/viewform?usp=sf_link");
-            startActivity(i);
+//            Intent i = new Intent(MembershipApplication.this, WebViewActivity.class);
+//            i.putExtra("provide", "https://docs.google.com/forms/d/e/1FAIpQLSdXOmDnMTPwT6ocBD0UCjFodn80R3lVJkECzr0enuMz1uOlvw/viewform?usp=sf_link");
+//            startActivity(i);
+            Helper.openLink(MembershipApplication.this, "https://docs.google.com/forms/d/e/1FAIpQLSdXOmDnMTPwT6ocBD0UCjFodn80R3lVJkECzr0enuMz1uOlvw/viewform?usp=sf_link");
             binding.step1Lay.setVisibility(View.GONE);
             binding.step2Lay.setVisibility(View.VISIBLE);
             binding.step3Lay.setVisibility(View.VISIBLE);

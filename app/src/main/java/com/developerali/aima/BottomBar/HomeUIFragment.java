@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcelable;
 import android.text.Html;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -118,7 +119,12 @@ public class HomeUIFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         isOpen = false;
-        checkAndAddPointers();
+
+        try {
+            checkAndAddPointers();
+        }catch (Exception e){
+
+        }
 
         //ImageSlider
         final ArrayList<BannerModel> links = new ArrayList<>();
@@ -192,7 +198,6 @@ public class HomeUIFragment extends Fragment {
             Call<UserDetails> call = apiService.getUserDetails(
                     "getUserDetails", myId
             );
-
             call.enqueue(new Callback<UserDetails>() {
                 @Override
                 public void onResponse(Call<UserDetails> call, Response<UserDetails> response) {
@@ -203,13 +208,16 @@ public class HomeUIFragment extends Fragment {
                             Helper.userDetails = userModel;
                             Helper.saveUserDetailsToSharedPref(getActivity(), userModel);
 
-                            if (userModel.getImage() != null && !userModel.getImage().isEmpty()){
-                                Glide.with(getActivity())
-                                        .load(userModel.getImage())
-                                        .diskCacheStrategy(DiskCacheStrategy.ALL) // Cache both original & resized versions
-                                        .placeholder(R.drawable.profileplaceholder)
-                                        .into(binding.myProfile);
+                            if (isAdded() && getActivity() != null && !getActivity().isDestroyed()) {
+                                if (userModel.getImage() != null && !userModel.getImage().isEmpty()) {
+                                    Glide.with(getActivity())
+                                            .load(userModel.getImage())
+                                            .diskCacheStrategy(DiskCacheStrategy.ALL) // Cache both original & resized versions
+                                            .placeholder(R.drawable.profileplaceholder)
+                                            .into(binding.myProfile);
+                                }
                             }
+
 
                             Helper.showBadge(userModel.getVerified(), userModel.getVerified_valid(), binding.verifiedProfile);
 
@@ -352,45 +360,48 @@ public class HomeUIFragment extends Fragment {
     }
 
     private void checkAndAddPointers() {
-        Call<BoundaryData> call = apiService.fetchBoundaryData(
-                "fetchBoundaryData");
-        call.enqueue(new Callback<BoundaryData>() {
-            @Override
-            public void onResponse(Call<BoundaryData> call, Response<BoundaryData> response) {
-                if (response.isSuccessful() && response.body() != null){
-                    BoundaryData apiResponse = response.body();
-                    if (apiResponse.getStatus().equalsIgnoreCase("success")){
-                        if (apiResponse.getShow().equalsIgnoreCase("yes")){
-                            binding.mapLayout.setVisibility(View.VISIBLE);
-                            binding.mapLayout.setAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.top_to_bottom));
-                            Glide.with(getActivity())
-                                    .load(apiResponse.getImgData())
-                                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                                    .skipMemoryCache(false)
-                                    .placeholder(getActivity().getDrawable(R.drawable.placeholder))
-                                    .into(binding.mapImg);
-                            binding.mapLayout.setOnClickListener(v->{
-                                Intent i = new Intent(getActivity().getApplicationContext(), CheckMapActivity.class);
-                                //i.putExtra("data", (Parcelable) apiResponse.getData());
-                                getActivity().startActivity(i);
-                            });
+        try {
+            Call<BoundaryData> call = apiService.fetchBoundaryData(
+                    "fetchBoundaryData");
+            call.enqueue(new Callback<BoundaryData>() {
+                @Override
+                public void onResponse(Call<BoundaryData> call, Response<BoundaryData> response) {
+                    if (response.isSuccessful() && response.body() != null){
+                        BoundaryData apiResponse = response.body();
+                        if (apiResponse.getStatus().equalsIgnoreCase("success")){
+                            if (apiResponse.getShow().equalsIgnoreCase("yes")){
+                                binding.mapLayout.setVisibility(View.VISIBLE);
+                                binding.mapLayout.setAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.top_to_bottom));
+                                Glide.with(getActivity())
+                                        .load(apiResponse.getImgData())
+                                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                                        .skipMemoryCache(false)
+                                        .placeholder(getActivity().getDrawable(R.drawable.placeholder))
+                                        .into(binding.mapImg);
+                                binding.mapLayout.setOnClickListener(v->{
+                                    Intent i = new Intent(getActivity().getApplicationContext(), CheckMapActivity.class);
+                                    getActivity().startActivity(i);
+                                });
+                            }else {
+                                binding.mapLayout.setVisibility(View.GONE);
+                                //Toast.makeText(getActivity(), apiResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
                         }else {
                             binding.mapLayout.setVisibility(View.GONE);
-                            Toast.makeText(getActivity(), "List is empty! ", Toast.LENGTH_SHORT).show();
+                            //Toast.makeText(getActivity(), apiResponse.getStatus(), Toast.LENGTH_SHORT).show();
                         }
-                    }else {
-                        binding.mapLayout.setVisibility(View.GONE);
-                        Toast.makeText(getActivity(), apiResponse.getStatus(), Toast.LENGTH_SHORT).show();
                     }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<BoundaryData> call, Throwable t) {
-                binding.mapLayout.setVisibility(View.GONE);
-                Toast.makeText(getActivity(), t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<BoundaryData> call, Throwable t) {
+                    binding.mapLayout.setVisibility(View.GONE);
+                    //Toast.makeText(getActivity(), t.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+        }catch (Exception e){
+            Toast.makeText(getActivity(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @SuppressLint("ResourceAsColor")
@@ -430,6 +441,11 @@ public class HomeUIFragment extends Fragment {
     }
 
     private void checkNewPosts(CountResponse.Data countData) {
+        Context context = getActivity();
+        if (context == null) {
+            Log.e("HomeUIFragment", "Activity is null; cannot check new posts.");
+            return;
+        }
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE);
         int publicPosts = sharedPreferences.getInt("PublicPosts", 0);
         int adminPosts = sharedPreferences.getInt("AdminPosts", 0);
@@ -438,6 +454,8 @@ public class HomeUIFragment extends Fragment {
         int newPublicPost = countData.getPublicPosts() - publicPosts;
         int newAdminPost = countData.getAdminPosts() - adminPosts;
         int newVideoPost = countData.getVideos() - videos;
+
+        if (binding == null) return;
 
         if (newPublicPost > 0){
             binding.postIcon.setVisibility(View.VISIBLE);

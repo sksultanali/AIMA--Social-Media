@@ -12,8 +12,8 @@ android {
         applicationId "com.developerali.aima"
         minSdk 26
         targetSdk 35
-        versionCode 22
-        versionName "4.6.3"
+        versionCode 30
+        versionName "4.7.1"
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -27,6 +27,7 @@ android {
         }
         release {
             minifyEnabled true
+            shrinkResources true
             debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -77,7 +78,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics:22.1.2'
 
     //meeting
-    implementation ('org.jitsi.react:jitsi-meet-sdk:10.0.0') { transitive = true }
+    implementation ('org.jitsi.react:jitsi-meet-sdk:10.3.0') { transitive = true }
 
     //other dependencies
     implementation 'de.hdodenhof:circleimageview:3.1.0'
@@ -109,8 +110,8 @@ dependencies {
     implementation 'com.razorpay:checkout:1.6.41'
     implementation 'com.android.volley:volley:1.2.1'
 
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.11.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.11.0'
     implementation 'com.squareup.okhttp3:okhttp:4.11.0'
     implementation 'io.noties.markwon:core:4.6.2'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.10.0'

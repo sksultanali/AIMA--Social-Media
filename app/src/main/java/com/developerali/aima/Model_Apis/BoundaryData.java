@@ -5,19 +5,33 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
-public class BoundaryData implements Parcelable{
+public class BoundaryData implements Parcelable {
 
+    @SerializedName("status")
     private String status;
+    @SerializedName("show")
     private String show;
+    @SerializedName("imgData")
     private String imgData;
+    @SerializedName("youtube_link")
     private String youtube_link;
+    @SerializedName("message")
+    private String message;
+    @SerializedName("data")
     private List<Data> data;
+
+    // Default Constructor
+    public BoundaryData() {
+    }
 
     protected BoundaryData(Parcel in) {
         status = in.readString();
         show = in.readString();
+        imgData = in.readString();
         youtube_link = in.readString();
         data = in.createTypedArrayList(Data.CREATOR);
     }
@@ -34,13 +48,20 @@ public class BoundaryData implements Parcelable{
         }
     };
 
-    // Getters and Setters
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getShow() {
+        return show;
+    }
+
+    public void setShow(String show) {
+        this.show = show;
     }
 
     public String getImgData() {
@@ -59,12 +80,12 @@ public class BoundaryData implements Parcelable{
         this.youtube_link = youtube_link;
     }
 
-    public String getShow() {
-        return show;
+    public String getMessage() {
+        return message;
     }
 
-    public void setShow(String show) {
-        this.show = show;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public List<Data> getData() {
@@ -81,19 +102,27 @@ public class BoundaryData implements Parcelable{
     }
 
     @Override
-    public void writeToParcel(@NonNull Parcel parcel, int i) {
+    public void writeToParcel(@NonNull Parcel parcel, int flags) {
         parcel.writeString(status);
         parcel.writeString(show);
+        parcel.writeString(imgData);
         parcel.writeString(youtube_link);
         parcel.writeTypedList(data);
     }
 
-    // Inner class to represent individual boundary data
     public static class Data implements Parcelable {
+        @SerializedName("id")
         private int id;
+        @SerializedName("latitude")
         private String latitude;
+        @SerializedName("longitude")
         private String longitude;
+        @SerializedName("time")
         private String time;
+
+        // Default Constructor
+        public Data() {
+        }
 
         protected Data(Parcel in) {
             id = in.readInt();
@@ -114,7 +143,6 @@ public class BoundaryData implements Parcelable{
             }
         };
 
-        // Getters and Setters
         public int getId() {
             return id;
         }
@@ -153,7 +181,7 @@ public class BoundaryData implements Parcelable{
         }
 
         @Override
-        public void writeToParcel(@NonNull Parcel parcel, int i) {
+        public void writeToParcel(@NonNull Parcel parcel, int flags) {
             parcel.writeInt(id);
             parcel.writeString(latitude);
             parcel.writeString(longitude);

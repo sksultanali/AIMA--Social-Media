@@ -150,6 +150,14 @@ public interface ApiService {
     );
 
     @GET("aimaAppData/api.php")
+    Call<ApiResponse> updateVideoField(
+            @Query("action") String action,
+            @Query("videoId") String videoId,
+            @Query("field") String field,
+            @Query("value") String value
+    );
+
+    @GET("aimaAppData/api.php")
     Call<CountResponse> getCounts(
             @Query("action") String action
     );

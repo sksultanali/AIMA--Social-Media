@@ -154,6 +154,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.viewHolder>{
                 "dd LLL yyyy", postModel.getTime()) : TimeAgo.using(time);
 
         if (myPost){
+
+            holder.binding.discoverClose.setVisibility(View.GONE);
+            holder.binding.discoverDots.setVisibility(View.VISIBLE);
+
             if (Helper.userDetails != null){
                 postModel.setUploader(Helper.userDetails.getUserId());
                 holder.binding.discoverProfileName.setText(Helper.userDetails.getName());
@@ -176,9 +180,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.viewHolder>{
                             .priority(Priority.HIGH)
                             .into(holder.binding.discoverProfileImage);
                 }
-                holder.binding.discoverClose.setVisibility(View.GONE);
-                holder.binding.discoverDots.setVisibility(View.VISIBLE);
             }
+
         } else if (postModel.getUploader().equalsIgnoreCase("admin")){
             holder.binding.discoverProfileName.setText("Admin Post");
             holder.binding.verifiedProfile.setVisibility(View.VISIBLE);
@@ -247,7 +250,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.viewHolder>{
         holder.binding.discoverDots.setOnClickListener(c->{
             AlertDialog.Builder builder = new AlertDialog.Builder(activity);
             builder.setTitle("Select an Action")
-                    .setItems(new CharSequence[]{"Unpublish", "Delete Post"}, (dialog, which) -> {
+                    .setItems(new CharSequence[]{"Unpublish", "Delete Post", "Republish"}, (dialog, which) -> {
                         switch (which) {
                             case 0: // Copy Profile Link
                                 Call<ApiResponse> call = apiService.updatePostField(
@@ -259,7 +262,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.viewHolder>{
                                         if (response.isSuccessful() && response.body() != null){
                                             ApiResponse apiResponse = response.body();
                                             if (apiResponse.getStatus().equalsIgnoreCase("success")){
-                                                Toast.makeText(activity, "unpublished...", Toast.LENGTH_SHORT).show();
+                                                holder.binding.discoverProfile.setText("Unpublished");
                                             }else {
                                                 Toast.makeText(activity, apiResponse.getMessage(), Toast.LENGTH_SHORT).show();
                                             }
@@ -297,13 +300,33 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.viewHolder>{
                                     }
                                 });
                                 break;
+                            case 2: // Copy Profile Link
+                                Call<ApiResponse> call3 = apiService.updatePostField(
+                                        "updatePostField", postModel.getId(), "status", "Pending Approval"
+                                );
+                                call3.enqueue(new Callback<ApiResponse>() {
+                                    @Override
+                                    public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+                                        if (response.isSuccessful() && response.body() != null){
+                                            ApiResponse apiResponse = response.body();
+                                            if (apiResponse.getStatus().equalsIgnoreCase("success")){
+                                                holder.binding.discoverProfile.setText("Re_Published");
+                                            }else {
+                                                Toast.makeText(activity, apiResponse.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ApiResponse> call, Throwable t) {
+                                        Toast.makeText(activity, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                                break;
                         }
                     })
                     .setNegativeButton("Cancel", null)
                     .show();
-            models.remove(position);
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, models.size());
             notifyDataSetChanged();
         });
 

@@ -65,6 +65,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
 
+        holder.binding.discoverDots.setVisibility(View.GONE);
         if (notificationModel.getSeen()){
             holder.binding.backgroundNotification.setBackgroundColor(activity.getColor(R.color.backgroundColour));
         }

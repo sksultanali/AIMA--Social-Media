@@ -461,6 +461,7 @@ public class PostActivity extends AppCompatActivity {
             binding.imageSeen.setVisibility(View.VISIBLE);
             binding.imageSeen.setImageURI(imageUri);
             binding.postBtn.setBackground(getDrawable(R.drawable.button_follow_background));
+            binding.postBtn.setTextColor(getColor(R.color.white));
         }
     }
 

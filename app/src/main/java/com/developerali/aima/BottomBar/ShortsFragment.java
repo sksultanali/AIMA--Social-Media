@@ -87,4 +87,6 @@ public class ShortsFragment extends Fragment {
         super.onStop();
         adapter.stopListening();
     }
+
+
 }

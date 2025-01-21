@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.developerali.aima.Helpers.Helper;
+import com.developerali.aima.Model_Apis.ApiResponse;
 import com.developerali.aima.Model_Apis.ApiService;
 import com.developerali.aima.Model_Apis.RetrofitClient;
 import com.developerali.aima.Model_Apis.UserDetails;
@@ -25,6 +26,7 @@ import com.developerali.aima.databinding.ItemCommentBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -43,10 +45,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.viewHold
     FirebaseDatabase database;
     Activity activity;
     ApiService apiService;
+    FirebaseAuth auth;
 
     public CommentAdapter(Activity activity, ArrayList<CommentModel> list){
         this.models = list;
         this.activity = activity;
+        auth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
         apiService = RetrofitClient.getClient().create(ApiService.class);
     }
 
@@ -97,38 +102,61 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.viewHold
             holder.binding.actualComment.setText(commentModel.getComment());
         }
 
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                PopupMenu popupMenu = new PopupMenu(activity, holder.binding.layout);
+        if (commentModel.getCommentedBy().equalsIgnoreCase(auth.getCurrentUser().getUid())){
+            holder.binding.dots.setVisibility(View.VISIBLE);
+        }else {
+            holder.binding.dots.setVisibility(View.GONE);
+        }
 
-                popupMenu.getMenuInflater().inflate(R.menu.delete_menu, popupMenu.getMenu());
-
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        if (item.getItemId() == R.id.deleteMenu){
-                            database.getReference().child("comments").child(commentModel.getPostId())
+        holder.binding.dots.setOnClickListener(v -> {
+            PopupMenu popupMenu = new PopupMenu(activity, holder.binding.dots);
+            popupMenu.getMenuInflater().inflate(R.menu.delete_menu, popupMenu.getMenu());
+            popupMenu.setOnMenuItemClickListener(item -> {
+                if (item.getItemId() == R.id.deleteMenu) {
+                    if (database != null && commentModel.getPostId() != null && commentModel.getCommentId() != null) {
+                        database.getReference()
+                                .child("comments")
+                                .child(commentModel.getPostId())
                                 .child(commentModel.getCommentId())
                                 .removeValue()
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        models.remove(position);
-                                        notifyItemRemoved(position);
-                                        notifyItemRangeChanged(position, models.size());
-                                        notifyDataSetChanged();
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        Call<ApiResponse> call2 = apiService.updatePostField(
+                                                "updatePostField", commentModel.getPostId(), "commentsCount", String.valueOf(-1)
+                                        );
+                                        call2.enqueue(new Callback<ApiResponse>() {
+                                            @Override
+                                            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<ApiResponse> call, Throwable t) {
+
+                                            }
+                                        });
+                                        try {
+                                            models.remove(position);
+                                            notifyItemRemoved(position);
+                                            notifyItemRangeChanged(position, models.size());
+                                        }catch (Exception e){
+
+                                        }
                                         Toast.makeText(activity, "Comment deleted!", Toast.LENGTH_SHORT).show();
+                                        notifyDataSetChanged();
+                                    } else {
+                                        Toast.makeText(activity, "Failed to delete comment!", Toast.LENGTH_SHORT).show();
                                     }
                                 });
-                        }
-                        return true;
+                    } else {
+                        Toast.makeText(activity, "Unable to delete comment. Invalid data.", Toast.LENGTH_SHORT).show();
                     }
-                });
-                popupMenu.show();
+                }
                 return true;
-            }
+            });
+            popupMenu.show();
         });
+
 
 
     }
